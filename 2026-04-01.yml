@@ -1,0 +1,69 @@
+date: 2026-04-01
+workout_name: "Complementary Full Body"
+bodyweight: null
+energy: null
+notes: null
+
+warmup:
+  - activity: Run
+    duration_min: 6
+  - activity: Mobility
+    duration_min: 5
+    focus: hips and shoulders
+
+exercises:
+  - name: Dumbbell Shoulder Press
+    sets:
+      - weight_kg: 10
+        reps: 15
+      - weight_kg: 12
+        reps: 10
+      - weight_kg: 12
+        reps: 7
+
+  - name: Back Extensions
+    sets:
+      - reps: 20
+      - reps: 20
+
+  - name: Chest Supported Row
+    sets:
+      - weight_kg: 30
+        reps: 15
+      - weight_kg: 35
+        reps: 12
+      - weight_kg: 35
+        reps: 12
+
+  - name: Leg Press
+    sets:
+      - weight_kg: 120
+        reps: 12
+      - weight_kg: 140
+        reps: 12
+      - weight_kg: 140
+        reps: 12
+
+  - name: Seated Leg Curl
+    sets:
+      - weight_kg: 25
+        reps: 15
+      - weight_kg: 30
+        reps: 12
+      - weight_kg: 30
+        reps: 12
+
+  - name: Lateral Raises
+    sets:
+      - weight_kg: 8
+        reps: 12
+      - weight_kg: 8
+        reps: 8
+      - weight_kg: 8
+        reps: 8
+
+  - name: Plank
+    sets:
+      - duration_sec: 0
+      - duration_sec: 0
+      - duration_sec: 0
