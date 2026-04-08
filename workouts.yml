@@ -1,0 +1,333 @@
+---
+workouts:
+- date: 2026-04-08
+  workout_name: Full Body A (strength focus)
+  bodyweight: 
+  energy: felt good
+  notes: Workout 8.04
+  warmup:
+  - activity: Run
+    duration_min: 7
+  - activity: Mobility
+    duration_min: 5
+  exercises:
+  - name: Smith Machine Squat
+    sets:
+    - weight_kg: 5
+      reps: 10
+    - weight_kg: 10
+      reps: 10
+    - weight_kg: 10
+      reps: 12
+    - weight_kg: 15
+      reps: 10
+  - name: Incline Dumbbell Bench Press
+    sets:
+    - weight_kg: 14
+      reps: 12
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 18
+      reps: 10
+  - name: Chest Supported Row
+    sets:
+    - weight_kg: 36
+      reps: 15
+    - weight_kg: 43
+      reps: 12
+    - weight_kg: 50
+      reps: 8
+  - name: Leg Curl
+    sets:
+    - weight_kg: 25
+      reps: 15
+    - weight_kg: 25
+      reps: 15
+    - weight_kg: 25
+      reps: 12
+  - name: Triceps Pushdown (Cable)
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 8
+    - weight_kg: 20
+      reps: 4
+    - weight_kg: 10
+      reps: 6
+  - name: Back Extension
+    sets:
+    - reps: 20
+    - reps: 15
+- date: 2026-04-04
+  workout_name: Full Body – Variation
+  bodyweight: 
+  energy: 
+  notes: Felt a bit dizzy on leg press; some sets to failure on chest press and curls
+  warmup:
+  - activity: Run
+    duration_min: 11
+  - activity: Mobility
+    duration_min: 5
+    focus: hips and shoulders
+  exercises:
+  - name: Back Extension
+    sets:
+    - reps: 20
+    - reps: 20
+  - name: Incline Dumbbell Bench Press
+    sets:
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 18
+      reps: 10
+    - weight_kg: 18
+      reps: 8
+  - name: Seated Cable Row (Neutral Grip)
+    sets:
+    - weight_kg: 60
+      reps: 12
+    - weight_kg: 75
+      reps: 12
+    - weight_kg: 85
+      reps: 10
+  - name: Leg Press (Feet High Placement)
+    sets:
+    - weight_kg: 120
+      reps: 15
+    - weight_kg: 160
+      reps: 12
+    - weight_kg: 160
+      reps: 10
+  - name: Seated Leg Curl
+    sets:
+    - weight_kg: 30
+      reps: 15
+    - weight_kg: 35
+      reps: 12
+    - weight_kg: 40
+      reps: 12
+  - name: Machine Chest Press
+    sets:
+    - weight_kg: 40
+      reps: 8
+    - weight_kg: 40
+      reps: 6
+    - weight_kg: 40
+      reps: 3
+    - weight_kg: 20
+      reps: 4
+  - name: Shoulder Press Machine (F1)
+    sets:
+    - weight_kg: 15
+      reps: 10
+    - weight_kg: 15
+      reps: 8
+    - weight_kg: 15
+      reps: 8
+  - name: Biceps Curl
+    sets:
+    - weight_kg: 12
+      reps: 12
+    - weight_kg: 12
+      reps: 8
+    - weight_kg: 12
+      reps: 6
+  - name: Triceps Pushdown (Rope)
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 7
+    - weight_kg: 15
+      reps: 8
+  cooldown:
+  - activity: Bike
+    duration_min: 10
+- date: 2026-04-02
+  workout_name: Full Body – Complementary
+  bodyweight: 
+  energy: 
+  notes: Some sets hard (lat pulldown, triceps, back extension)
+  warmup:
+  - activity: Run
+    duration_min: 8
+  - activity: Mobility
+    duration_min: 5
+    focus: hips and shoulders
+  exercises:
+  - name: Smith Machine Squat
+    sets:
+    - weight_kg: 0
+      reps: 10
+    - weight_kg: 10
+      reps: 10
+    - weight_kg: 10
+      reps: 10
+  - name: Flat Dumbbell Bench Press
+    sets:
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 18
+      reps: 12
+    - weight_kg: 18
+      reps: 10
+  - name: Back Extension
+    sets:
+    - reps: 20
+    - reps: 18
+  - name: Chest Supported Row
+    sets:
+    - weight_kg: 30
+      reps: 15
+    - weight_kg: 36
+      reps: 12
+    - weight_kg: 43
+      reps: 12
+  - name: Leg Press (Horizontal)
+    sets:
+    - weight_kg: 146
+      reps: 15
+    - weight_kg: 155
+      reps: 15
+  - name: Lat Pulldown (Neutral or Wide Grip)
+    sets:
+    - weight_kg: 30
+      reps: 15
+    - weight_kg: 35
+      reps: 12
+    - weight_kg: 40
+      reps: 8
+  - name: Leg Curl (Seated or Lying)
+    sets:
+    - weight_kg: 25
+      reps: 12
+    - weight_kg: 25
+      reps: 12
+    - weight_kg: 25
+      reps: 12
+  - name: Triceps Pushdown (Cable)
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 6
+    - weight_kg: 20
+      reps: 4
+    - weight_kg: 10
+      reps: 
+  cooldown:
+  - activity: Bike
+    duration_min: 10
+- date: 2026-04-01
+  workout_name: Complementary Full Body
+  bodyweight: 
+  energy: 
+  notes: 
+  warmup:
+  - activity: Run
+    duration_min: 6
+  - activity: Mobility
+    duration_min: 5
+    focus: hips and shoulders
+  exercises:
+  - name: Dumbbell Shoulder Press
+    sets:
+    - weight_kg: 10
+      reps: 15
+    - weight_kg: 12
+      reps: 10
+    - weight_kg: 12
+      reps: 7
+  - name: Back Extensions
+    sets:
+    - reps: 20
+    - reps: 20
+  - name: Chest Supported Row
+    sets:
+    - weight_kg: 30
+      reps: 15
+    - weight_kg: 35
+      reps: 12
+    - weight_kg: 35
+      reps: 12
+  - name: Leg Press
+    sets:
+    - weight_kg: 120
+      reps: 12
+    - weight_kg: 140
+      reps: 12
+    - weight_kg: 140
+      reps: 12
+  - name: Seated Leg Curl
+    sets:
+    - weight_kg: 25
+      reps: 15
+    - weight_kg: 30
+      reps: 12
+    - weight_kg: 30
+      reps: 12
+  - name: Lateral Raises
+    sets:
+    - weight_kg: 8
+      reps: 12
+    - weight_kg: 8
+      reps: 8
+    - weight_kg: 8
+      reps: 8
+  - name: Plank
+    sets:
+    - duration_sec: 0
+    - duration_sec: 0
+    - duration_sec: 0
+- date: 2026-03-30
+  workout_name: Workout
+  bodyweight: 
+  energy: 
+  notes: Felt dizzy at the end after ~2 months without training
+  warmup:
+  - activity: Bike
+    duration_min: 10
+  - activity: Run
+    duration_min: 5
+  exercises:
+  - name: Incline Bench Press
+    sets:
+    - weight_kg: 14
+      reps: 12
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 16
+      reps: 12
+  - name: Back Extension
+    sets:
+    - reps: 20
+    - reps: 20
+  - name: Lying Leg Curl
+    sets:
+    - weight_kg: 23
+      reps: 15
+    - weight_kg: 27
+      reps: 12
+    - weight_kg: 32
+      reps: 8
+  - name: Lat Pulldown (Cable)
+    sets:
+    - weight_kg: 30
+      reps: 15
+    - weight_kg: 35
+      reps: 12
+    - weight_kg: 35
+      reps: 12
+  - name: Triceps Row Pulldown
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 15
+      reps: 8
+  - name: Leg Press
+    sets:
+    - weight_kg: 155
+      reps: 12
