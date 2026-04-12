@@ -191,6 +191,182 @@ canvas {
   line-height: 1.35;
 }
 
+.calendar-day-detail {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.calendar-detail-workout {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ece8dc;
+}
+
+.calendar-detail-meta {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.calendar-detail-list {
+  margin-top: 6px;
+}
+
+.calendar-detail-ex {
+  margin-top: 4px;
+  font-size: 0.86rem;
+}
+
+.next-plan {
+  display: grid;
+  gap: 8px;
+}
+
+.next-plan-head {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.next-plan-item {
+  border: 1px solid #ece8dc;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.next-plan-name {
+  font-weight: 700;
+}
+
+.next-plan-target {
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+}
+
+.exercise-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.exercise-card {
+  border: 1px solid #ece8dc;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px;
+}
+
+.exercise-card-title {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.exercise-card canvas {
+  height: 180px;
+}
+
+.live-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.live-field {
+  display: grid;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.live-field input,
+.live-field select {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--ink);
+}
+
+.live-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.live-btn {
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent-2);
+  color: #fff;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 700;
+}
+
+.live-btn-muted {
+  background: #8a948d;
+}
+
+.live-btn-accent {
+  background: var(--accent);
+}
+
+.live-btn-dark {
+  background: #1e2a32;
+}
+
+.live-status {
+  margin-top: 10px;
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+}
+
+.live-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.live-item {
+  border: 1px solid #ece8dc;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.live-item-name {
+  font-weight: 700;
+}
+
+.live-item-sets {
+  margin-top: 4px;
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+}
+
+.live-yaml-output {
+  width: 100%;
+  min-height: 180px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font: 12px/1.4 "Menlo", "Consolas", monospace;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
 @media (max-width: 900px) {
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -198,6 +374,18 @@ canvas {
 
   .panel-grid {
     grid-template-columns: 1fr;
+  }
+
+  .exercise-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .live-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .live-actions {
+    grid-column: 1 / -1;
   }
 
   .session-list {

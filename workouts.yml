@@ -2,7 +2,7 @@
 workouts:
 - date: '2026-04-11'
   workout_name: Full Body B (hypertrophy focus)
-  bodyweight: 
+  bodyweight: 83.7
   energy: 
   notes: Machine chest press felt hard at 20kg; shoulder press hard on final set.
     Skipped lat pulldown and plank.
@@ -341,7 +341,7 @@ workouts:
     - duration_sec: 0
 - date: 2026-03-30
   workout_name: Workout
-  bodyweight: 
+  bodyweight: 84.15
   energy: 
   notes: Felt dizzy at the end after ~2 months without training
   warmup:

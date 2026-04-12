@@ -36,7 +36,55 @@
         </article>
       </section>
 
+      <section class="panel">
+        <h2>Next Workout Plan</h2>
+        <p class="panel-note">Coach-crafted progression plan (updated manually).</p>
+        <div id="next-plan" class="next-plan"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Live Set Logger</h2>
+        <p class="panel-note">Quickly log sets during training. Data is saved on this device.</p>
+        <div class="live-grid">
+          <label class="live-field" for="live-workout-name">
+            <span>Session Name</span>
+            <input id="live-workout-name" type="text" placeholder="Full Body A" />
+          </label>
+          <label class="live-field" for="live-exercise">
+            <span>Exercise</span>
+            <select id="live-exercise"></select>
+          </label>
+          <label class="live-field" for="live-weight">
+            <span>Weight (kg)</span>
+            <input id="live-weight" type="number" min="0" step="1" inputmode="decimal" placeholder="20" />
+          </label>
+          <label class="live-field" for="live-reps">
+            <span>Reps</span>
+            <input id="live-reps" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
+          </label>
+          <div class="live-actions">
+            <button id="live-add" class="live-btn" type="button">Add Set</button>
+            <button id="live-clear" class="live-btn live-btn-muted" type="button">Clear Session</button>
+            <button id="live-export-yaml" class="live-btn live-btn-accent" type="button">Export YAML for Today</button>
+            <button id="live-copy-yaml" class="live-btn live-btn-dark" type="button">Copy YAML</button>
+          </div>
+        </div>
+        <div id="live-status" class="live-status"></div>
+        <div id="live-list" class="live-list"></div>
+        <label class="live-field" for="live-yaml-output">
+          <span>YAML Output</span>
+          <textarea id="live-yaml-output" class="live-yaml-output" readonly placeholder="Your generated YAML will appear here..."></textarea>
+        </label>
+      </section>
+
       <section class="panel-grid">
+        <article class="panel panel-wide">
+          <h2>Workouts by Calendar Day</h2>
+          <p class="panel-note">Each day in range is shown. Tap/click a bar to see that day's workout.</p>
+          <canvas id="calendar-chart" height="220"></canvas>
+          <div id="calendar-day-detail" class="calendar-day-detail"></div>
+        </article>
+
         <article class="panel">
           <h2>Tonnage Trend</h2>
           <p class="panel-note">Estimated as sum of weight x reps for logged sets.</p>
@@ -49,18 +97,16 @@
           <canvas id="sets-chart" height="220"></canvas>
         </article>
 
+        <article class="panel">
+          <h2>Bodyweight Trend</h2>
+          <p class="panel-note">Logged bodyweight over workout dates (kg).</p>
+          <canvas id="bodyweight-chart" height="220"></canvas>
+        </article>
+
         <article class="panel panel-wide">
-          <div class="panel-head">
-            <div>
-              <h2>Exercise Progression</h2>
-              <p class="panel-note">Top set weight by workout date.</p>
-            </div>
-            <label class="select-wrap" for="exercise-select">
-              <span>Exercise</span>
-              <select id="exercise-select"></select>
-            </label>
-          </div>
-          <canvas id="exercise-chart" height="260"></canvas>
+          <h2>Exercise Progression</h2>
+          <p class="panel-note">One chart per exercise (top set weight by date).</p>
+          <div id="exercise-charts" class="exercise-charts"></div>
         </article>
       </section>
 
