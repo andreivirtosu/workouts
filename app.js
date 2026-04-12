@@ -193,8 +193,9 @@
     ctx.fillStyle = colors.text;
     ctx.font = "12px 'Avenir Next', 'Trebuchet MS', sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText(String(Math.round(maxV)), 6, pad.top + 4);
-    ctx.fillText(String(Math.round(minV)), 6, height - pad.bottom);
+    const formatAxisValue = (value) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
+    ctx.fillText(formatAxisValue(maxV), 6, pad.top + 4);
+    ctx.fillText(formatAxisValue(minV), 6, height - pad.bottom);
 
     ctx.textAlign = "center";
     const tickIndexes = values.length <= 4 ? values.map((_, i) => i) : [0, Math.floor((values.length - 1) / 2), values.length - 1];
