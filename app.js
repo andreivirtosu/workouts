@@ -113,15 +113,19 @@
 
   function setupCanvas(canvas) {
     const dpr = window.devicePixelRatio || 1;
+    const baseHeight = Number(canvas.dataset.baseHeight || canvas.getAttribute("height")) || 220;
+    if (!canvas.dataset.baseHeight) canvas.dataset.baseHeight = String(baseHeight);
+    canvas.style.width = "100%";
+    canvas.style.height = `${baseHeight}px`;
+
     const width = Math.max(1, canvas.clientWidth);
-    const cssHeight = canvas.clientHeight || Number(canvas.getAttribute("height")) || 220;
 
     canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(cssHeight * dpr);
+    canvas.height = Math.floor(baseHeight * dpr);
 
     const ctx = canvas.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { ctx, width, height: cssHeight };
+    return { ctx, width, height: baseHeight };
   }
 
   function drawAxes(ctx, width, height, opts) {
