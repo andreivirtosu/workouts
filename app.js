@@ -113,15 +113,15 @@
 
   function setupCanvas(canvas) {
     const dpr = window.devicePixelRatio || 1;
-    const width = Math.max(320, canvas.clientWidth);
-    const height = canvas.height;
+    const width = Math.max(1, canvas.clientWidth);
+    const cssHeight = canvas.clientHeight || Number(canvas.getAttribute("height")) || 220;
 
     canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
+    canvas.height = Math.floor(cssHeight * dpr);
 
     const ctx = canvas.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { ctx, width, height };
+    return { ctx, width, height: cssHeight };
   }
 
   function drawAxes(ctx, width, height, opts) {
