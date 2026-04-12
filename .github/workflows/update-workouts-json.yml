@@ -1,0 +1,41 @@
+name: Update workouts.json
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - workouts.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Regenerate workouts.json from workouts.yml
+        run: |
+          ruby -e 'require "yaml"; require "json"; d=YAML.load_file("workouts.yml"); File.write("workouts.json", JSON.pretty_generate(d))'
+
+      - name: Commit updated workouts.json if changed
+        run: |
+          if git diff --quiet -- workouts.json; then
+            echo "No workouts.json changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add workouts.json
+          git commit -m "Auto-update workouts.json"
+          git push

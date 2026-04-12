@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workout Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">Training Log</p>
+        <h1>Workout Dashboard</h1>
+        <p id="status" class="subtitle">Loading data...</p>
+      </header>
+
+      <section class="kpi-grid" aria-label="Key metrics">
+        <article class="kpi-card">
+          <p class="kpi-label">Workouts</p>
+          <p id="kpi-workouts" class="kpi-value">-</p>
+        </article>
+        <article class="kpi-card">
+          <p class="kpi-label">Total Sets</p>
+          <p id="kpi-sets" class="kpi-value">-</p>
+        </article>
+        <article class="kpi-card">
+          <p class="kpi-label">Total Reps</p>
+          <p id="kpi-reps" class="kpi-value">-</p>
+        </article>
+        <article class="kpi-card">
+          <p class="kpi-label">Estimated Tonnage (kg)</p>
+          <p id="kpi-tonnage" class="kpi-value">-</p>
+        </article>
+      </section>
+
+      <section class="panel-grid">
+        <article class="panel">
+          <h2>Tonnage Trend</h2>
+          <p class="panel-note">Estimated as sum of weight x reps for logged sets.</p>
+          <canvas id="tonnage-chart" height="220"></canvas>
+        </article>
+
+        <article class="panel">
+          <h2>Sets Per Workout</h2>
+          <p class="panel-note">Volume distribution by session date.</p>
+          <canvas id="sets-chart" height="220"></canvas>
+        </article>
+
+        <article class="panel panel-wide">
+          <div class="panel-head">
+            <div>
+              <h2>Exercise Progression</h2>
+              <p class="panel-note">Top set weight by workout date.</p>
+            </div>
+            <label class="select-wrap" for="exercise-select">
+              <span>Exercise</span>
+              <select id="exercise-select"></select>
+            </label>
+          </div>
+          <canvas id="exercise-chart" height="260"></canvas>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Recent Sessions</h2>
+        <div id="session-list" class="session-list"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
