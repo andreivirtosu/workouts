@@ -1,5 +1,64 @@
 ---
 workouts:
+- date: '2026-04-11'
+  workout_name: Full Body B (hypertrophy focus)
+  bodyweight: 
+  energy: 
+  notes: Machine chest press felt hard at 20kg; shoulder press hard on final set.
+    Skipped lat pulldown and plank.
+  warmup:
+  - activity: Run
+    duration_min: 6
+  - activity: Mobility
+    duration_min: 5
+  exercises:
+  - name: Leg Press
+    sets:
+    - weight_kg: 146
+      reps: 15
+    - weight_kg: 155
+      reps: 12
+    - weight_kg: 164
+      reps: 12
+  - name: Machine Chest Press
+    sets:
+    - weight_kg: 20
+      reps: 10
+    - weight_kg: 20
+      reps: 6
+    - weight_kg: 20
+      reps: 6
+  - name: Back Extension
+    sets:
+    - reps: 15
+    - reps: 15
+  - name: Cable Row
+    sets:
+    - weight_kg: 65
+      reps: 15
+    - weight_kg: 75
+      reps: 15
+    - weight_kg: 85
+      reps: 12
+  - name: Shoulder Press Machine
+    sets:
+    - weight_kg: 15
+      reps: 15
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 20
+      reps: 8
+  - name: Biceps Curl
+    sets:
+    - weight_kg: 12
+      reps: 12
+    - weight_kg: 14
+      reps: 10
+    - weight_kg: 14
+      reps: 6
+  cooldown:
+  - activity: Bike
+    duration_min: 8
 - date: 2026-04-08
   workout_name: Full Body A (strength focus)
   bodyweight: 
