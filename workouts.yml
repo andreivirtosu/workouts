@@ -25,7 +25,7 @@ workouts:
       reps: 15
     - weight_kg: 35
       reps: 12
-  - name: Triceps Pushdown + Biceps Curl
+  - name: Triceps Pushdown
     sets:
     - weight_kg: 15
       reps: 15

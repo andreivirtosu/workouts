@@ -742,7 +742,8 @@
       { name: "Leg Press", target: "150kg x 12, 160kg x 10-12, 165kg x 8-10" },
       { name: "Leg Curl", target: "30kg x 12-15, 35kg x 10-12, 35kg x 10-12" },
       { name: "Shoulder Press Machine", target: "15kg x 12, 20kg x 8-10, 20kg x 8" },
-      { name: "Triceps Pushdown + Biceps Curl", target: "2 rounds: 15kg x 10-12 + 12-14kg x 8-10" },
+      { name: "Triceps Pushdown", target: "15kg x 10-12, 20kg x 8, 20kg x 6" },
+      { name: "Biceps Curl", target: "12kg x 10-12, 12kg x 8, 12kg x 6-8" },
       { name: "Plank", target: "2 sets x 30-45s" },
       { name: "Cooldown", target: "Bike 8-10 min" }
     ];
