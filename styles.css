@@ -288,6 +288,10 @@ canvas {
   color: var(--ink-soft);
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .live-field input,
 .live-field select {
   border: 1px solid var(--line);
@@ -313,6 +317,14 @@ canvas {
   font-weight: 700;
 }
 
+.live-btn-start {
+  background: #1f7a43;
+}
+
+.live-btn-end {
+  background: #b03a2e;
+}
+
 .live-btn-muted {
   background: #8a948d;
 }
@@ -329,6 +341,75 @@ canvas {
   margin-top: 10px;
   font-size: 0.84rem;
   color: var(--ink-soft);
+}
+
+.live-feedback {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--accent-2);
+  min-height: 1.1em;
+}
+
+.rest-timer {
+  margin-top: 8px;
+  border: 1px solid #ece8dc;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 10px;
+}
+
+.rest-timer-head {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.84rem;
+}
+
+.rest-timer-row {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rest-btn {
+  border: 0;
+  border-radius: 8px;
+  background: #355c7d;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.rest-btn-stop {
+  background: #7a3b3b;
+}
+
+.rest-display {
+  margin-top: 8px;
+  font: 700 1rem/1.2 "Menlo", "Consolas", monospace;
+  color: var(--ink);
+}
+
+.live-ex-history {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid #ece8dc;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.84rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.live-ex-history-title {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.live-ex-history-row {
+  margin: 3px 0 0;
 }
 
 .live-list {

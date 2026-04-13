@@ -54,6 +54,10 @@
             <span>Exercise</span>
             <select id="live-exercise"></select>
           </label>
+          <label id="live-custom-wrap" class="live-field" for="live-custom-exercise" hidden>
+            <span>Custom Exercise Name</span>
+            <input id="live-custom-exercise" type="text" placeholder="e.g. Dumbbell Row" />
+          </label>
           <label class="live-field" for="live-weight">
             <span>Weight (kg)</span>
             <input id="live-weight" type="number" min="0" step="1" inputmode="decimal" placeholder="20" />
@@ -62,7 +66,13 @@
             <span>Reps</span>
             <input id="live-reps" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
           </label>
+          <label class="live-field" for="live-set-note">
+            <span>Set Note (optional)</span>
+            <input id="live-set-note" type="text" placeholder="e.g. hard, pause reps, bad form" />
+          </label>
           <div class="live-actions">
+            <button id="live-start" class="live-btn live-btn-start" type="button">Start Workout</button>
+            <button id="live-end" class="live-btn live-btn-end" type="button">End Workout</button>
             <button id="live-add" class="live-btn" type="button">Add Set</button>
             <button id="live-clear" class="live-btn live-btn-muted" type="button">Clear Session</button>
             <button id="live-export-yaml" class="live-btn live-btn-accent" type="button">Export YAML for Today</button>
@@ -70,6 +80,18 @@
           </div>
         </div>
         <div id="live-status" class="live-status"></div>
+        <div id="live-feedback" class="live-feedback"></div>
+        <div class="rest-timer">
+          <div class="rest-timer-head">Rest Timer</div>
+          <div class="rest-timer-row">
+            <button id="rest-60" class="rest-btn" type="button">60s</button>
+            <button id="rest-90" class="rest-btn" type="button">90s</button>
+            <button id="rest-120" class="rest-btn" type="button">120s</button>
+            <button id="rest-stop" class="rest-btn rest-btn-stop" type="button">Stop</button>
+          </div>
+          <div id="rest-display" class="rest-display">--:--</div>
+        </div>
+        <div id="live-ex-history" class="live-ex-history"></div>
         <div id="live-list" class="live-list"></div>
         <label class="live-field" for="live-yaml-output">
           <span>YAML Output</span>
