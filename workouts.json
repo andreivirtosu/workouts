@@ -1,6 +1,127 @@
 {
   "workouts": [
     {
+      "date": "2026-04-13",
+      "workout_name": "Full Body",
+      "bodyweight": 82.7,
+      "energy": "very good",
+      "notes": "Lat pulldown final sets hard; chest press logged as 2x20kg machine load equivalent.",
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 6
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 155,
+              "reps": 15
+            },
+            {
+              "weight_kg": 164,
+              "reps": 12
+            },
+            {
+              "weight_kg": 173,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Leg Curl",
+          "sets": [
+            {
+              "weight_kg": 25,
+              "reps": 15
+            },
+            {
+              "weight_kg": 30,
+              "reps": 15
+            },
+            {
+              "weight_kg": 35,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Triceps Pushdown + Biceps Curl",
+          "sets": [
+            {
+              "weight_kg": 15,
+              "reps": 15
+            },
+            {
+              "weight_kg": 20,
+              "reps": 8
+            },
+            {
+              "weight_kg": 20,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Back Extension",
+          "sets": [
+            {
+              "reps": 20
+            }
+          ]
+        },
+        {
+          "name": "Lat Pulldown",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 15
+            },
+            {
+              "weight_kg": 45,
+              "reps": 8
+            },
+            {
+              "weight_kg": 45,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Biceps Curl",
+          "sets": [
+            {
+              "weight_kg": 12,
+              "reps": 12
+            },
+            {
+              "weight_kg": 12,
+              "reps": 6
+            },
+            {
+              "weight_kg": 12,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Chest Press Machine",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 6
+            },
+            {
+              "weight_kg": 40,
+              "reps": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-04-11",
       "workout_name": "Full Body B (hypertrophy focus)",
       "bodyweight": 83.7,
