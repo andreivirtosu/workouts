@@ -304,7 +304,12 @@ canvas {
 
 .live-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.live-actions-top {
+  margin-bottom: 10px;
 }
 
 .live-btn {
@@ -315,6 +320,28 @@ canvas {
   padding: 10px 12px;
   font: inherit;
   font-weight: 700;
+}
+
+.live-advanced {
+  margin-top: 8px;
+  border: 1px solid #ece8dc;
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px 10px;
+}
+
+.live-advanced > summary {
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.live-advanced-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .live-btn-start {
@@ -335,6 +362,24 @@ canvas {
 
 .live-btn-dark {
   background: #1e2a32;
+}
+
+.live-btn-plus {
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0;
+  font-size: 2rem;
+  line-height: 1;
+  background: var(--accent);
+}
+
+.live-btn-minus {
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0;
+  font-size: 2rem;
+  line-height: 1;
+  background: #8a948d;
 }
 
 .live-status {
@@ -462,11 +507,16 @@ canvas {
   }
 
   .live-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .live-actions {
     grid-column: 1 / -1;
+  }
+
+  .live-actions .live-btn,
+  .live-advanced-actions .live-btn {
+    width: 100%;
   }
 
   .session-list {

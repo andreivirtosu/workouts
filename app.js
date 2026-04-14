@@ -664,6 +664,7 @@
     const startBtn = document.getElementById("live-start");
     const endBtn = document.getElementById("live-end");
     const addBtn = document.getElementById("live-add");
+    const removeLastBtn = document.getElementById("live-remove-last");
     const clearBtn = document.getElementById("live-clear");
     const exportBtn = document.getElementById("live-export-yaml");
     const copyBtn = document.getElementById("live-copy-yaml");
@@ -681,7 +682,7 @@
     const rest90Btn = document.getElementById("rest-90");
     const rest120Btn = document.getElementById("rest-120");
     const restStopBtn = document.getElementById("rest-stop");
-    if (!startBtn || !endBtn || !addBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!startBtn || !endBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
     let session = ensureTodaySession(loadLiveSession());
     renderLiveExerciseOptions();
@@ -763,6 +764,19 @@
       noteInput.value = "";
       repsInput.focus();
       feedback.textContent = "";
+    });
+
+    removeLastBtn.addEventListener("click", () => {
+      session = ensureTodaySession(session);
+      if (!session.sets.length) {
+        feedback.textContent = "No sets to remove.";
+        return;
+      }
+      const removed = session.sets.pop();
+      saveLiveSession(session);
+      renderLiveSession(session);
+      renderLiveExerciseHistory(getActiveLiveExerciseName());
+      feedback.textContent = `Removed last set (${removed.exercise || "Exercise"}).`;
     });
 
     clearBtn.addEventListener("click", () => {
