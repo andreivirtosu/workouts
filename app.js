@@ -576,6 +576,7 @@
     if (customInput && !isCustom) customInput.value = "";
 
     if (state.liveLoggerBound) {
+      updateLiveInputMode();
       const activeExercise = getActiveLiveExerciseName();
       renderLiveExerciseHistory(activeExercise);
     }
@@ -590,6 +591,36 @@
       return custom || "Exercise";
     }
     return select.value || "Exercise";
+  }
+
+  function isDurationOnlyExercise(name) {
+    const raw = String(name || "").trim().toLowerCase();
+    return raw === "plank" || raw === "hangs" || raw === "hang";
+  }
+
+  function updateLiveInputMode() {
+    const weightWrap = document.getElementById("live-weight-wrap");
+    const repsWrap = document.getElementById("live-reps-wrap");
+    const weightInput = document.getElementById("live-weight");
+    const repsInput = document.getElementById("live-reps");
+    const durationWrap = document.getElementById("live-duration-wrap");
+    const durationInput = document.getElementById("live-duration-sec");
+    if (!weightWrap || !repsWrap || !weightInput || !repsInput || !durationWrap || !durationInput) return;
+
+    const durationOnly = isDurationOnlyExercise(getActiveLiveExerciseName());
+    weightWrap.hidden = durationOnly;
+    repsWrap.hidden = durationOnly;
+    weightWrap.style.display = durationOnly ? "none" : "";
+    repsWrap.style.display = durationOnly ? "none" : "";
+    durationWrap.hidden = !durationOnly;
+    durationWrap.style.display = durationOnly ? "" : "none";
+
+    if (durationOnly) {
+      weightInput.value = "";
+      repsInput.value = "";
+    } else {
+      durationInput.value = "";
+    }
   }
 
   function renderLiveExerciseHistory(exerciseName) {
@@ -655,21 +686,18 @@
     }
 
     const grouped = new Map();
-    session.sets.forEach((set) => {
+    session.sets.forEach((set, index) => {
       const key = set.exercise || "Exercise";
-      if (!grouped.has(key)) grouped.set(key, []);
-      grouped.get(key).push(set);
+      if (!grouped.has(key)) grouped.set(key, { sets: [], lastIndex: index });
+      const entry = grouped.get(key);
+      entry.sets.push(set);
+      entry.lastIndex = index;
     });
 
-    const html = Array.from(grouped.entries()).map(([exercise, sets]) => {
-      const line = sets.map((s) => {
-        const weight = toNumber(s.weight_kg);
-        const reps = toNumber(s.reps);
-        if (weight !== null && reps !== null) return `${weight}kg x ${reps}`;
-        if (reps !== null) return `${reps} reps`;
-        if (weight !== null) return `${weight}kg`;
-        return "set";
-      }).join(" | ");
+    const html = Array.from(grouped.entries())
+      .sort((a, b) => b[1].lastIndex - a[1].lastIndex)
+      .map(([exercise, entry]) => {
+      const line = entry.sets.map(formatSet).join(" | ");
       return `
         <div class="live-item">
           <div class="live-item-name">${escapeHtml(exercise)}</div>
@@ -704,6 +732,7 @@
     const customExerciseInput = document.getElementById("live-custom-exercise");
     const weightInput = document.getElementById("live-weight");
     const repsInput = document.getElementById("live-reps");
+    const durationInput = document.getElementById("live-duration-sec");
     const noteInput = document.getElementById("live-set-note");
     const nameInput = document.getElementById("live-workout-name");
     const yamlOutput = document.getElementById("live-yaml-output");
@@ -713,10 +742,11 @@
     const rest90Btn = document.getElementById("rest-90");
     const rest120Btn = document.getElementById("rest-120");
     const restStopBtn = document.getElementById("rest-stop");
-    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !durationInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
     let session = ensureTodaySession(loadLiveSession());
     renderLiveExerciseOptions();
+    updateLiveInputMode();
     renderLiveSession(session);
     renderLiveExerciseHistory(getActiveLiveExerciseName());
     renderRestDisplay("--:--");
@@ -745,10 +775,12 @@
       customWrap.hidden = !isCustom;
       customWrap.style.display = isCustom ? "" : "none";
       if (!isCustom) customExerciseInput.value = "";
+      updateLiveInputMode();
       renderLiveExerciseHistory(getActiveLiveExerciseName());
     });
 
     customExerciseInput.addEventListener("input", () => {
+      updateLiveInputMode();
       renderLiveExerciseHistory(getActiveLiveExerciseName());
     });
 
@@ -770,24 +802,33 @@
 
     addBtn.addEventListener("click", () => {
       const exercise = getActiveLiveExerciseName();
+      const durationOnly = isDurationOnlyExercise(exercise);
       const weight = toNumber(weightInput.value);
       const reps = toNumber(repsInput.value);
+      const durationSec = toNumber(durationInput.value);
       const note = noteInput.value.trim();
-      if (weight === null && reps === null) return;
+      if (durationOnly) {
+        if (durationSec === null) return;
+      } else if (weight === null && reps === null) {
+        return;
+      }
 
       session = ensureTodaySession(session);
       session.sets.push({
         exercise,
-        weight_kg: weight,
-        reps,
+        weight_kg: durationOnly ? null : weight,
+        reps: durationOnly ? null : reps,
+        duration_sec: durationOnly ? durationSec : null,
         note: note || null
       });
       saveLiveSession(session);
       renderLiveSession(session);
       renderLiveExerciseHistory(exercise);
+      durationInput.value = "";
       repsInput.value = "";
       noteInput.value = "";
-      repsInput.focus();
+      if (durationOnly) durationInput.focus();
+      else repsInput.focus();
       feedback.textContent = "";
     });
 
@@ -810,6 +851,7 @@
       renderLiveSession(session);
       weightInput.value = "";
       repsInput.value = "";
+      durationInput.value = "";
       noteInput.value = "";
       yamlOutput.value = "";
       feedback.textContent = "Session cleared.";
@@ -886,6 +928,7 @@
       byExercise.get(name).sets.push({
         weight_kg: toNumber(set.weight_kg),
         reps: toNumber(set.reps),
+        duration_sec: toNumber(set.duration_sec),
         note: (set && typeof set.note === "string" && set.note.trim()) ? set.note.trim() : null
       });
     });
@@ -915,9 +958,11 @@
       exercise.sets.forEach((set) => {
         const hasWeight = set.weight_kg !== null;
         const hasReps = set.reps !== null;
+        const hasDuration = set.duration_sec !== null;
         if (hasWeight) lines.push(`    - weight_kg: ${set.weight_kg}`);
         else lines.push("    -");
-        if (hasReps) lines.push(`      reps: ${set.reps}`);
+        if (hasDuration) lines.push(`      duration_sec: ${set.duration_sec}`);
+        else if (hasReps) lines.push(`      reps: ${set.reps}`);
         else lines.push("      reps: null");
         if (set.note) lines.push(`      note: ${yamlQuote(set.note)}`);
       });

@@ -48,13 +48,17 @@
             <span>Custom Exercise Name</span>
             <input id="live-custom-exercise" type="text" placeholder="e.g. Dumbbell Row" />
           </label>
-          <label class="live-field" for="live-weight">
+          <label id="live-weight-wrap" class="live-field" for="live-weight">
             <span>Weight (kg)</span>
             <input id="live-weight" type="number" min="0" step="1" inputmode="decimal" placeholder="20" />
           </label>
-          <label class="live-field" for="live-reps">
+          <label id="live-reps-wrap" class="live-field" for="live-reps">
             <span>Reps</span>
             <input id="live-reps" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
+          </label>
+          <label id="live-duration-wrap" class="live-field" for="live-duration-sec" hidden>
+            <span>Seconds</span>
+            <input id="live-duration-sec" type="number" min="1" step="1" inputmode="numeric" placeholder="30" />
           </label>
           <label class="live-field" for="live-set-note">
             <span>Set Note (optional)</span>
