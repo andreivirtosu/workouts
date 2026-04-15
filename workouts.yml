@@ -5,7 +5,9 @@ workouts:
   bodyweight: 93.3
   energy: 
   notes: Reconstructed from memory after phone died. Some values approximated.
-  warmup: []
+  warmup:
+  - activity: Run
+    duration_min: 7
   exercises:
   - name: Smith Machine Squat
     sets:

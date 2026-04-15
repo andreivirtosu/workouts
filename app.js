@@ -1008,17 +1008,17 @@
     if (!container) return;
 
     const plan = [
-      { name: "Warmup", target: "Run 8 min + mobility 5 min" },
-      { name: "Smith Machine Squat", target: "5kg x 10, 10kg x 10, 15kg x 8-10, 15kg x 8-10" },
-      { name: "Incline Dumbbell Bench Press", target: "16kg x 10-12, 18kg x 8-10, 18kg x 8-10" },
-      { name: "Cable Row / Chest Supported Row", target: "65kg x 12-15, 75kg x 10-12, 85kg x 8-10" },
-      { name: "Leg Press", target: "150kg x 12, 160kg x 10-12, 165kg x 8-10" },
-      { name: "Leg Curl", target: "30kg x 12-15, 35kg x 10-12, 35kg x 10-12" },
-      { name: "Shoulder Press Machine", target: "15kg x 12, 20kg x 8-10, 20kg x 8" },
-      { name: "Triceps Pushdown", target: "15kg x 10-12, 20kg x 8, 20kg x 6" },
-      { name: "Biceps Curl", target: "12kg x 10-12, 12kg x 8, 12kg x 6-8" },
-      { name: "Plank", target: "2 sets x 30-45s" },
-      { name: "Cooldown", target: "Bike 8-10 min" }
+      { name: "Warmup", target: "Run 6-7 min + mobility 3 min" },
+      { name: "Leg Press", target: "3 x 10-12 (moderate, no max effort)" },
+      { name: "Shoulder Press Machine", target: "3 x 8-10" },
+      { name: "Lat Pulldown", target: "3 x 10-12" },
+      { name: "Chest Supported Row", target: "3 x 10-12" },
+      { name: "Split Squat", target: "2 x 8-10/leg (or Leg Extension 2-3 x 12-15)" },
+      { name: "Chest Fly Machine", target: "2 x 10-12" },
+      { name: "Back Extension", target: "1-2 x 12-15 (controlled, stop early if low back feels off)" },
+      { name: "Plank", target: "2 x 30-45s" },
+      { name: "Hangs", target: "2 x 20-30s" },
+      { name: "Cooldown", target: "Bike 5-6 min" }
     ];
 
     state.nextPlanExercises = plan

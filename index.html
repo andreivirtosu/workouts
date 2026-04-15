@@ -37,6 +37,13 @@
       </section>
 
       <section class="panel">
+        <h2>Workouts by Calendar Day</h2>
+        <p class="panel-note">Each day in range is shown. Tap/click a bar to see that day's workout.</p>
+        <canvas id="calendar-chart" height="220"></canvas>
+        <div id="calendar-day-detail" class="calendar-day-detail"></div>
+      </section>
+
+      <section class="panel">
         <h2>Next Workout Plan</h2>
         <p class="panel-note">Coach-crafted progression plan (updated manually).</p>
         <div id="next-plan" class="next-plan"></div>
@@ -45,6 +52,8 @@
       <section class="panel">
         <h2>Live Set Logger</h2>
         <p class="panel-note">Quickly log sets during training. Data is saved on this device.</p>
+        <div id="live-status" class="live-status"></div>
+        <div id="live-feedback" class="live-feedback"></div>
         <div class="live-actions live-actions-top">
           <button id="live-toggle-workout" class="live-btn live-btn-start" type="button">Start Workout</button>
         </div>
@@ -74,12 +83,10 @@
             <input id="live-set-note" type="text" placeholder="e.g. hard, pause reps, bad form" />
           </label>
           <div class="live-actions">
-            <button id="live-remove-last" class="live-btn live-btn-minus" type="button" aria-label="Remove Last Set" title="Remove Last Set">-</button>
             <button id="live-add" class="live-btn live-btn-plus" type="button" aria-label="Add Set" title="Add Set">+</button>
+            <button id="live-remove-last" class="live-btn live-btn-minus" type="button" aria-label="Remove Last Set" title="Remove Last Set">-</button>
           </div>
         </div>
-        <div id="live-status" class="live-status"></div>
-        <div id="live-feedback" class="live-feedback"></div>
         <details class="live-advanced">
           <summary>More actions</summary>
           <div class="live-advanced-actions">
@@ -102,18 +109,11 @@
           </div>
           <div id="rest-display" class="rest-display">--:--</div>
         </div>
-        <div id="live-ex-history" class="live-ex-history"></div>
         <div id="live-list" class="live-list"></div>
+        <div id="live-ex-history" class="live-ex-history"></div>
       </section>
 
       <section class="panel-grid">
-        <article class="panel panel-wide">
-          <h2>Workouts by Calendar Day</h2>
-          <p class="panel-note">Each day in range is shown. Tap/click a bar to see that day's workout.</p>
-          <canvas id="calendar-chart" height="220"></canvas>
-          <div id="calendar-day-detail" class="calendar-day-detail"></div>
-        </article>
-
         <article class="panel">
           <h2>Tonnage Trend</h2>
           <p class="panel-note">Estimated as sum of weight x reps for logged sets.</p>
