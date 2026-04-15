@@ -85,6 +85,21 @@
     return { sets, reps };
   }
 
+  function getWorkoutDurationMinutes(workout) {
+    const direct = toNumber(workout && workout.duration_min);
+    if (direct !== null) return direct;
+
+    const startedAt = workout && typeof workout.started_at === "string" ? workout.started_at : null;
+    const endedAt = workout && typeof workout.ended_at === "string" ? workout.ended_at : null;
+    if (!startedAt || !endedAt) return null;
+
+    const start = new Date(startedAt);
+    const end = new Date(endedAt);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return null;
+    const diffMs = Math.max(0, end.getTime() - start.getTime());
+    return Math.round(diffMs / 60000);
+  }
+
   function prepareExerciseSeries(workoutsAsc) {
     const map = new Map();
 
@@ -312,6 +327,7 @@
         return `
           <div class="calendar-detail-workout">
             <div><strong>${escapeHtml(workout.workout_name || "Workout")}</strong></div>
+            <div class="calendar-detail-meta">Duration: ${escapeHtml(formatDuration(workout))}</div>
             <div class="calendar-detail-meta">Warmup: ${escapeHtml(formatActivities(workout.warmup))}</div>
             <div class="calendar-detail-list">${exercisesHtml || "<div class=\"calendar-detail-ex\">No exercises logged</div>"}</div>
             <div class="calendar-detail-meta">Cooldown: ${escapeHtml(formatActivities(workout.cooldown))}</div>
@@ -462,6 +478,11 @@
         return `${activity}${suffix}`;
       })
       .join(", ");
+  }
+
+  function formatDuration(workout) {
+    const minutes = getWorkoutDurationMinutes(workout);
+    return minutes === null ? "not logged" : `${minutes} min`;
   }
 
   function getTodayIso() {
@@ -1061,7 +1082,7 @@
 
       item.innerHTML = `
         <p class="session-title">${workout.date} - ${workout.workout_name || "Workout"}</p>
-        <p class="session-meta">${m.sets} sets | ${m.reps} reps</p>
+        <p class="session-meta">${m.sets} sets | ${m.reps} reps | ${formatDuration(workout)}</p>
         <p class="session-notes"><strong>Warmup:</strong> ${escapeHtml(formatActivities(workout.warmup))}</p>
         <div class="session-workout">${exercisesHtml || "<p class=\"session-exercise\">No exercises logged</p>"}</div>
         <p class="session-notes"><strong>Cooldown:</strong> ${escapeHtml(formatActivities(workout.cooldown))}</p>
@@ -1127,6 +1148,18 @@
       drawLineChart(bodyweightCanvas, bwLabels, bwValues, colors.bar);
     } else {
       drawCanvasMessage(bodyweightCanvas, "Log bodyweight to see trend.");
+    }
+
+    const durationPoints = workoutsAsc
+      .map((w) => ({ date: String(w.date), duration: getWorkoutDurationMinutes(w) }))
+      .filter((p) => p.duration !== null);
+    const durationCanvas = document.getElementById("duration-chart");
+    if (durationPoints.length) {
+      const durationLabels = durationPoints.map((p) => formatDateShort(p.date));
+      const durationValues = durationPoints.map((p) => p.duration);
+      drawLineChart(durationCanvas, durationLabels, durationValues, colors.line);
+    } else {
+      drawCanvasMessage(durationCanvas, "Log workout duration to see trend.");
     }
 
     renderExerciseCharts();

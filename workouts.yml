@@ -1,7 +1,61 @@
 ---
 workouts:
+- date: '2026-04-15'
+  workout_name: Full Body
+  duration_min: 46
+  bodyweight: 83.4
+  energy:
+  notes: More cardio today. Stationary bike 35 min at the end.
+  warmup:
+  - activity: Run
+    duration_min: 10
+  exercises:
+  - name: Shoulder Lateral Machine
+    sets:
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 23
+      reps: 12
+    - weight_kg: 30
+      reps: 10
+  - name: Plank
+    sets:
+    - duration_sec: 60
+  - name: Hangs
+    sets:
+    - duration_sec: 30
+    - duration_sec: 30
+  - name: Chest Supported Row
+    sets:
+    - weight_kg: 57
+      reps: 12
+    - weight_kg: 64
+      reps: 10
+    - weight_kg: 64
+      reps: 10
+      note: Hard
+  - name: Back Extension
+    sets:
+    - reps: 15
+    - reps: 15
+  - name: Bench Press Dumbbells
+    sets:
+    - weight_kg: 18
+      reps: 12
+    - weight_kg: 18
+      reps: 12
+  - name: Lat Pulldown
+    sets:
+    - weight_kg: 40
+      reps: 12
+    - weight_kg: 45
+      reps: 8
+  cooldown:
+  - activity: Stationary Bike
+    duration_min: 35
 - date: '2026-04-14'
   workout_name: Full Body (reconstructed)
+  duration_min: 46
   bodyweight: 83.3
   energy: 
   notes: Reconstructed from memory after phone died. Some values approximated.
@@ -63,6 +117,7 @@ workouts:
     duration_min: 6
 - date: '2026-04-13'
   workout_name: Full Body
+  duration_min: 46
   bodyweight: 82.7
   energy: very good
   notes: Lat pulldown final sets hard; chest press logged as 2x20kg machine load equivalent.
@@ -121,6 +176,7 @@ workouts:
       reps: 4
 - date: '2026-04-11'
   workout_name: Full Body B (hypertrophy focus)
+  duration_min: 46
   bodyweight: 83.7
   energy: 
   notes: Machine chest press felt hard at 20kg; shoulder press hard on final set.
@@ -180,6 +236,7 @@ workouts:
     duration_min: 8
 - date: 2026-04-08
   workout_name: Full Body A (strength focus)
+  duration_min: 46
   bodyweight: 
   energy: felt good
   notes: Workout 8.04
@@ -239,6 +296,7 @@ workouts:
     - reps: 15
 - date: 2026-04-04
   workout_name: Full Body – Variation
+  duration_min: 46
   bodyweight: 
   energy: 
   notes: Felt a bit dizzy on leg press; some sets to failure on chest press and curls
@@ -324,6 +382,7 @@ workouts:
     duration_min: 10
 - date: 2026-04-02
   workout_name: Full Body – Complementary
+  duration_min: 46
   bodyweight: 
   energy: 
   notes: Some sets hard (lat pulldown, triceps, back extension)
@@ -399,6 +458,7 @@ workouts:
     duration_min: 10
 - date: 2026-04-01
   workout_name: Complementary Full Body
+  duration_min: 46
   bodyweight: 
   energy: 
   notes: 
@@ -460,6 +520,7 @@ workouts:
     - duration_sec: 0
 - date: 2026-03-30
   workout_name: Workout
+  duration_min: 46
   bodyweight: 84.15
   energy: 
   notes: Felt dizzy at the end after ~2 months without training
