@@ -1027,18 +1027,16 @@
 
   function renderNextPlan(workoutsAsc) {
     const plan = [
-      { name: "Warmup", target: "Run 6-7 min + mobility 3 min" },
-      { name: "Shoulder Press Machine", target: "3 x 8-10" },
-      { name: "Lat Pulldown", target: "3 x 10-12" },
-      { name: "Leg Extension", target: "3 x 12-15" },
-      { name: "Split Squat", target: "2 x 8-10/leg (light to moderate, controlled)" },
-      { name: "Back Extension", target: "2 x 12-15 (controlled, stop early if low back feels off)" },
-      { name: "Chest Fly Machine", target: "2 x 10-12" },
-      { name: "Chest Supported Row", target: "2 x 10-12" },
-      { name: "Plank", target: "2 x 30-45s" },
-      { name: "Hangs", target: "2 x 20-30s" },
-      { name: "Dead Bug / Cable Crunch", target: "2 sets" },
-      { name: "Cooldown", target: "Bike 5-6 min" }
+      { name: "Warmup", target: "Run 6-8 min + mobility 3-5 min" },
+      { name: "Leg Press", target: "3 x 12-15" },
+      { name: "Romanian Deadlift", target: "3 x 8-10" },
+      { name: "Incline Dumbbell Bench Press", target: "3 x 10-12" },
+      { name: "Lat Pulldown / Assisted Pull-up", target: "3 x 8-12" },
+      { name: "Bulgarian Split Squat", target: "2 x 8-10/leg" },
+      { name: "Seated Cable Row", target: "2-3 x 10-12" },
+      { name: "Rear Delt Fly / Cable Lateral Raise", target: "2 x 12-15" },
+      { name: "Plank", target: "2 x 45-60s" },
+      { name: "Cooldown", target: "Bike 5-10 min optional" }
     ];
 
     state.nextPlanExercises = plan
