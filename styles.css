@@ -51,6 +51,28 @@ body {
   margin: 32px auto 56px;
 }
 
+.top-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.top-nav-link {
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  background: #fff;
+}
+
+.top-nav-link.is-active {
+  color: #fff;
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+}
+
 .hero h1 {
   margin: 0;
   font-size: clamp(2rem, 4vw, 3rem);

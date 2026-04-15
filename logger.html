@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workout Logger</title>
+    <link rel="stylesheet" href="styles.css?v=20260415b" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <main class="container">
+      <nav class="top-nav">
+        <a class="top-nav-link" href="./index.html">Dashboard</a>
+        <a class="top-nav-link is-active" href="./logger.html">Log Sets</a>
+      </nav>
+
+      <header class="hero">
+        <p class="eyebrow">Training Log</p>
+        <h1>Live Set Logger</h1>
+        <p id="status" class="subtitle">Logging mode</p>
+      </header>
+
+      <section class="panel">
+        <h2>Next Workout Plan</h2>
+        <p class="panel-note">Coach-crafted progression plan (updated manually).</p>
+        <div id="next-plan" class="next-plan"></div>
+      </section>
+
+      <section class="panel">
+        <p class="panel-note">Quickly log sets during training. Data is saved on this device.</p>
+        <div id="live-status" class="live-status"></div>
+        <div id="live-feedback" class="live-feedback"></div>
+        <div class="live-actions live-actions-top">
+          <button id="live-toggle-workout" class="live-btn live-btn-start" type="button">Start Workout</button>
+        </div>
+        <div class="live-grid">
+          <label class="live-field" for="live-workout-name">
+            <span>Session Name</span>
+            <input id="live-workout-name" type="text" placeholder="Full Body A" />
+          </label>
+          <label class="live-field" for="live-exercise">
+            <span>Exercise</span>
+            <select id="live-exercise"></select>
+          </label>
+          <label id="live-custom-wrap" class="live-field" for="live-custom-exercise" hidden>
+            <span>Custom Exercise Name</span>
+            <input id="live-custom-exercise" type="text" placeholder="e.g. Dumbbell Row" />
+          </label>
+          <label class="live-field" for="live-weight">
+            <span>Weight (kg)</span>
+            <input id="live-weight" type="number" min="0" step="1" inputmode="decimal" placeholder="20" />
+          </label>
+          <label class="live-field" for="live-reps">
+            <span>Reps</span>
+            <input id="live-reps" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
+          </label>
+          <label class="live-field" for="live-set-note">
+            <span>Set Note (optional)</span>
+            <input id="live-set-note" type="text" placeholder="e.g. hard, pause reps, bad form" />
+          </label>
+          <div class="live-actions">
+            <button id="live-add" class="live-btn live-btn-plus" type="button" aria-label="Add Set" title="Add Set">+</button>
+            <button id="live-remove-last" class="live-btn live-btn-minus" type="button" aria-label="Remove Last Set" title="Remove Last Set">-</button>
+          </div>
+        </div>
+
+        <details class="live-advanced">
+          <summary>More actions</summary>
+          <div class="live-advanced-actions">
+            <button id="live-export-yaml" class="live-btn live-btn-accent" type="button">Export YAML for Today</button>
+            <button id="live-copy-yaml" class="live-btn live-btn-dark" type="button">Copy YAML</button>
+            <button id="live-clear" class="live-btn live-btn-muted" type="button">Clear Session</button>
+            <button id="rest-stop" class="live-btn live-btn-muted" type="button">Stop Rest Timer</button>
+          </div>
+          <label class="live-field" for="live-yaml-output">
+            <span>YAML Output</span>
+            <textarea id="live-yaml-output" class="live-yaml-output" readonly placeholder="Your generated YAML will appear here..."></textarea>
+          </label>
+        </details>
+
+        <div class="rest-timer">
+          <div class="rest-timer-head">Rest Timer</div>
+          <div class="rest-timer-row">
+            <button id="rest-60" class="rest-btn" type="button">60s</button>
+            <button id="rest-90" class="rest-btn" type="button">90s</button>
+            <button id="rest-120" class="rest-btn" type="button">120s</button>
+          </div>
+          <div id="rest-display" class="rest-display">--:--</div>
+        </div>
+
+        <div id="live-list" class="live-list"></div>
+        <div id="live-ex-history" class="live-ex-history"></div>
+      </section>
+    </main>
+
+    <script src="app.js?v=20260415b"></script>
+  </body>
+</html>

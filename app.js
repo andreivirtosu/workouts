@@ -149,6 +149,7 @@
   }
 
   function drawLineChart(canvas, labels, values, lineColor) {
+    if (!canvas) return;
     const { ctx, width, height } = setupCanvas(canvas);
     const pad = { top: 18, right: 12, bottom: 34, left: 44 };
     ctx.clearRect(0, 0, width, height);
@@ -208,6 +209,7 @@
   }
 
   function drawBarChart(canvas, labels, values) {
+    if (!canvas) return;
     const { ctx, width, height } = setupCanvas(canvas);
     const pad = { top: 16, right: 12, bottom: 34, left: 38 };
     ctx.clearRect(0, 0, width, height);
@@ -245,6 +247,7 @@
   }
 
   function drawCanvasMessage(canvas, message) {
+    if (!canvas) return;
     const { ctx, width, height } = setupCanvas(canvas);
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = "#4a5963";
@@ -329,6 +332,7 @@
   }
 
   function drawCalendarChart(canvas, days) {
+    if (!canvas) return;
     const labels = days.map((d) => d.label);
     const values = days.map((d) => d.count);
     const { ctx, width, height } = setupCanvas(canvas);
@@ -417,9 +421,12 @@
       { sets: 0, reps: 0 }
     );
 
-    document.getElementById("kpi-workouts").textContent = String(workoutsAsc.length);
-    document.getElementById("kpi-sets").textContent = String(totals.sets);
-    document.getElementById("kpi-reps").textContent = String(totals.reps);
+    const workoutsEl = document.getElementById("kpi-workouts");
+    const setsEl = document.getElementById("kpi-sets");
+    const repsEl = document.getElementById("kpi-reps");
+    if (workoutsEl) workoutsEl.textContent = String(workoutsAsc.length);
+    if (setsEl) setsEl.textContent = String(totals.sets);
+    if (repsEl) repsEl.textContent = String(totals.reps);
   }
 
   function escapeHtml(value) {
@@ -998,26 +1005,28 @@
   }
 
   function renderNextPlan(workoutsAsc) {
-    const container = document.getElementById("next-plan");
-    if (!container) return;
-
     const plan = [
       { name: "Warmup", target: "Run 6-7 min + mobility 3 min" },
-      { name: "Leg Press", target: "3 x 10-12 (moderate, no max effort)" },
       { name: "Shoulder Press Machine", target: "3 x 8-10" },
       { name: "Lat Pulldown", target: "3 x 10-12" },
-      { name: "Chest Supported Row", target: "3 x 10-12" },
-      { name: "Split Squat", target: "2 x 8-10/leg (or Leg Extension 2-3 x 12-15)" },
+      { name: "Leg Extension", target: "3 x 12-15" },
+      { name: "Split Squat", target: "2 x 8-10/leg (light to moderate, controlled)" },
+      { name: "Back Extension", target: "2 x 12-15 (controlled, stop early if low back feels off)" },
       { name: "Chest Fly Machine", target: "2 x 10-12" },
-      { name: "Back Extension", target: "1-2 x 12-15 (controlled, stop early if low back feels off)" },
+      { name: "Chest Supported Row", target: "2 x 10-12" },
       { name: "Plank", target: "2 x 30-45s" },
       { name: "Hangs", target: "2 x 20-30s" },
+      { name: "Dead Bug / Cable Crunch", target: "2 sets" },
       { name: "Cooldown", target: "Bike 5-6 min" }
     ];
 
     state.nextPlanExercises = plan
       .map((item) => item.name)
       .filter((name) => !["Warmup", "Cooldown"].includes(name));
+    renderLiveExerciseOptions();
+
+    const container = document.getElementById("next-plan");
+    if (!container) return;
 
     const blocks = plan.map((item) => `
       <div class="next-plan-item">
@@ -1030,11 +1039,11 @@
       <div class="next-plan-head">Manual plan for your next session (${workoutsAsc.length} workouts logged so far).</div>
       ${blocks}
     `;
-    renderLiveExerciseOptions();
   }
 
   function renderSessionList(workoutsDesc) {
     const container = document.getElementById("session-list");
+    if (!container) return;
     container.innerHTML = "";
 
     workoutsDesc.forEach((workout) => {
@@ -1125,6 +1134,7 @@
 
   async function load() {
     const status = document.getElementById("status");
+    const shouldUpdateStatus = !!(status && status.dataset && status.dataset.dynamic === "true");
 
     try {
       const response = await fetch("./workouts.json", { cache: "no-store" });
@@ -1147,9 +1157,13 @@
       renderCharts();
       renderSessionList(workoutsDesc);
 
-      status.textContent = `Showing ${workouts.length} workouts from ${workoutsAsc[0].date} to ${workoutsAsc[workoutsAsc.length - 1].date}.`;
+      if (shouldUpdateStatus) {
+        status.textContent = `Showing ${workouts.length} workouts from ${workoutsAsc[0].date} to ${workoutsAsc[workoutsAsc.length - 1].date}.`;
+      }
     } catch (err) {
-      status.textContent = "Could not load workouts.json. Start a local server (for example: python3 -m http.server 8000).";
+      if (shouldUpdateStatus) {
+        status.textContent = "Could not load workouts.json. Start a local server (for example: python3 -m http.server 8000).";
+      }
       console.error(err);
     }
   }
