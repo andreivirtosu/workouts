@@ -625,6 +625,7 @@
     const startedText = started ? ` | start ${started}` : "";
     const endedText = ended ? ` | end ${ended}` : "";
     status.textContent = `${session.date} | ${session.sets.length} set${session.sets.length === 1 ? "" : "s"} logged | ${timeText}${startedText}${endedText}`;
+    updateLiveToggleButton(session);
 
     if (!session.sets.length) {
       list.innerHTML = `<div class="live-item">No sets logged yet.</div>`;
@@ -658,11 +659,19 @@
     list.innerHTML = html;
   }
 
+  function updateLiveToggleButton(session) {
+    const btn = document.getElementById("live-toggle-workout");
+    if (!btn) return;
+    const running = !!session?.started_at && !session?.ended_at;
+    btn.textContent = running ? "End Workout" : "Start Workout";
+    btn.classList.toggle("live-btn-start", !running);
+    btn.classList.toggle("live-btn-end", running);
+  }
+
   function bindLiveLogger() {
     if (state.liveLoggerBound) return;
 
-    const startBtn = document.getElementById("live-start");
-    const endBtn = document.getElementById("live-end");
+    const toggleWorkoutBtn = document.getElementById("live-toggle-workout");
     const addBtn = document.getElementById("live-add");
     const removeLastBtn = document.getElementById("live-remove-last");
     const clearBtn = document.getElementById("live-clear");
@@ -682,7 +691,7 @@
     const rest90Btn = document.getElementById("rest-90");
     const rest120Btn = document.getElementById("rest-120");
     const restStopBtn = document.getElementById("rest-stop");
-    if (!startBtn || !endBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
     let session = ensureTodaySession(loadLiveSession());
     renderLiveExerciseOptions();
@@ -721,25 +730,19 @@
       renderLiveExerciseHistory(getActiveLiveExerciseName());
     });
 
-    startBtn.addEventListener("click", () => {
-      session = ensureTodaySession(session);
-      session.started_at = toMinuteStamp();
-      session.ended_at = null;
-      saveLiveSession(session);
-      renderLiveSession(session);
-      feedback.textContent = "Workout timer started.";
-      syncTimer();
-    });
-
-    endBtn.addEventListener("click", () => {
-      if (!session.started_at) {
-        feedback.textContent = "Start the workout timer first.";
-        return;
+    toggleWorkoutBtn.addEventListener("click", () => {
+      const running = !!session.started_at && !session.ended_at;
+      if (running) {
+        session.ended_at = toMinuteStamp();
+        feedback.textContent = "Workout timer ended.";
+      } else {
+        session = ensureTodaySession(session);
+        session.started_at = toMinuteStamp();
+        session.ended_at = null;
+        feedback.textContent = "Workout timer started.";
       }
-      session.ended_at = toMinuteStamp();
       saveLiveSession(session);
       renderLiveSession(session);
-      feedback.textContent = "Workout timer ended.";
       syncTimer();
     });
 

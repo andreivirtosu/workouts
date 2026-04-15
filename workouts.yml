@@ -1,5 +1,64 @@
 ---
 workouts:
+- date: '2026-04-14'
+  workout_name: Full Body (reconstructed)
+  bodyweight: 93.3
+  energy: 
+  notes: Reconstructed from memory after phone died. Some values approximated.
+  warmup: []
+  exercises:
+  - name: Smith Machine Squat
+    sets:
+    - weight_kg: 10
+      reps: 12
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 15
+      reps: 12
+  - name: Incline Dumbbell Bench Press
+    sets:
+    - weight_kg: 14
+      reps: 12
+    - weight_kg: 18
+      reps: 10
+    - weight_kg: 18
+      reps: 10
+  - name: Chest Supported Row
+    sets:
+    - weight_kg: 36
+      reps: 15
+    - weight_kg: 43
+      reps: 12
+    - weight_kg: 50
+      reps: 8
+  - name: Leg Press
+    sets:
+    - weight_kg: 155
+      reps: 15
+    - weight_kg: 164
+      reps: 12
+    - weight_kg: 173
+      reps: 15
+  - name: Back Extension
+    sets:
+    - reps: 15
+  - name: Chest Fly Machine
+    sets:
+    - weight_kg: 30
+      reps: 10
+    - weight_kg: 40
+      reps: 10
+    - weight_kg: 40
+      reps: 10
+  - name: Plank
+    sets:
+    - duration_sec: 30
+  - name: Hangs
+    sets:
+    - duration_sec: 20
+  cooldown:
+  - activity: Bike
+    duration_min: 6
 - date: '2026-04-13'
   workout_name: Full Body
   bodyweight: 82.7
