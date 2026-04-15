@@ -71,7 +71,6 @@
     const exercises = Array.isArray(workout.exercises) ? workout.exercises : [];
     let sets = 0;
     let reps = 0;
-    let tonnage = 0;
 
     exercises.forEach((ex) => {
       const exSets = Array.isArray(ex.sets) ? ex.sets : [];
@@ -79,14 +78,11 @@
 
       exSets.forEach((set) => {
         const setReps = toNumber(set.reps);
-        const setWeight = toNumber(set.weight_kg);
-
         if (setReps !== null) reps += setReps;
-        if (setReps !== null && setWeight !== null) tonnage += setWeight * setReps;
       });
     });
 
-    return { sets, reps, tonnage };
+    return { sets, reps };
   }
 
   function prepareExerciseSeries(workoutsAsc) {
@@ -416,16 +412,14 @@
         const m = buildWorkoutMetrics(workout);
         acc.sets += m.sets;
         acc.reps += m.reps;
-        acc.tonnage += m.tonnage;
         return acc;
       },
-      { sets: 0, reps: 0, tonnage: 0 }
+      { sets: 0, reps: 0 }
     );
 
     document.getElementById("kpi-workouts").textContent = String(workoutsAsc.length);
     document.getElementById("kpi-sets").textContent = String(totals.sets);
     document.getElementById("kpi-reps").textContent = String(totals.reps);
-    document.getElementById("kpi-tonnage").textContent = Math.round(totals.tonnage).toLocaleString();
   }
 
   function escapeHtml(value) {
@@ -1058,7 +1052,7 @@
 
       item.innerHTML = `
         <p class="session-title">${workout.date} - ${workout.workout_name || "Workout"}</p>
-        <p class="session-meta">${m.sets} sets | ${m.reps} reps | ${Math.round(m.tonnage)} kg tonnage</p>
+        <p class="session-meta">${m.sets} sets | ${m.reps} reps</p>
         <p class="session-notes"><strong>Warmup:</strong> ${escapeHtml(formatActivities(workout.warmup))}</p>
         <div class="session-workout">${exercisesHtml || "<p class=\"session-exercise\">No exercises logged</p>"}</div>
         <p class="session-notes"><strong>Cooldown:</strong> ${escapeHtml(formatActivities(workout.cooldown))}</p>
@@ -1105,9 +1099,6 @@
 
     drawCalendarChart(document.getElementById("calendar-chart"), state.dailySeries);
     renderCalendarDayDetail(selectedDay);
-
-    const tonnageSeries = workoutsAsc.map((w) => buildWorkoutMetrics(w).tonnage);
-    drawLineChart(document.getElementById("tonnage-chart"), labels, tonnageSeries, colors.line);
 
     const setsSeries = workoutsAsc.map((w) => buildWorkoutMetrics(w).sets);
     drawBarChart(document.getElementById("sets-chart"), labels, setsSeries);
