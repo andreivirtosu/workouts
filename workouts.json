@@ -1,6 +1,115 @@
 {
   "workouts": [
     {
+      "date": "2026-04-18",
+      "workout_name": "Full body",
+      "duration_min": 40,
+      "bodyweight": 83.2,
+      "energy": "Good energy level.",
+      "notes": "Gym full in the morning.",
+      "warmup": [
+
+      ],
+      "exercises": [
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 155,
+              "reps": 20
+            },
+            {
+              "weight_kg": 164,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Incline Dumbbell Bench Press",
+          "sets": [
+            {
+              "weight_kg": 16,
+              "reps": 12
+            },
+            {
+              "weight_kg": 18,
+              "reps": 12
+            },
+            {
+              "weight_kg": 22,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Lat Pulldown / Assisted Pull-up",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 10
+            },
+            {
+              "weight_kg": 50,
+              "reps": 8,
+              "note": "Hard"
+            }
+          ]
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets": [
+            {
+              "weight_kg": 70,
+              "reps": 15
+            },
+            {
+              "weight_kg": 70,
+              "reps": 12
+            },
+            {
+              "weight_kg": 80,
+              "reps": 12,
+              "note": "Not hard"
+            }
+          ]
+        },
+        {
+          "name": "Rear Delt Fly / Cable Lateral Raise",
+          "sets": [
+            {
+              "weight_kg": 22.5,
+              "reps": 6
+            },
+            {
+              "weight_kg": 22.5,
+              "reps": 6
+            },
+            {
+              "weight_kg": 13.5,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Back extension",
+          "sets": [
+            {
+              "weight_kg": 0,
+              "reps": 15
+            },
+            {
+              "weight_kg": 0,
+              "reps": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-04-15",
       "workout_name": "Full Body",
       "duration_min": 46,

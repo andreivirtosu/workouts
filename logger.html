@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Workout Logger</title>
-    <link rel="stylesheet" href="styles.css?v=20260415b" />
+    <link rel="stylesheet" href="styles.css?v=20260420a" />
   </head>
   <body>
     <div class="bg-shape bg-shape-a"></div>
@@ -23,8 +23,7 @@
       </header>
 
       <section class="panel">
-        <h2>Next Workout Plan</h2>
-        <p class="panel-note">Coach-crafted progression plan (updated manually).</p>
+        <h2 id="next-workout-title">Next Workout: Upper A</h2>
         <div id="next-plan" class="next-plan"></div>
       </section>
 
@@ -36,10 +35,6 @@
           <button id="live-toggle-workout" class="live-btn live-btn-start" type="button">Start Workout</button>
         </div>
         <div class="live-grid">
-          <label class="live-field" for="live-workout-name">
-            <span>Session Name</span>
-            <input id="live-workout-name" type="text" placeholder="Full Body A" />
-          </label>
           <label class="live-field" for="live-exercise">
             <span>Exercise</span>
             <select id="live-exercise"></select>
@@ -99,6 +94,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=20260415b"></script>
+    <script src="app.js?v=20260420a"></script>
   </body>
 </html>

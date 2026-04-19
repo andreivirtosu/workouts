@@ -263,6 +263,50 @@ canvas {
   font-size: 0.9rem;
 }
 
+.next-plan-toggle {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.next-plan-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex: 0 0 24px;
+}
+
+.next-plan-copy {
+  min-width: 0;
+}
+
+.next-plan-toggle.is-done {
+  background: color-mix(in oklab, #dff4e7 72%, white 28%);
+  border-color: #9cccaf;
+}
+
+.next-plan-toggle.is-done .next-plan-check {
+  border-color: #1f7a43;
+  background: #1f7a43;
+}
+
+.next-plan-toggle.is-done .next-plan-name,
+.next-plan-toggle.is-done .next-plan-target {
+  opacity: 0.8;
+}
+
 .next-plan-name {
   font-weight: 700;
 }

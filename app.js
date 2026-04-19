@@ -16,11 +16,16 @@
     selectedCalendarDate: null,
     calendarBound: false,
     nextPlanExercises: [],
+    nextPlanDone: {},
     liveLoggerBound: false,
     liveTimerIntervalId: null,
     restTimerIntervalId: null,
     restTimerEndTs: null
   };
+
+  function getCurrentPlanName() {
+    return "Upper A";
+  }
 
   function toNumber(value) {
     if (value === null || value === undefined) return null;
@@ -502,20 +507,24 @@
     return "workout-live-session-v1";
   }
 
+  function getNextPlanStorageKey(date = getTodayIso()) {
+    return `workout-next-plan-done-v1:${date}`;
+  }
+
   function loadLiveSession() {
     try {
       const raw = localStorage.getItem(getLiveStorageKey());
-      if (!raw) return { date: getTodayIso(), workout_name: "", sets: [] };
+      if (!raw) return { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [] };
       const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== "object") return { date: getTodayIso(), workout_name: "", sets: [] };
+      if (!parsed || typeof parsed !== "object") return { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [] };
       if (!Array.isArray(parsed.sets)) parsed.sets = [];
       if (!parsed.date) parsed.date = getTodayIso();
-      if (typeof parsed.workout_name !== "string") parsed.workout_name = "";
+      parsed.workout_name = getCurrentPlanName();
       if (typeof parsed.started_at !== "string") parsed.started_at = null;
       if (typeof parsed.ended_at !== "string") parsed.ended_at = null;
       return parsed;
     } catch (err) {
-      return { date: getTodayIso(), workout_name: "", sets: [] };
+      return { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [] };
     }
   }
 
@@ -523,10 +532,28 @@
     localStorage.setItem(getLiveStorageKey(), JSON.stringify(session));
   }
 
+  function loadNextPlanDone(date = getTodayIso()) {
+    try {
+      const raw = localStorage.getItem(getNextPlanStorageKey(date));
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (err) {
+      return {};
+    }
+  }
+
+  function saveNextPlanDone(doneMap, date = getTodayIso()) {
+    localStorage.setItem(getNextPlanStorageKey(date), JSON.stringify(doneMap || {}));
+  }
+
   function ensureTodaySession(session) {
     const today = getTodayIso();
-    if (session.date === today) return session;
-    return { date: today, workout_name: "", sets: [], started_at: null, ended_at: null };
+    if (session.date === today) {
+      session.workout_name = getCurrentPlanName();
+      return session;
+    }
+    return { date: today, workout_name: getCurrentPlanName(), sets: [], started_at: null, ended_at: null };
   }
 
   function formatClockTime(isoString) {
@@ -665,12 +692,14 @@
   }
 
   function renderLiveSession(session) {
+    const nextWorkoutTitle = document.getElementById("next-workout-title");
     const status = document.getElementById("live-status");
     const list = document.getElementById("live-list");
-    const nameInput = document.getElementById("live-workout-name");
-    if (!status || !list || !nameInput) return;
+    if (!status || !list) return;
 
-    nameInput.value = session.workout_name || "";
+    if (nextWorkoutTitle) {
+      nextWorkoutTitle.textContent = `Next Workout: ${session.workout_name || getCurrentPlanName()}`;
+    }
     const durationMin = getSessionDurationMinutes(session);
     const started = formatClockTime(session.started_at);
     const ended = formatClockTime(session.ended_at);
@@ -734,7 +763,6 @@
     const repsInput = document.getElementById("live-reps");
     const durationInput = document.getElementById("live-duration-sec");
     const noteInput = document.getElementById("live-set-note");
-    const nameInput = document.getElementById("live-workout-name");
     const yamlOutput = document.getElementById("live-yaml-output");
     const status = document.getElementById("live-status");
     const feedback = document.getElementById("live-feedback");
@@ -742,7 +770,7 @@
     const rest90Btn = document.getElementById("rest-90");
     const rest120Btn = document.getElementById("rest-120");
     const restStopBtn = document.getElementById("rest-stop");
-    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !durationInput || !noteInput || !nameInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
     let session = ensureTodaySession(loadLiveSession());
     renderLiveExerciseOptions();
@@ -764,11 +792,6 @@
       }
     };
     syncTimer();
-
-    nameInput.addEventListener("input", () => {
-      session.workout_name = nameInput.value.trim();
-      saveLiveSession(session);
-    });
 
     exerciseSelect.addEventListener("change", () => {
       const isCustom = exerciseSelect.value === "__custom__";
@@ -846,7 +869,7 @@
     });
 
     clearBtn.addEventListener("click", () => {
-      session = { date: getTodayIso(), workout_name: "", sets: [], started_at: null, ended_at: null };
+      session = { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [], started_at: null, ended_at: null };
       saveLiveSession(session);
       renderLiveSession(session);
       weightInput.value = "";
@@ -1072,17 +1095,18 @@
 
   function renderNextPlan(workoutsAsc) {
     const plan = [
-      { name: "Warmup", target: "Run 6-8 min + mobility 3-5 min" },
-      { name: "Leg Press", target: "3 x 12-15" },
-      { name: "Romanian Deadlift", target: "3 x 8-10" },
-      { name: "Incline Dumbbell Bench Press", target: "3 x 10-12" },
-      { name: "Lat Pulldown / Assisted Pull-up", target: "3 x 8-12" },
-      { name: "Bulgarian Split Squat", target: "2 x 8-10/leg" },
-      { name: "Seated Cable Row", target: "2-3 x 10-12" },
-      { name: "Rear Delt Fly / Cable Lateral Raise", target: "2 x 12-15" },
-      { name: "Plank", target: "2 x 45-60s" },
-      { name: "Cooldown", target: "Bike 5-10 min optional" }
+      { name: "Warmup", target: "Bike or row 5 min + mobility 3-5 min" },
+      { name: "Incline Dumbbell Bench Press", target: "3 x 8-10" },
+      { name: "Chest Supported Row / Seated Cable Row", target: "3 x 8-12" },
+      { name: "Assisted Pull-up", target: "3 x 5-8" },
+      { name: "Shoulder Press Machine / DB Shoulder Press", target: "2-3 x 8-10" },
+      { name: "Lateral Raise / Rear Delt Fly", target: "2 x 12-15" },
+      { name: "Triceps Pushdown", target: "2 x 10-12" },
+      { name: "Biceps Curl", target: "2 x 10-12" },
+      { name: "Plank / Dead Bug", target: "2-3 sets" },
+      { name: "Cooldown", target: "Walk or bike 5 min optional" }
     ];
+    state.nextPlanDone = loadNextPlanDone();
 
     state.nextPlanExercises = plan
       .map((item) => item.name)
@@ -1092,17 +1116,32 @@
     const container = document.getElementById("next-plan");
     if (!container) return;
 
-    const blocks = plan.map((item) => `
-      <div class="next-plan-item">
-        <div class="next-plan-name">${escapeHtml(item.name)}</div>
+    const blocks = plan.map((item) => {
+      const done = !!state.nextPlanDone[item.name];
+      const doneClass = done ? " is-done" : "";
+      const checked = done ? "true" : "false";
+      return `
+      <button class="next-plan-item next-plan-toggle${doneClass}" type="button" data-plan-name="${escapeHtml(item.name)}" aria-pressed="${checked}">
+        <div class="next-plan-check" aria-hidden="true">${done ? "✓" : ""}</div>
+        <div class="next-plan-copy">
+          <div class="next-plan-name">${escapeHtml(item.name)}</div>
         <div class="next-plan-target">${escapeHtml(item.target)}</div>
-      </div>
-    `).join("");
-
-    container.innerHTML = `
-      <div class="next-plan-head">Manual plan for your next session (${workoutsAsc.length} workouts logged so far).</div>
-      ${blocks}
+        </div>
+      </button>
     `;
+    }).join("");
+
+    container.innerHTML = blocks;
+
+    container.querySelectorAll(".next-plan-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const name = button.getAttribute("data-plan-name");
+        if (!name) return;
+        state.nextPlanDone[name] = !state.nextPlanDone[name];
+        saveNextPlanDone(state.nextPlanDone);
+        renderNextPlan(workoutsAsc);
+      });
+    });
   }
 
   function renderSessionList(workoutsDesc) {
