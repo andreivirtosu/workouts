@@ -342,7 +342,7 @@
       .join("");
 
     detail.innerHTML = `
-      <div><strong>${escapeHtml(day.date)}</strong> (${day.count} workout${day.count > 1 ? "s" : ""})</div>
+      <div><strong>${escapeHtml(day.date)}</strong></div>
       ${workoutsHtml}
     `;
   }
