@@ -19,12 +19,73 @@
     nextPlanDone: {},
     liveLoggerBound: false,
     liveTimerIntervalId: null,
+    sharedDraftSaveTimerId: null,
     restTimerIntervalId: null,
     restTimerEndTs: null
   };
 
+  const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
+
   function getCurrentPlanName() {
     return "Upper A";
+  }
+
+  async function fetchSharedWorkoutDraft() {
+    const response = await fetch(SHARED_WORKOUT_OBJECT_URL, {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) {
+      throw new Error(`Load failed (${response.status})`);
+    }
+    const payload = await response.json();
+    return payload && payload.data && typeof payload.data.content === "string" ? payload.data.content : "";
+  }
+
+  async function saveSharedWorkoutDraft(text, title) {
+    const response = await fetch(SHARED_WORKOUT_OBJECT_URL, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        name: title || "Last Workout",
+        data: {
+          content: text || "",
+          updated_at: new Date().toISOString()
+        }
+      })
+    });
+    if (!response.ok) {
+      throw new Error(`Save failed (${response.status})`);
+    }
+    return response.json();
+  }
+
+  function refreshLiveYamlOutput(session) {
+    const yamlOutput = document.getElementById("live-yaml-output");
+    if (!yamlOutput) return "";
+    const yaml = buildLiveSessionYaml(session);
+    yamlOutput.value = yaml;
+    return yaml;
+  }
+
+  function queueSharedWorkoutDraftSave(session, feedbackEl) {
+    if (state.sharedDraftSaveTimerId) {
+      window.clearTimeout(state.sharedDraftSaveTimerId);
+    }
+
+    const yaml = refreshLiveYamlOutput(session);
+    state.sharedDraftSaveTimerId = window.setTimeout(async () => {
+      state.sharedDraftSaveTimerId = null;
+      try {
+        await saveSharedWorkoutDraft(yaml, session.workout_name || getCurrentPlanName());
+        if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
+      } catch (err) {
+        if (feedbackEl) feedbackEl.textContent = err.message || "Could not auto-save shared draft.";
+      }
+    }, 700);
   }
 
   function toNumber(value) {
@@ -776,6 +837,7 @@
     renderLiveExerciseOptions();
     updateLiveInputMode();
     renderLiveSession(session);
+    refreshLiveYamlOutput(session);
     renderLiveExerciseHistory(getActiveLiveExerciseName());
     renderRestDisplay("--:--");
 
@@ -820,6 +882,8 @@
       }
       saveLiveSession(session);
       renderLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
       syncTimer();
     });
 
@@ -846,6 +910,8 @@
       });
       saveLiveSession(session);
       renderLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
       renderLiveExerciseHistory(exercise);
       durationInput.value = "";
       repsInput.value = "";
@@ -864,6 +930,8 @@
       const removed = session.sets.pop();
       saveLiveSession(session);
       renderLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
       renderLiveExerciseHistory(getActiveLiveExerciseName());
       feedback.textContent = `Removed last set (${removed.exercise || "Exercise"}).`;
     });
@@ -876,14 +944,15 @@
       repsInput.value = "";
       durationInput.value = "";
       noteInput.value = "";
-      yamlOutput.value = "";
+      refreshLiveYamlOutput(session);
       feedback.textContent = "Session cleared.";
+      queueSharedWorkoutDraftSave(session, feedback);
       syncTimer();
       stopRestTimer();
     });
 
     exportBtn.addEventListener("click", () => {
-      yamlOutput.value = buildLiveSessionYaml(session);
+      yamlOutput.value = refreshLiveYamlOutput(session);
       yamlOutput.scrollTop = 0;
       feedback.textContent = "YAML generated. Tap Copy YAML to copy it.";
     });
