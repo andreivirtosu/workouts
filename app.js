@@ -1163,54 +1163,135 @@
   }
 
   function renderNextPlan(workoutsAsc) {
-    const plan = [
-      { name: "Warmup", target: "Bike or row 5 min + mobility 3-5 min" },
-      { name: "Incline Dumbbell Bench Press", target: "3 x 8-10" },
-      { name: "Chest Supported Row / Seated Cable Row", target: "3 x 8-12" },
-      { name: "Assisted Pull-up", target: "3 x 5-8" },
-      { name: "Shoulder Press Machine / DB Shoulder Press", target: "2-3 x 8-10" },
-      { name: "Lateral Raise / Rear Delt Fly", target: "2 x 12-15" },
-      { name: "Triceps Pushdown", target: "2 x 10-12" },
-      { name: "Biceps Curl", target: "2 x 10-12" },
-      { name: "Plank / Dead Bug", target: "2-3 sets" },
-      { name: "Cooldown", target: "Walk or bike 5 min optional" }
+    const weeklyPlan = [
+      {
+        day: "Monday",
+        workout: "Upper A",
+        next: true,
+        items: [
+          "Warmup: Bike or row 5 min + mobility 3-5 min",
+          "Incline Dumbbell Bench Press: 3 x 8-10",
+          "Chest Supported Row or Seated Cable Row: 3 x 8-12",
+          "Assisted Pull-up: 3 x 5-8",
+          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
+          "Machine Chest Press or Assisted Dips: 2-3 x 8-10",
+          "Rear Delt Fly or Lateral Raise: 2 x 12-15",
+          "Plank or Dead Bug: 2-3 sets"
+        ]
+      },
+      {
+        day: "Tuesday",
+        workout: "Lower A",
+        items: [
+          "Warmup: Easy bike 5 min + lower-body mobility",
+          "Smith Machine Squat or Goblet Squat: 3-4 x 8-10",
+          "Leg Press: 3 x 10-15",
+          "Seated or Lying Leg Curl: 3 x 12-15",
+          "Walking Lunges or Split Squat: 2 sets each side",
+          "Calf Raise: 2-3 x 12-15",
+          "Farmer's Carry: 3-4 rounds",
+          "Optional bike: 8-10 min"
+        ]
+      },
+      {
+        day: "Wednesday",
+        workout: "Recovery",
+        items: [
+          "Rest, walk, or easy cardio"
+        ]
+      },
+      {
+        day: "Thursday",
+        workout: "Upper B",
+        items: [
+          "Warmup: Bike or row 5 min + shoulder mobility",
+          "Flat DB Bench Press or Machine Chest Press: 3 x 8-10",
+          "One-Arm DB Row or Cable Row: 3 x 10-12",
+          "Lat Pulldown: 3 x 8-12",
+          "Assisted Dips or Incline Machine Press: 2-3 x 8-10",
+          "Rear Delt Fly: 2-3 x 12-15",
+          "Lateral Raise or Face Pull: 2 x 12-15",
+          "Hangs or Pallof Press: 2-3 sets"
+        ]
+      },
+      {
+        day: "Friday",
+        workout: "Recovery",
+        items: [
+          "Rest, walk, or easy cardio"
+        ]
+      },
+      {
+        day: "Saturday",
+        workout: "Lower B",
+        items: [
+          "Warmup: Easy bike 5 min + hip mobility",
+          "Romanian Deadlift: 3 x 8-10",
+          "Bulgarian Split Squat or Reverse Lunge: 3 sets each side",
+          "Leg Curl: 3 x 12-15",
+          "Back Extension: 2-3 x 12-15",
+          "Leg Press, lighter than Lower A: 2 x 15",
+          "Plank or Dead Bug: 2-3 sets",
+          "Bike / rower / incline walk: 10 min steady"
+        ]
+      },
+      {
+        day: "Sunday",
+        workout: "Recovery",
+        items: [
+          "Rest or light mobility"
+        ]
+      }
     ];
-    state.nextPlanDone = loadNextPlanDone();
 
-    state.nextPlanExercises = plan
-      .map((item) => item.name)
-      .filter((name) => !["Warmup", "Cooldown"].includes(name));
+    const nextWorkout = weeklyPlan.find((entry) => entry.next) || weeklyPlan[0];
+    const overview = document.getElementById("week-overview");
+    if (overview) {
+      overview.innerHTML = weeklyPlan.map((entry) => {
+        const nextClass = entry.next ? " next-plan-item-week is-next-workout" : " next-plan-item-week";
+        const items = entry.items
+          .map((item) => `<div class="next-plan-target">${escapeHtml(item)}</div>`)
+          .join("");
+
+        return `
+        <article class="next-plan-item${nextClass}">
+          <div class="next-plan-name">${escapeHtml(entry.day)}: ${escapeHtml(entry.workout)}</div>
+          <div class="next-plan-copy">
+            ${items}
+          </div>
+        </article>
+      `;
+      }).join("");
+    }
+
+    const nextTitle = document.getElementById("next-workout-title");
+    if (nextTitle && nextWorkout) {
+      nextTitle.textContent = `Next Workout: ${nextWorkout.workout}`;
+    }
+
+    state.nextPlanExercises = (nextWorkout ? nextWorkout.items : [])
+      .map((item) => item.split(":")[0].trim())
+      .filter((name) => !["Warmup", "Cooldown", "Optional bike"].includes(name));
     renderLiveExerciseOptions();
 
     const container = document.getElementById("next-plan");
     if (!container) return;
 
-    const blocks = plan.map((item) => {
-      const done = !!state.nextPlanDone[item.name];
-      const doneClass = done ? " is-done" : "";
-      const checked = done ? "true" : "false";
+    const blocks = (nextWorkout ? nextWorkout.items : []).map((item) => {
+      const parts = item.split(":");
+      const name = parts.shift().trim();
+      const target = parts.join(":").trim();
       return `
-      <button class="next-plan-item next-plan-toggle${doneClass}" type="button" data-plan-name="${escapeHtml(item.name)}" aria-pressed="${checked}">
-        <div class="next-plan-check" aria-hidden="true">${done ? "✓" : ""}</div>
+      <article class="next-plan-item">
+        <div class="next-plan-name">${escapeHtml(name)}</div>
         <div class="next-plan-copy">
-          <div class="next-plan-name">${escapeHtml(item.name)}</div>
-        <div class="next-plan-target">${escapeHtml(item.target)}</div>
+          <div class="next-plan-target">${escapeHtml(target)}</div>
         </div>
-      </button>
+      </article>
     `;
     }).join("");
 
     container.innerHTML = blocks;
-
-    container.querySelectorAll(".next-plan-toggle").forEach((button) => {
-      button.addEventListener("click", () => {
-        const name = button.getAttribute("data-plan-name");
-        if (!name) return;
-        state.nextPlanDone[name] = !state.nextPlanDone[name];
-        saveNextPlanDone(state.nextPlanDone);
-        renderNextPlan(workoutsAsc);
-      });
-    });
   }
 
   function renderSessionList(workoutsDesc) {

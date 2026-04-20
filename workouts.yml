@@ -1,5 +1,73 @@
 ---
 workouts:
+- date: '2026-04-20'
+  workout_name: 'Upper A'
+  started_at: '2026-04-20T15:10'
+  ended_at: '2026-04-20T16:10'
+  duration_min: 60
+  bodyweight:
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 6
+  exercises:
+  - name: 'Incline Dumbbell Bench Press'
+    sets:
+    - weight_kg: 16
+      reps: 12
+    - weight_kg: 18
+      reps: 12
+    - weight_kg: 22
+      reps: 5
+  - name: 'Chest Supported Row / Seated Cable Row'
+    sets:
+    - weight_kg: 57
+      reps: 12
+    - weight_kg: 64
+      reps: 8
+    - weight_kg: 64
+      reps: 8
+  - name: 'Back extension'
+    sets:
+    - weight_kg: 0
+      reps: 15
+    - weight_kg: 0
+      reps: 15
+  - name: 'Hang'
+    sets:
+    -
+      duration_sec: 30
+    -
+      duration_sec: 30
+  - name: 'Triceps Pushdown'
+    sets:
+    - weight_kg: 15
+      reps: 15
+    - weight_kg: 20
+      reps: 7
+  - name: 'Lateral Raise / Rear Delt Fly'
+    sets:
+    - weight_kg: 16
+      reps: 12
+      note: 'Machine'
+    - weight_kg: 16
+      reps: 12
+  - name: 'Shoulder Press Machine / DB Shoulder Press'
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 12
+  - name: 'Assisted Pull-up'
+    sets:
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 50
+      reps: 12
+  cooldown:
+  - activity: 'Bike'
+    duration_min: 10
 - date: '2026-04-18'
   workout_name: Full body
   duration_min: 40
