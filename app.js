@@ -1167,7 +1167,6 @@
       {
         day: "Monday",
         workout: "Upper A",
-        next: true,
         items: [
           "Warmup: Bike or row 5 min + mobility 3-5 min",
           "Incline Dumbbell Bench Press: 3 x 8-10",
@@ -1181,6 +1180,7 @@
       },
       {
         day: "Tuesday",
+        next: true,
         workout: "Lower A",
         items: [
           "Warmup: Easy bike 5 min + lower-body mobility",
