@@ -258,6 +258,13 @@ canvas {
   font-size: 0.9rem;
 }
 
+.next-plan-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .next-plan-copy {
   min-width: 0;
 }
@@ -265,6 +272,26 @@ canvas {
 .next-plan-item-week.is-next-workout {
   border-color: #8db5bb;
   background: color-mix(in oklab, #e8f6f7 72%, white 28%);
+}
+
+.next-plan-action {
+  flex-shrink: 0;
+  border: 1px solid #8db5bb;
+  border-radius: 999px;
+  background: #f2fbfc;
+  color: #1f6f78;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.next-plan-action.is-active {
+  background: #1f6f78;
+  border-color: #1f6f78;
+  color: #fff;
+  cursor: default;
 }
 
 .next-plan-name {
@@ -298,6 +325,13 @@ canvas {
 
 .exercise-card canvas {
   height: 180px;
+}
+
+.live-session-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 220px));
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .live-grid {
@@ -534,6 +568,15 @@ canvas {
 
   .live-grid {
     grid-template-columns: 1fr;
+  }
+
+  .live-session-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .next-plan-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .live-actions {

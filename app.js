@@ -17,6 +17,7 @@
     calendarBound: false,
     nextPlanExercises: [],
     nextPlanDone: {},
+    nextPlanBound: false,
     liveLoggerBound: false,
     liveTimerIntervalId: null,
     sharedDraftSaveTimerId: null,
@@ -27,7 +28,8 @@
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
 
   function getCurrentPlanName() {
-    return "Upper A";
+    const activeWorkout = getWeeklyPlan().find((entry) => entry.next);
+    return activeWorkout ? activeWorkout.workout : "Lower A";
   }
 
   async function fetchSharedWorkoutDraft() {
@@ -131,6 +133,13 @@
     if (raw.includes("back extension")) return "Back Extension";
     if (raw.includes("squat")) return "Squat";
     return name || "Unknown";
+  }
+
+  function expandPlanExerciseNames(label) {
+    return String(label || "")
+      .split(/\s+or\s+|\s*\/\s*/i)
+      .map((part) => part.trim())
+      .filter(Boolean);
   }
 
   function buildWorkoutMetrics(workout) {
@@ -568,8 +577,128 @@
     return "workout-live-session-v1";
   }
 
+  function getActivePlanStorageKey() {
+    return "workout-active-plan-v1";
+  }
+
   function getNextPlanStorageKey(date = getTodayIso()) {
     return `workout-next-plan-done-v1:${date}`;
+  }
+
+  function loadActivePlanId() {
+    try {
+      return localStorage.getItem(getActivePlanStorageKey()) || "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function saveActivePlanId(planId) {
+    localStorage.setItem(getActivePlanStorageKey(), planId);
+  }
+
+  function getWeeklyPlan() {
+    const selectedId = loadActivePlanId();
+    const weeklyPlan = [
+      {
+        id: "monday-upper-a",
+        day: "Monday",
+        workout: "Upper A",
+        selectable: true,
+        items: [
+          "Warmup: Bike or row 5 min + mobility 3-5 min",
+          "Incline Dumbbell Bench Press: 3 x 8-10",
+          "Chest Supported Row or Seated Cable Row: 3 x 8-12",
+          "Assisted Pull-up: 3 x 5-8",
+          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
+          "Machine Chest Press or Assisted Dips: 2-3 x 8-10",
+          "Rear Delt Fly or Lateral Raise: 2 x 12-15",
+          "Plank or Dead Bug: 2-3 sets"
+        ]
+      },
+      {
+        id: "tuesday-lower-a",
+        day: "Tuesday",
+        workout: "Lower A",
+        selectable: true,
+        defaultNext: true,
+        items: [
+          "Warmup: Easy bike 5 min + lower-body mobility",
+          "Smith Machine Squat or Goblet Squat: 3-4 x 8-10",
+          "Leg Press: 3 x 10-15",
+          "Seated or Lying Leg Curl: 3 x 12-15",
+          "Walking Lunges or Split Squat: 2 sets each side",
+          "Calf Raise: 2-3 x 12-15",
+          "Farmer's Carry: 3-4 rounds",
+          "Optional bike: 8-10 min"
+        ]
+      },
+      {
+        id: "wednesday-recovery",
+        day: "Wednesday",
+        workout: "Recovery",
+        selectable: false,
+        items: [
+          "Rest, walk, or easy cardio"
+        ]
+      },
+      {
+        id: "thursday-upper-b",
+        day: "Thursday",
+        workout: "Upper B",
+        selectable: true,
+        items: [
+          "Warmup: Bike or row 5 min + shoulder mobility",
+          "Flat DB Bench Press or Machine Chest Press: 3 x 8-10",
+          "One-Arm DB Row or Cable Row: 3 x 10-12",
+          "Lat Pulldown: 3 x 8-12",
+          "Assisted Dips or Incline Machine Press: 2-3 x 8-10",
+          "Rear Delt Fly: 2-3 x 12-15",
+          "Lateral Raise or Face Pull: 2 x 12-15",
+          "Hangs or Pallof Press: 2-3 sets"
+        ]
+      },
+      {
+        id: "friday-recovery",
+        day: "Friday",
+        workout: "Recovery",
+        selectable: false,
+        items: [
+          "Rest, walk, or easy cardio"
+        ]
+      },
+      {
+        id: "saturday-lower-b",
+        day: "Saturday",
+        workout: "Lower B",
+        selectable: true,
+        items: [
+          "Warmup: Easy bike 5 min + hip mobility",
+          "Romanian Deadlift: 3 x 8-10",
+          "Bulgarian Split Squat or Reverse Lunge: 3 sets each side",
+          "Leg Curl: 3 x 12-15",
+          "Back Extension: 2-3 x 12-15",
+          "Leg Press, lighter than Lower A: 2 x 15",
+          "Plank or Dead Bug: 2-3 sets",
+          "Bike / rower / incline walk: 10 min steady"
+        ]
+      },
+      {
+        id: "sunday-recovery",
+        day: "Sunday",
+        workout: "Recovery",
+        selectable: false,
+        items: [
+          "Rest or light mobility"
+        ]
+      }
+    ];
+
+    const hasSelected = weeklyPlan.some((entry) => entry.selectable && entry.id === selectedId);
+    return weeklyPlan.map((entry) => ({
+      ...entry,
+      next: entry.selectable && (hasSelected ? entry.id === selectedId : !!entry.defaultNext)
+    }));
   }
 
   function loadLiveSession() {
@@ -581,6 +710,9 @@
       if (!Array.isArray(parsed.sets)) parsed.sets = [];
       if (!parsed.date) parsed.date = getTodayIso();
       parsed.workout_name = getCurrentPlanName();
+      parsed.bodyweight = toNumber(parsed.bodyweight);
+      parsed.warmup_run_min = toNumber(parsed.warmup_run_min);
+      parsed.cooldown_bike_min = toNumber(parsed.cooldown_bike_min);
       if (typeof parsed.started_at !== "string") parsed.started_at = null;
       if (typeof parsed.ended_at !== "string") parsed.ended_at = null;
       return parsed;
@@ -612,9 +744,21 @@
     const today = getTodayIso();
     if (session.date === today) {
       session.workout_name = getCurrentPlanName();
+      session.bodyweight = toNumber(session.bodyweight);
+      session.warmup_run_min = toNumber(session.warmup_run_min);
+      session.cooldown_bike_min = toNumber(session.cooldown_bike_min);
       return session;
     }
-    return { date: today, workout_name: getCurrentPlanName(), sets: [], started_at: null, ended_at: null };
+    return {
+      date: today,
+      workout_name: getCurrentPlanName(),
+      bodyweight: null,
+      warmup_run_min: null,
+      cooldown_bike_min: null,
+      sets: [],
+      started_at: null,
+      ended_at: null
+    };
   }
 
   function formatClockTime(isoString) {
@@ -756,10 +900,22 @@
     const nextWorkoutTitle = document.getElementById("next-workout-title");
     const status = document.getElementById("live-status");
     const list = document.getElementById("live-list");
+    const bodyweightInput = document.getElementById("live-bodyweight");
+    const warmupRunInput = document.getElementById("live-warmup-run");
+    const cooldownBikeInput = document.getElementById("live-cooldown-bike");
     if (!status || !list) return;
 
     if (nextWorkoutTitle) {
       nextWorkoutTitle.textContent = `Next Workout: ${session.workout_name || getCurrentPlanName()}`;
+    }
+    if (bodyweightInput) {
+      bodyweightInput.value = session.bodyweight === null ? "" : String(session.bodyweight);
+    }
+    if (warmupRunInput) {
+      warmupRunInput.value = session.warmup_run_min === null ? "" : String(session.warmup_run_min);
+    }
+    if (cooldownBikeInput) {
+      cooldownBikeInput.value = session.cooldown_bike_min === null ? "" : String(session.cooldown_bike_min);
     }
     const durationMin = getSessionDurationMinutes(session);
     const started = formatClockTime(session.started_at);
@@ -820,6 +976,9 @@
     const exerciseSelect = document.getElementById("live-exercise");
     const customWrap = document.getElementById("live-custom-wrap");
     const customExerciseInput = document.getElementById("live-custom-exercise");
+    const bodyweightInput = document.getElementById("live-bodyweight");
+    const warmupRunInput = document.getElementById("live-warmup-run");
+    const cooldownBikeInput = document.getElementById("live-cooldown-bike");
     const weightInput = document.getElementById("live-weight");
     const repsInput = document.getElementById("live-reps");
     const durationInput = document.getElementById("live-duration-sec");
@@ -831,7 +990,7 @@
     const rest90Btn = document.getElementById("rest-90");
     const rest120Btn = document.getElementById("rest-120");
     const restStopBtn = document.getElementById("rest-stop");
-    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !bodyweightInput || !warmupRunInput || !cooldownBikeInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
     let session = ensureTodaySession(loadLiveSession());
     renderLiveExerciseOptions();
@@ -867,6 +1026,30 @@
     customExerciseInput.addEventListener("input", () => {
       updateLiveInputMode();
       renderLiveExerciseHistory(getActiveLiveExerciseName());
+    });
+
+    bodyweightInput.addEventListener("input", () => {
+      session = ensureTodaySession(session);
+      session.bodyweight = toNumber(bodyweightInput.value);
+      saveLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
+    });
+
+    warmupRunInput.addEventListener("input", () => {
+      session = ensureTodaySession(session);
+      session.warmup_run_min = toNumber(warmupRunInput.value);
+      saveLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
+    });
+
+    cooldownBikeInput.addEventListener("input", () => {
+      session = ensureTodaySession(session);
+      session.cooldown_bike_min = toNumber(cooldownBikeInput.value);
+      saveLiveSession(session);
+      refreshLiveYamlOutput(session);
+      queueSharedWorkoutDraftSave(session, feedback);
     });
 
     toggleWorkoutBtn.addEventListener("click", () => {
@@ -937,9 +1120,21 @@
     });
 
     clearBtn.addEventListener("click", () => {
-      session = { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [], started_at: null, ended_at: null };
+      session = {
+        date: getTodayIso(),
+        workout_name: getCurrentPlanName(),
+        bodyweight: null,
+        warmup_run_min: null,
+        cooldown_bike_min: null,
+        sets: [],
+        started_at: null,
+        ended_at: null
+      };
       saveLiveSession(session);
       renderLiveSession(session);
+      bodyweightInput.value = "";
+      warmupRunInput.value = "";
+      cooldownBikeInput.value = "";
       weightInput.value = "";
       repsInput.value = "";
       durationInput.value = "";
@@ -1001,6 +1196,44 @@
     state.liveLoggerBound = true;
   }
 
+  function syncActiveWorkoutUi() {
+    const session = ensureTodaySession(loadLiveSession());
+    saveLiveSession(session);
+    renderNextPlan(state.workoutsAsc);
+
+    if (!state.liveLoggerBound) return;
+
+    const feedback = document.getElementById("live-feedback");
+    renderLiveExerciseOptions();
+    updateLiveInputMode();
+    renderLiveSession(session);
+    refreshLiveYamlOutput(session);
+    renderLiveExerciseHistory(getActiveLiveExerciseName());
+    if (feedback) {
+      feedback.textContent = `Active workout set to ${session.workout_name}.`;
+      queueSharedWorkoutDraftSave(session, feedback);
+    }
+  }
+
+  function bindNextPlanActions() {
+    if (state.nextPlanBound) return;
+    const overview = document.getElementById("week-overview");
+    if (!overview) return;
+
+    overview.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-set-active-workout]");
+      if (!button) return;
+
+      const planId = button.getAttribute("data-set-active-workout");
+      if (!planId) return;
+
+      saveActivePlanId(planId);
+      syncActiveWorkoutUi();
+    });
+
+    state.nextPlanBound = true;
+  }
+
   function yamlQuote(value) {
     return `'${String(value || "").replaceAll("'", "''")}'`;
   }
@@ -1031,10 +1264,16 @@
     lines.push(`  started_at: ${safeSession.started_at ? yamlQuote(safeSession.started_at) : "null"}`);
     lines.push(`  ended_at: ${safeSession.ended_at ? yamlQuote(safeSession.ended_at) : "null"}`);
     lines.push(`  duration_min: ${getSessionDurationMinutes(safeSession) ?? "null"}`);
-    lines.push("  bodyweight:");
+    lines.push(`  bodyweight: ${safeSession.bodyweight === null ? "" : safeSession.bodyweight}`);
     lines.push("  energy:");
     lines.push("  notes: null");
-    lines.push("  warmup: []");
+    if (safeSession.warmup_run_min === null) {
+      lines.push("  warmup: []");
+    } else {
+      lines.push("  warmup:");
+      lines.push(`  - activity: ${yamlQuote("Run")}`);
+      lines.push(`    duration_min: ${safeSession.warmup_run_min}`);
+    }
     lines.push("  exercises:");
 
     if (!grouped.length) {
@@ -1060,6 +1299,13 @@
       });
     });
 
+    if (safeSession.cooldown_bike_min === null) {
+      return lines.join("\n");
+    }
+
+    lines.push("  cooldown:");
+    lines.push(`  - activity: ${yamlQuote("Bike")}`);
+    lines.push(`    duration_min: ${safeSession.cooldown_bike_min}`);
     return lines.join("\n");
   }
 
@@ -1163,99 +1409,28 @@
   }
 
   function renderNextPlan(workoutsAsc) {
-    const weeklyPlan = [
-      {
-        day: "Monday",
-        workout: "Upper A",
-        items: [
-          "Warmup: Bike or row 5 min + mobility 3-5 min",
-          "Incline Dumbbell Bench Press: 3 x 8-10",
-          "Chest Supported Row or Seated Cable Row: 3 x 8-12",
-          "Assisted Pull-up: 3 x 5-8",
-          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
-          "Machine Chest Press or Assisted Dips: 2-3 x 8-10",
-          "Rear Delt Fly or Lateral Raise: 2 x 12-15",
-          "Plank or Dead Bug: 2-3 sets"
-        ]
-      },
-      {
-        day: "Tuesday",
-        next: true,
-        workout: "Lower A",
-        items: [
-          "Warmup: Easy bike 5 min + lower-body mobility",
-          "Smith Machine Squat or Goblet Squat: 3-4 x 8-10",
-          "Leg Press: 3 x 10-15",
-          "Seated or Lying Leg Curl: 3 x 12-15",
-          "Walking Lunges or Split Squat: 2 sets each side",
-          "Calf Raise: 2-3 x 12-15",
-          "Farmer's Carry: 3-4 rounds",
-          "Optional bike: 8-10 min"
-        ]
-      },
-      {
-        day: "Wednesday",
-        workout: "Recovery",
-        items: [
-          "Rest, walk, or easy cardio"
-        ]
-      },
-      {
-        day: "Thursday",
-        workout: "Upper B",
-        items: [
-          "Warmup: Bike or row 5 min + shoulder mobility",
-          "Flat DB Bench Press or Machine Chest Press: 3 x 8-10",
-          "One-Arm DB Row or Cable Row: 3 x 10-12",
-          "Lat Pulldown: 3 x 8-12",
-          "Assisted Dips or Incline Machine Press: 2-3 x 8-10",
-          "Rear Delt Fly: 2-3 x 12-15",
-          "Lateral Raise or Face Pull: 2 x 12-15",
-          "Hangs or Pallof Press: 2-3 sets"
-        ]
-      },
-      {
-        day: "Friday",
-        workout: "Recovery",
-        items: [
-          "Rest, walk, or easy cardio"
-        ]
-      },
-      {
-        day: "Saturday",
-        workout: "Lower B",
-        items: [
-          "Warmup: Easy bike 5 min + hip mobility",
-          "Romanian Deadlift: 3 x 8-10",
-          "Bulgarian Split Squat or Reverse Lunge: 3 sets each side",
-          "Leg Curl: 3 x 12-15",
-          "Back Extension: 2-3 x 12-15",
-          "Leg Press, lighter than Lower A: 2 x 15",
-          "Plank or Dead Bug: 2-3 sets",
-          "Bike / rower / incline walk: 10 min steady"
-        ]
-      },
-      {
-        day: "Sunday",
-        workout: "Recovery",
-        items: [
-          "Rest or light mobility"
-        ]
-      }
-    ];
+    const weeklyPlan = getWeeklyPlan();
 
     const nextWorkout = weeklyPlan.find((entry) => entry.next) || weeklyPlan[0];
     const overview = document.getElementById("week-overview");
     if (overview) {
       overview.innerHTML = weeklyPlan.map((entry) => {
         const nextClass = entry.next ? " next-plan-item-week is-next-workout" : " next-plan-item-week";
+        const action = !entry.selectable
+          ? ""
+          : entry.next
+            ? '<button class="next-plan-action is-active" type="button" disabled>Active</button>'
+            : `<button class="next-plan-action" type="button" data-set-active-workout="${escapeHtml(entry.id)}">Set Active</button>`;
         const items = entry.items
           .map((item) => `<div class="next-plan-target">${escapeHtml(item)}</div>`)
           .join("");
 
         return `
         <article class="next-plan-item${nextClass}">
-          <div class="next-plan-name">${escapeHtml(entry.day)}: ${escapeHtml(entry.workout)}</div>
+          <div class="next-plan-head">
+            <div class="next-plan-name">${escapeHtml(entry.day)}: ${escapeHtml(entry.workout)}</div>
+            ${action}
+          </div>
           <div class="next-plan-copy">
             ${items}
           </div>
@@ -1270,7 +1445,7 @@
     }
 
     state.nextPlanExercises = (nextWorkout ? nextWorkout.items : [])
-      .map((item) => item.split(":")[0].trim())
+      .flatMap((item) => expandPlanExerciseNames(item.split(":")[0].trim()))
       .filter((name) => !["Warmup", "Cooldown", "Optional bike"].includes(name));
     renderLiveExerciseOptions();
 
@@ -1417,6 +1592,7 @@
 
       renderKpis(workoutsAsc);
       renderNextPlan(workoutsAsc);
+      bindNextPlanActions();
       bindLiveLogger();
       bindCalendarInteractions();
       renderCharts();
