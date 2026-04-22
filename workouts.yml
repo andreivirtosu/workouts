@@ -647,7 +647,7 @@ workouts:
   - activity: Bike
     duration_min: 10
 - date: 2026-04-01
-  workout_name: Complementary Full Body
+  workout_name: Full Body Complementary
   duration_min: 46
   bodyweight: 
   energy: 
@@ -709,7 +709,7 @@ workouts:
     - duration_sec: 0
     - duration_sec: 0
 - date: 2026-03-30
-  workout_name: Workout
+  workout_name: Full Body
   duration_min: 46
   bodyweight: 84.15
   energy: 
