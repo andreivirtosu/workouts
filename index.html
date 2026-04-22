@@ -38,8 +38,10 @@
 
       <section class="panel">
         <h2>Workouts by Calendar Day</h2>
-        <p class="panel-note">Each day in range is shown. Tap/click a bar to see that day's workout.</p>
+        <p class="panel-note">Calendar heatmap by workout type. Tap/click a day to see that day's workout.</p>
+        <div id="activity-summary" class="activity-summary" aria-label="Training summary"></div>
         <canvas id="calendar-chart" height="220"></canvas>
+        <div id="calendar-legend" class="calendar-legend" aria-label="Workout type legend"></div>
         <div id="calendar-day-detail" class="calendar-day-detail"></div>
       </section>
 

@@ -418,6 +418,159 @@
     return days;
   }
 
+  function getWorkoutType(workoutName) {
+    const raw = String(workoutName || "").trim().toLowerCase();
+    if (raw.startsWith("upper")) return "Upper";
+    if (raw.startsWith("lower")) return "Lower";
+    if (raw.startsWith("full")) return "Full Body";
+    if (raw.startsWith("push")) return "Push";
+    if (raw.startsWith("pull")) return "Pull";
+    if (raw.includes("cardio")) return "Cardio";
+    return "Other";
+  }
+
+  function getCalendarDayType(day) {
+    if (!day || !day.count) return "Rest";
+    const types = [...new Set((day.workouts || []).map((workout) => getWorkoutType(workout.workout_name)))];
+    if (types.length > 1) return "Mixed";
+    return types[0] || "Other";
+  }
+
+  function getCalendarTypeColor(type) {
+    switch (type) {
+      case "Upper":
+        return "#5b8def";
+      case "Lower":
+        return "#2aa876";
+      case "Full Body":
+        return "#c97a2b";
+      case "Push":
+        return "#c45c7a";
+      case "Pull":
+        return "#7b6fd6";
+      case "Cardio":
+        return "#00a6b2";
+      case "Mixed":
+        return "#4a5963";
+      case "Rest":
+        return "#e7ebf0";
+      default:
+        return "#9aa7b3";
+    }
+  }
+
+  function getCalendarLegendItems(days) {
+    const present = new Set(days.filter((day) => day.count).map((day) => getCalendarDayType(day)));
+    const ordered = ["Upper", "Lower", "Full Body", "Push", "Pull", "Cardio", "Mixed", "Other", "Rest"]
+      .filter((type) => type === "Rest" || present.has(type));
+    return ordered.map((type) => ({ type, color: getCalendarTypeColor(type) }));
+  }
+
+  function computeStreaks(days) {
+    let current = 0;
+    let longest = 0;
+    let running = 0;
+
+    days.forEach((day) => {
+      if (day.count > 0) {
+        running += 1;
+        longest = Math.max(longest, running);
+      } else {
+        running = 0;
+      }
+    });
+
+    for (let i = days.length - 1; i >= 0; i -= 1) {
+      if (days[i].count > 0) current += 1;
+      else break;
+    }
+
+    return { current, longest };
+  }
+
+  function computeWeeklyAverage(days) {
+    if (!days.length) return 0;
+    const totalWorkouts = days.reduce((sum, day) => sum + day.count, 0);
+    const totalWeeks = Math.max(1, Math.ceil(days.length / 7));
+    return totalWorkouts / totalWeeks;
+  }
+
+  function computeCurrentMonthTotal(days) {
+    if (!days.length) return 0;
+    const latest = parseDate(days[days.length - 1].date);
+    const month = latest.getMonth();
+    const year = latest.getFullYear();
+    return days
+      .filter((day) => {
+        const date = parseDate(day.date);
+        return date.getFullYear() === year && date.getMonth() === month;
+      })
+      .reduce((sum, day) => sum + day.count, 0);
+  }
+
+  function computeCurrentMonthTrainingDays(days) {
+    if (!days.length) return 0;
+    const latest = parseDate(days[days.length - 1].date);
+    const month = latest.getMonth();
+    const year = latest.getFullYear();
+    return days.filter((day) => {
+      if (!day.count) return false;
+      const date = parseDate(day.date);
+      return date.getFullYear() === year && date.getMonth() === month;
+    }).length;
+  }
+
+  function renderActivitySummary(days) {
+    const container = document.getElementById("activity-summary");
+    if (!container) return;
+
+    if (!days.length) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const streaks = computeStreaks(days);
+    const currentMonthTotal = computeCurrentMonthTotal(days);
+    const currentMonthTrainingDays = computeCurrentMonthTrainingDays(days);
+    const weeklyAverage = computeWeeklyAverage(days);
+    const latestMonthLabel = parseDate(days[days.length - 1].date).toLocaleDateString(undefined, { month: "short" });
+
+    container.innerHTML = `
+      <article class="activity-stat">
+        <p class="activity-stat-label">Current Streak</p>
+        <p class="activity-stat-value">${streaks.current}</p>
+        <p class="activity-stat-note">Consecutive training days</p>
+      </article>
+      <article class="activity-stat">
+        <p class="activity-stat-label">Longest Streak</p>
+        <p class="activity-stat-value">${streaks.longest}</p>
+        <p class="activity-stat-note">Best run in this history</p>
+      </article>
+      <article class="activity-stat">
+        <p class="activity-stat-label">Avg / Week</p>
+        <p class="activity-stat-value">${weeklyAverage.toFixed(1)}</p>
+        <p class="activity-stat-note">Across ${Math.max(1, Math.ceil(days.length / 7))} tracked weeks</p>
+      </article>
+      <article class="activity-stat">
+        <p class="activity-stat-label">This Month</p>
+        <p class="activity-stat-value">${currentMonthTotal}</p>
+        <p class="activity-stat-note">${currentMonthTrainingDays} active day${currentMonthTrainingDays === 1 ? "" : "s"} in ${latestMonthLabel}</p>
+      </article>
+    `;
+  }
+
+  function renderCalendarLegend(days) {
+    const container = document.getElementById("calendar-legend");
+    if (!container) return;
+    const items = getCalendarLegendItems(days);
+    container.innerHTML = items.map((item) => `
+      <span class="calendar-legend-item">
+        <span class="calendar-legend-swatch" style="background:${item.color}"></span>
+        <span>${escapeHtml(item.type)}</span>
+      </span>
+    `).join("");
+  }
+
   function renderCalendarDayDetail(day) {
     const detail = document.getElementById("calendar-day-detail");
     if (!detail) return;
@@ -466,58 +619,99 @@
     return latestWithWorkout ? latestWithWorkout.date : (days[0] ? days[0].date : null);
   }
 
+  function startOfWeek(date) {
+    const start = new Date(date);
+    start.setDate(start.getDate() - start.getDay());
+    return start;
+  }
+
+  function endOfWeek(date) {
+    const end = new Date(date);
+    end.setDate(end.getDate() + (6 - end.getDay()));
+    return end;
+  }
+
+  function diffDays(a, b) {
+    return Math.round((b.getTime() - a.getTime()) / 86400000);
+  }
+
   function drawCalendarChart(canvas, days) {
     if (!canvas) return;
-    const labels = days.map((d) => d.label);
-    const values = days.map((d) => d.count);
     const { ctx, width, height } = setupCanvas(canvas);
-    const pad = { top: 16, right: 12, bottom: 34, left: 38 };
+    const pad = { top: 28, right: 12, bottom: 12, left: 34 };
     ctx.clearRect(0, 0, width, height);
 
-    if (!values.length) return;
+    if (!days.length) {
+      state.calendarBars = [];
+      drawCanvasMessage(canvas, "No workout days yet.");
+      return;
+    }
 
-    drawAxes(ctx, width, height, { pad });
-
-    const maxV = Math.max(1, ...values);
+    const dateMap = new Map(days.map((day) => [day.date, day]));
+    const firstDate = parseDate(days[0].date);
+    const lastDate = parseDate(days[days.length - 1].date);
+    const rangeStart = startOfWeek(firstDate);
+    const rangeEnd = endOfWeek(lastDate);
+    const totalWeeks = Math.floor(diffDays(rangeStart, rangeEnd) / 7) + 1;
     const chartW = width - pad.left - pad.right;
     const chartH = height - pad.top - pad.bottom;
-    const slotW = chartW / values.length;
-    const barW = Math.max(6, slotW * 0.65);
-    const bars = [];
+    const gap = totalWeeks > 26 ? 2 : 3;
+    const cellSize = Math.max(4, Math.min(18, Math.floor(Math.min((chartW - gap * (totalWeeks - 1)) / totalWeeks, (chartH - gap * 6) / 7))));
+    const startX = pad.left;
+    const startY = pad.top;
+    const monthLabels = [];
+    const cells = [];
 
-    values.forEach((v, i) => {
-      const baseH = (v / maxV) * chartH;
-      const h = Math.max(4, baseH);
-      const x = pad.left + i * slotW + (slotW - barW) / 2;
-      const y = height - pad.bottom - h;
-      const day = days[i];
+    ctx.fillStyle = colors.text;
+    ctx.font = "12px 'Avenir Next', 'Trebuchet MS', sans-serif";
+    ctx.textAlign = "left";
+    const weekdayLabels = ["S", "M", "T", "W", "T", "F", "S"];
+    weekdayLabels.forEach((label, row) => {
+      if (row % 2 === 1) {
+        const y = startY + row * (cellSize + gap) + cellSize * 0.72;
+        ctx.fillText(label, 8, y);
+      }
+    });
+
+    for (let cursor = new Date(rangeStart); cursor <= rangeEnd; cursor = addDays(cursor, 1)) {
+      const iso = toIsoDate(cursor);
+      const day = dateMap.get(iso) || { date: iso, label: formatDateShort(iso), count: 0, workouts: [] };
+      const weekIndex = Math.floor(diffDays(rangeStart, cursor) / 7);
+      const weekday = cursor.getDay();
+      const x = startX + weekIndex * (cellSize + gap);
+      const y = startY + weekday * (cellSize + gap);
       const selected = state.selectedCalendarDate === day.date;
 
-      ctx.fillStyle = v > 0 ? colors.bar : "#d5d9df";
-      ctx.fillRect(x, y, barW, h);
+      if (cursor.getDate() === 1 || (weekIndex === 0 && weekday === 0)) {
+        const label = cursor.toLocaleDateString(undefined, { month: "short" });
+        const existing = monthLabels[monthLabels.length - 1];
+        if (!existing || existing.label !== label) {
+          monthLabels.push({ label, x });
+        }
+      }
+
+      ctx.fillStyle = getCalendarTypeColor(getCalendarDayType(day));
+      ctx.fillRect(x, y, cellSize, cellSize);
 
       if (selected) {
         ctx.strokeStyle = "#cc5a2b";
         ctx.lineWidth = 2;
-        ctx.strokeRect(x - 1, y - 1, barW + 2, h + 2);
+        ctx.strokeRect(x - 1, y - 1, cellSize + 2, cellSize + 2);
+      } else {
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x + 0.5, y + 0.5, cellSize - 1, cellSize - 1);
       }
 
-      bars.push({ x, y, w: barW, h, day });
+      cells.push({ x, y, w: cellSize, h: cellSize, day });
+    }
+
+    monthLabels.forEach((item) => {
+      ctx.fillStyle = colors.text;
+      ctx.fillText(item.label, item.x, 16);
     });
 
-    state.calendarBars = bars;
-
-    ctx.fillStyle = colors.text;
-    ctx.font = "12px 'Avenir Next', 'Trebuchet MS', sans-serif";
-    ctx.textAlign = "center";
-    const tickIndexes = labels.length <= 8
-      ? labels.map((_, i) => i)
-      : [0, Math.floor((labels.length - 1) / 3), Math.floor((labels.length - 1) * 2 / 3), labels.length - 1];
-
-    tickIndexes.forEach((i) => {
-      const x = pad.left + i * slotW + slotW / 2;
-      ctx.fillText(labels[i], x, height - 10);
-    });
+    state.calendarBars = cells;
   }
 
   function bindCalendarInteractions() {
@@ -1600,7 +1794,9 @@
     const selectedDay = state.dailySeries.find((d) => d.date === state.selectedCalendarDate) || state.dailySeries[0] || null;
     if (selectedDay) state.selectedCalendarDate = selectedDay.date;
 
+    renderActivitySummary(state.dailySeries);
     drawCalendarChart(document.getElementById("calendar-chart"), state.dailySeries);
+    renderCalendarLegend(state.dailySeries);
     renderCalendarDayDetail(selectedDay);
 
     const setsSeries = workoutsAsc.map((w) => buildWorkoutMetrics(w).sets);
