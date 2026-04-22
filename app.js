@@ -825,9 +825,11 @@
     return select.value || "Exercise";
   }
 
-  function isDurationOnlyExercise(name) {
+  function getLiveExerciseInputMode(name) {
     const raw = String(name || "").trim().toLowerCase();
-    return raw === "plank" || raw === "hangs" || raw === "hang";
+    if (raw === "plank" || raw === "hangs" || raw === "hang") return "duration-only";
+    if (raw === "farmer's carry" || raw === "farmers carry") return "weighted-duration";
+    return "standard";
   }
 
   function updateLiveInputMode() {
@@ -839,16 +841,18 @@
     const durationInput = document.getElementById("live-duration-sec");
     if (!weightWrap || !repsWrap || !weightInput || !repsInput || !durationWrap || !durationInput) return;
 
-    const durationOnly = isDurationOnlyExercise(getActiveLiveExerciseName());
+    const inputMode = getLiveExerciseInputMode(getActiveLiveExerciseName());
+    const durationOnly = inputMode === "duration-only";
+    const usesDuration = durationOnly || inputMode === "weighted-duration";
     weightWrap.hidden = durationOnly;
-    repsWrap.hidden = durationOnly;
+    repsWrap.hidden = usesDuration;
     weightWrap.style.display = durationOnly ? "none" : "";
-    repsWrap.style.display = durationOnly ? "none" : "";
-    durationWrap.hidden = !durationOnly;
-    durationWrap.style.display = durationOnly ? "" : "none";
+    repsWrap.style.display = usesDuration ? "none" : "";
+    durationWrap.hidden = !usesDuration;
+    durationWrap.style.display = usesDuration ? "" : "none";
 
-    if (durationOnly) {
-      weightInput.value = "";
+    if (usesDuration) {
+      if (durationOnly) weightInput.value = "";
       repsInput.value = "";
     } else {
       durationInput.value = "";
@@ -1072,13 +1076,16 @@
 
     addBtn.addEventListener("click", () => {
       const exercise = getActiveLiveExerciseName();
-      const durationOnly = isDurationOnlyExercise(exercise);
+      const inputMode = getLiveExerciseInputMode(exercise);
+      const durationOnly = inputMode === "duration-only";
+      const usesDuration = durationOnly || inputMode === "weighted-duration";
       const weight = toNumber(weightInput.value);
       const reps = toNumber(repsInput.value);
       const durationSec = toNumber(durationInput.value);
       const note = noteInput.value.trim();
-      if (durationOnly) {
+      if (usesDuration) {
         if (durationSec === null) return;
+        if (!durationOnly && weight === null) return;
       } else if (weight === null && reps === null) {
         return;
       }
@@ -1087,8 +1094,8 @@
       session.sets.push({
         exercise,
         weight_kg: durationOnly ? null : weight,
-        reps: durationOnly ? null : reps,
-        duration_sec: durationOnly ? durationSec : null,
+        reps: usesDuration ? null : reps,
+        duration_sec: usesDuration ? durationSec : null,
         note: note || null
       });
       saveLiveSession(session);
@@ -1099,7 +1106,7 @@
       durationInput.value = "";
       repsInput.value = "";
       noteInput.value = "";
-      if (durationOnly) durationInput.focus();
+      if (usesDuration) durationInput.focus();
       else repsInput.focus();
       feedback.textContent = "";
     });
@@ -1415,7 +1422,7 @@
     const overview = document.getElementById("week-overview");
     if (overview) {
       overview.innerHTML = weeklyPlan.map((entry) => {
-        const nextClass = entry.next ? " next-plan-item-week is-next-workout" : " next-plan-item-week";
+        const nextClass = entry.next ? " week-overview-item is-next-workout" : " week-overview-item";
         const action = !entry.selectable
           ? ""
           : entry.next
@@ -1426,8 +1433,8 @@
           .join("");
 
         return `
-        <article class="next-plan-item${nextClass}">
-          <div class="next-plan-head">
+        <article class="${nextClass}">
+          <div class="week-overview-head">
             <div class="next-plan-name">${escapeHtml(entry.day)}: ${escapeHtml(entry.workout)}</div>
             ${action}
           </div>
@@ -1448,6 +1455,7 @@
       .flatMap((item) => expandPlanExerciseNames(item.split(":")[0].trim()))
       .filter((name) => !["Warmup", "Cooldown", "Optional bike"].includes(name));
     renderLiveExerciseOptions();
+    state.nextPlanDone = loadNextPlanDone();
 
     const container = document.getElementById("next-plan");
     if (!container) return;
@@ -1456,17 +1464,31 @@
       const parts = item.split(":");
       const name = parts.shift().trim();
       const target = parts.join(":").trim();
+      const done = !!state.nextPlanDone[name];
+      const doneClass = done ? " is-done" : "";
+      const checked = done ? "true" : "false";
       return `
-      <article class="next-plan-item">
-        <div class="next-plan-name">${escapeHtml(name)}</div>
+      <button class="next-plan-item next-plan-toggle${doneClass}" type="button" data-plan-name="${escapeHtml(name)}" aria-pressed="${checked}">
+        <div class="next-plan-check" aria-hidden="true">${done ? "✓" : ""}</div>
         <div class="next-plan-copy">
+          <div class="next-plan-name">${escapeHtml(name)}</div>
           <div class="next-plan-target">${escapeHtml(target)}</div>
         </div>
-      </article>
+      </button>
     `;
     }).join("");
 
     container.innerHTML = blocks;
+
+    container.querySelectorAll(".next-plan-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const name = button.getAttribute("data-plan-name");
+        if (!name) return;
+        state.nextPlanDone[name] = !state.nextPlanDone[name];
+        saveNextPlanDone(state.nextPlanDone);
+        renderNextPlan(workoutsAsc);
+      });
+    });
   }
 
   function renderSessionList(workoutsDesc) {

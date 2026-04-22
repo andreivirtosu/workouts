@@ -20,7 +20,7 @@ workouts:
       reps: 12
     - weight_kg: 191
       reps: 12
-  - name: 'Seated leg curl'
+  - name: 'Seated Leg Curl'
     sets:
     - weight_kg: 30
       reps: 15
@@ -59,13 +59,11 @@ workouts:
   - name: 'Farmer''s Carry'
     sets:
     - weight_kg: 18
-      reps: 40
-      note: 'In seconds'
+      duration_sec: 40
     - weight_kg: 18
-      reps: 40
-      note: 'Second'
+      duration_sec: 40
     - weight_kg: 18
-      reps: 30
+      duration_sec: 30
       note: 'Hard'
   cooldown:
   - activity: 'Bike'

@@ -245,11 +245,13 @@ canvas {
   font-size: 0.86rem;
 }
 
+.week-overview,
 .next-plan {
   display: grid;
   gap: 8px;
 }
 
+.week-overview-item,
 .next-plan-item {
   border: 1px solid #ece8dc;
   border-radius: 10px;
@@ -258,18 +260,63 @@ canvas {
   font-size: 0.9rem;
 }
 
-.next-plan-head {
+.next-plan-toggle {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.next-plan-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex: 0 0 24px;
+}
+
+.week-overview-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
+.next-plan-head {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
 .next-plan-copy {
   min-width: 0;
 }
 
-.next-plan-item-week.is-next-workout {
+.next-plan-toggle.is-done {
+  background: color-mix(in oklab, #dff4e7 72%, white 28%);
+  border-color: #9cccaf;
+}
+
+.next-plan-toggle.is-done .next-plan-check {
+  border-color: #1f7a43;
+  background: #1f7a43;
+}
+
+.next-plan-toggle.is-done .next-plan-name,
+.next-plan-toggle.is-done .next-plan-target {
+  opacity: 0.8;
+}
+
+.week-overview-item.is-next-workout {
   border-color: #8db5bb;
   background: color-mix(in oklab, #e8f6f7 72%, white 28%);
 }
