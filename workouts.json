@@ -1,6 +1,140 @@
 {
   "workouts": [
     {
+      "date": "2026-04-22",
+      "workout_name": "Lower A",
+      "started_at": "2026-04-22T14:57",
+      "ended_at": "2026-04-22T15:57",
+      "duration_min": 60,
+      "bodyweight": 82.6,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 7
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 173,
+              "reps": 12
+            },
+            {
+              "weight_kg": 182,
+              "reps": 12
+            },
+            {
+              "weight_kg": 191,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Seated leg curl",
+          "sets": [
+            {
+              "weight_kg": 30,
+              "reps": 15
+            },
+            {
+              "weight_kg": 35,
+              "reps": 12
+            },
+            {
+              "weight_kg": 40,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Rotary calf",
+          "sets": [
+            {
+              "weight_kg": 25,
+              "reps": 20
+            },
+            {
+              "weight_kg": 30,
+              "reps": 15
+            },
+            {
+              "weight_kg": 35,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Smith Machine Squat",
+          "sets": [
+            {
+              "weight_kg": 10,
+              "reps": 12
+            },
+            {
+              "weight_kg": 15,
+              "reps": 12
+            },
+            {
+              "weight_kg": 15,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 45
+            },
+            {
+              "duration_sec": 30
+            }
+          ]
+        },
+        {
+          "name": "Plank",
+          "sets": [
+            {
+              "duration_sec": 60
+            },
+            {
+              "duration_sec": 45
+            }
+          ]
+        },
+        {
+          "name": "Farmer's Carry",
+          "sets": [
+            {
+              "weight_kg": 18,
+              "reps": 40,
+              "note": "In seconds"
+            },
+            {
+              "weight_kg": 18,
+              "reps": 40,
+              "note": "Second"
+            },
+            {
+              "weight_kg": 18,
+              "reps": 30,
+              "note": "Hard"
+            }
+          ]
+        }
+      ],
+      "cooldown": [
+        {
+          "activity": "Bike",
+          "duration_min": 6
+        }
+      ]
+    },
+    {
       "date": "2026-04-20",
       "workout_name": "Upper A",
       "started_at": "2026-04-20T15:10",
