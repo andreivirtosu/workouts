@@ -21,11 +21,15 @@
     liveLoggerBound: false,
     liveTimerIntervalId: null,
     sharedDraftSaveTimerId: null,
+    sharedDraftSaveRunId: 0,
     restTimerIntervalId: null,
     restTimerEndTs: null
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
+  const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
+  const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
+  const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
 
   function getCurrentPlanName() {
     const activeWorkout = getWeeklyPlan().find((entry) => entry.next);
@@ -73,21 +77,61 @@
     return yaml;
   }
 
-  function queueSharedWorkoutDraftSave(session, feedbackEl) {
+  function getSharedDraftRetryDelayMs() {
+    const span = SHARED_DRAFT_RETRY_MAX_DELAY_MS - SHARED_DRAFT_RETRY_MIN_DELAY_MS;
+    return SHARED_DRAFT_RETRY_MIN_DELAY_MS + Math.round(Math.random() * span);
+  }
+
+  function scheduleSharedWorkoutDraftSaveAttempt({ yaml, title, feedbackEl, runId, attempt, delayMs }) {
     if (state.sharedDraftSaveTimerId) {
       window.clearTimeout(state.sharedDraftSaveTimerId);
     }
 
-    const yaml = refreshLiveYamlOutput(session);
     state.sharedDraftSaveTimerId = window.setTimeout(async () => {
+      if (runId !== state.sharedDraftSaveRunId) return;
       state.sharedDraftSaveTimerId = null;
+
       try {
-        await saveSharedWorkoutDraft(yaml, session.workout_name || getCurrentPlanName());
+        await saveSharedWorkoutDraft(yaml, title);
+        if (runId !== state.sharedDraftSaveRunId) return;
         if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
       } catch (err) {
-        if (feedbackEl) feedbackEl.textContent = err.message || "Could not auto-save shared draft.";
+        if (runId !== state.sharedDraftSaveRunId) return;
+        if (attempt < SHARED_DRAFT_RETRY_MAX_ATTEMPTS) {
+          const nextAttempt = attempt + 1;
+          const retryDelayMs = getSharedDraftRetryDelayMs();
+          if (feedbackEl) {
+            feedbackEl.textContent = `Shared draft save failed. Retrying (${nextAttempt}/${SHARED_DRAFT_RETRY_MAX_ATTEMPTS}) in a few minutes...`;
+          }
+          scheduleSharedWorkoutDraftSaveAttempt({
+            yaml,
+            title,
+            feedbackEl,
+            runId,
+            attempt: nextAttempt,
+            delayMs: retryDelayMs
+          });
+          return;
+        }
+
+        if (feedbackEl) {
+          feedbackEl.textContent = `Warning: shared draft auto-save failed after ${SHARED_DRAFT_RETRY_MAX_ATTEMPTS} attempts.`;
+        }
       }
-    }, 700);
+    }, delayMs);
+  }
+
+  function queueSharedWorkoutDraftSave(session, feedbackEl) {
+    const yaml = refreshLiveYamlOutput(session);
+    state.sharedDraftSaveRunId += 1;
+    scheduleSharedWorkoutDraftSaveAttempt({
+      yaml,
+      title: session.workout_name || getCurrentPlanName(),
+      feedbackEl,
+      runId: state.sharedDraftSaveRunId,
+      attempt: 1,
+      delayMs: 700
+    });
   }
 
   function toNumber(value) {
