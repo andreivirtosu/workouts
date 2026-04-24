@@ -30,6 +30,32 @@
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
+  const EXERCISE_DEMOS = {
+    "Flat Bench Press": {
+      pageUrl: "https://musclewiki.com/exercise/dumbbell-bench-press",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-male-dumbbell-bench-press-front_y8zKZJl.jpg"
+    },
+    "Incline Bench Press": {
+      pageUrl: "https://musclewiki.com/exercise/dumbbell-incline-bench-press",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-male-dumbbell-incline-bench-press-front_q2q0T12.jpg"
+    },
+    "Row": {
+      pageUrl: "https://musclewiki.com/exercise/machine-seated-cable-row?model=f",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-female-machine-seated-cable-row-front.jpg"
+    },
+    "Rear Delt Fly": {
+      pageUrl: "https://musclewiki.com/exercise/dumbbell-rear-delt-fly",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-male-Dumbbells-dumbbell-rear-delt-fly-side.jpg"
+    },
+    "Lateral Raise": {
+      pageUrl: "https://musclewiki.com/exercise/dumbbell-lateral-raise",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-male-Dumbbells-dumbbell-lateral-raise-front.jpg"
+    },
+    "Lat Pulldown": {
+      pageUrl: "https://musclewiki.com/tr-tr/exercise/narrow-pulldown",
+      imageUrl: "https://media.musclewiki.com/media/uploads/og-male-Machine-narrow-pulldown-front.jpg"
+    }
+  };
 
   function getCurrentPlanName() {
     const activeWorkout = getWeeklyPlan().find((entry) => entry.next);
@@ -167,6 +193,7 @@
     const raw = (name || "").toLowerCase();
     if (raw.includes("leg press")) return "Leg Press";
     if (raw.includes("incline") && raw.includes("bench")) return "Incline Bench Press";
+    if (raw.includes("flat") && raw.includes("bench")) return "Flat Bench Press";
     if (raw.includes("machine chest press") || raw === "chest press") return "Machine Chest Press";
     if (raw.includes("chest supported row") || raw.includes("cable row") || raw.includes("seated cable row")) return "Row";
     if (raw.includes("lat pulldown")) return "Lat Pulldown";
@@ -176,7 +203,103 @@
     if (raw.includes("leg curl")) return "Leg Curl";
     if (raw.includes("back extension")) return "Back Extension";
     if (raw.includes("squat")) return "Squat";
+    if (raw.includes("rear delt")) return "Rear Delt Fly";
+    if (raw.includes("lateral raise")) return "Lateral Raise";
+    if (raw.includes("hang")) return "Hang";
+    if (raw.includes("plank")) return "Plank";
+    if (raw.includes("farmer")) return "Farmer's Carry";
     return name || "Unknown";
+  }
+
+  function getExerciseCategory(name) {
+    const raw = canonicalExerciseName(name).toLowerCase();
+    if (raw.includes("bench") || raw.includes("chest")) return "Chest";
+    if (raw.includes("row") || raw.includes("pulldown")) return "Back";
+    if (raw.includes("leg") || raw.includes("squat") || raw.includes("calf")) return "Legs";
+    if (raw.includes("shoulder") || raw.includes("rear delt") || raw.includes("lateral raise")) return "Shoulders";
+    if (raw.includes("biceps") || raw.includes("triceps")) return "Arms";
+    if (raw.includes("plank") || raw.includes("hang") || raw.includes("carry") || raw.includes("extension")) return "Core";
+    return "Other";
+  }
+
+  function getExerciseCategoryToken(category) {
+    switch (category) {
+      case "Chest": return "chest";
+      case "Back": return "back";
+      case "Legs": return "legs";
+      case "Shoulders": return "shoulders";
+      case "Arms": return "arms";
+      case "Core": return "core";
+      default: return "other";
+    }
+  }
+
+  function getExerciseInitials(name) {
+    return String(name || "Exercise")
+      .split(/[\s/()-]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase() || "EX";
+  }
+
+  function buildExerciseLibrary(workoutsAsc) {
+    const library = new Map();
+
+    workoutsAsc.forEach((workout) => {
+      const workoutDate = String(workout.date || "");
+      const exercises = Array.isArray(workout.exercises) ? workout.exercises : [];
+
+      exercises.forEach((exercise) => {
+        const displayName = String(exercise.name || "Exercise");
+        const canonical = canonicalExerciseName(displayName);
+        if (!library.has(canonical)) {
+          library.set(canonical, {
+            canonical,
+            displayName: canonical,
+            category: getExerciseCategory(canonical),
+            aliases: new Set(),
+            sessions: 0,
+            totalSets: 0,
+            lastDate: null,
+            topWeight: null,
+            topReps: null,
+            topDuration: null
+          });
+        }
+
+        const entry = library.get(canonical);
+        entry.aliases.add(displayName);
+        entry.sessions += 1;
+        entry.lastDate = workoutDate;
+
+        const sets = Array.isArray(exercise.sets) ? exercise.sets : [];
+        entry.totalSets += sets.length;
+
+        sets.forEach((set) => {
+          const weight = toNumber(set.weight_kg);
+          const reps = toNumber(set.reps);
+          const duration = toNumber(set.duration_sec);
+          if (weight !== null && (entry.topWeight === null || weight > entry.topWeight)) entry.topWeight = weight;
+          if (reps !== null && (entry.topReps === null || reps > entry.topReps)) entry.topReps = reps;
+          if (duration !== null && (entry.topDuration === null || duration > entry.topDuration)) entry.topDuration = duration;
+        });
+      });
+    });
+
+    return Array.from(library.values())
+      .map((entry) => ({
+        ...entry,
+        aliases: Array.from(entry.aliases).sort(),
+        token: getExerciseCategoryToken(entry.category),
+        initials: getExerciseInitials(entry.displayName),
+        demo: EXERCISE_DEMOS[entry.canonical] || null
+      }))
+      .sort((a, b) => {
+        if (a.category !== b.category) return a.category.localeCompare(b.category);
+        return a.displayName.localeCompare(b.displayName);
+      });
   }
 
   function expandPlanExerciseNames(label) {
@@ -1798,6 +1921,81 @@
     });
   }
 
+  function renderExerciseLibrary(workoutsAsc) {
+    const container = document.getElementById("exercise-library");
+    if (!container) return;
+
+    const library = buildExerciseLibrary(workoutsAsc);
+    if (!library.length) {
+      container.innerHTML = `<article class="exercise-library-empty">No exercises logged yet.</article>`;
+      return;
+    }
+
+    container.innerHTML = library.map((exercise) => {
+      const aliasText = exercise.aliases.length > 1 ? exercise.aliases.join(" • ") : exercise.aliases[0];
+      const topWeight = exercise.topWeight === null ? "No weight yet" : `${exercise.topWeight} kg top load`;
+      const topRepOrTime = exercise.topDuration !== null
+        ? `${exercise.topDuration}s max hold`
+          : exercise.topReps !== null
+            ? `${exercise.topReps} max reps`
+            : "No rep target yet";
+      const visualHtml = exercise.demo
+        ? `
+          <a class="exercise-demo-link" href="${escapeHtml(exercise.demo.pageUrl)}" target="_blank" rel="noreferrer">
+            <img class="exercise-demo-image" src="${escapeHtml(exercise.demo.imageUrl)}" alt="${escapeHtml(exercise.displayName)} demo" loading="lazy" />
+            <span class="exercise-demo-badge">Demo</span>
+          </a>
+        `
+        : `
+          <div class="exercise-avatar">${escapeHtml(exercise.initials)}</div>
+          <div class="exercise-stripes" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        `;
+      const demoSource = exercise.demo
+        ? `<a class="exercise-demo-source" href="${escapeHtml(exercise.demo.pageUrl)}" target="_blank" rel="noreferrer">View demo</a>`
+        : `<span class="exercise-demo-source is-muted">Visual tag</span>`;
+
+      return `
+        <article class="exercise-library-card" data-group="${escapeHtml(exercise.token)}">
+          <div class="exercise-library-visual">
+            ${visualHtml}
+          </div>
+          <div class="exercise-library-body">
+            <div class="exercise-library-head">
+              <div>
+                <p class="exercise-library-name">${escapeHtml(exercise.displayName)}</p>
+                <p class="exercise-library-alias">${escapeHtml(aliasText)}</p>
+              </div>
+              <span class="exercise-category-badge">${escapeHtml(exercise.category)}</span>
+            </div>
+            <div class="exercise-library-meta">
+              ${demoSource}
+            </div>
+            <div class="exercise-library-stats">
+              <div class="exercise-stat">
+                <span class="exercise-stat-label">Sessions</span>
+                <strong>${exercise.sessions}</strong>
+              </div>
+              <div class="exercise-stat">
+                <span class="exercise-stat-label">Sets</span>
+                <strong>${exercise.totalSets}</strong>
+              </div>
+              <div class="exercise-stat">
+                <span class="exercise-stat-label">Last Seen</span>
+                <strong>${escapeHtml(exercise.lastDate || "-")}</strong>
+              </div>
+            </div>
+            <div class="exercise-library-notes">
+              <span>${escapeHtml(topWeight)}</span>
+              <span>${escapeHtml(topRepOrTime)}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
   function renderCharts() {
     const workoutsAsc = state.workoutsAsc;
     const labels = workoutsAsc.map((w) => formatDateShort(w.date));
@@ -1847,6 +2045,7 @@
     }
 
     renderExerciseCharts();
+    renderExerciseLibrary(workoutsAsc);
   }
 
   async function load() {

@@ -267,7 +267,7 @@ workouts:
   - activity: Run
     duration_min: 10
   exercises:
-  - name: Shoulder Lateral Machine
+  - name: Lateral Raise
     sets:
     - weight_kg: 16
       reps: 12
@@ -762,7 +762,7 @@ workouts:
       reps: 12
     - weight_kg: 30
       reps: 12
-  - name: Lateral Raises
+  - name: Lateral Raise
     sets:
     - weight_kg: 8
       reps: 12

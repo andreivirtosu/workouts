@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workout Sessions</title>
+    <title>Exercises</title>
     <link rel="stylesheet" href="styles.css?v=20260424a" />
   </head>
   <body>
@@ -13,20 +13,25 @@
     <main class="container">
       <nav class="top-nav">
         <a class="top-nav-link" href="./index.html">Dashboard</a>
-        <a class="top-nav-link is-active" href="./sessions.html">Sessions</a>
-        <a class="top-nav-link" href="./exercises.html">Exercises</a>
+        <a class="top-nav-link" href="./sessions.html">Sessions</a>
+        <a class="top-nav-link is-active" href="./exercises.html">Exercises</a>
         <a class="top-nav-link" href="./logger.html">Log Sets</a>
       </nav>
 
       <header class="hero">
         <p class="eyebrow">Training Log</p>
-        <h1>All Sessions</h1>
+        <h1>Exercise Library</h1>
+        <p class="subtitle">A visual map of your movements, grouped by pattern and built from the workouts you have logged.</p>
       </header>
 
       <section class="panel">
-        <h2>Workout History</h2>
-        <p class="panel-note">All logged workout cards in reverse chronological order.</p>
-        <div id="session-list" class="session-list"></div>
+        <div class="panel-head">
+          <div>
+            <h2>All Exercises</h2>
+            <p class="panel-note">Grouped cards with recent usage, volume cues, and naming history.</p>
+          </div>
+        </div>
+        <div id="exercise-library" class="exercise-library"></div>
       </section>
     </main>
 
