@@ -467,12 +467,27 @@
   }
 
   function computeStreaks(days) {
+    if (!days.length) return { current: 0, longest: 0 };
+
+    const weeks = [];
+    const firstWeekStart = startOfWeek(parseDate(days[0].date));
+    const lastWeekStart = startOfWeek(parseDate(days[days.length - 1].date));
+
+    for (let cursor = new Date(firstWeekStart); cursor <= lastWeekStart; cursor = addDays(cursor, 7)) {
+      const weekStart = toIsoDate(cursor);
+      const weekEnd = toIsoDate(addDays(cursor, 6));
+      const workouts = days
+        .filter((day) => day.date >= weekStart && day.date <= weekEnd)
+        .reduce((sum, day) => sum + day.count, 0);
+      weeks.push({ weekStart, workouts, hitTarget: workouts >= 3 });
+    }
+
     let current = 0;
     let longest = 0;
     let running = 0;
 
-    days.forEach((day) => {
-      if (day.count > 0) {
+    weeks.forEach((week) => {
+      if (week.hitTarget) {
         running += 1;
         longest = Math.max(longest, running);
       } else {
@@ -480,8 +495,8 @@
       }
     });
 
-    for (let i = days.length - 1; i >= 0; i -= 1) {
-      if (days[i].count > 0) current += 1;
+    for (let i = weeks.length - 1; i >= 0; i -= 1) {
+      if (weeks[i].hitTarget) current += 1;
       else break;
     }
 
@@ -539,12 +554,12 @@
       <article class="activity-stat">
         <p class="activity-stat-label">Current Streak</p>
         <p class="activity-stat-value">${streaks.current}</p>
-        <p class="activity-stat-note">Consecutive training days</p>
+        <p class="activity-stat-note">Consecutive weeks with 3+ workouts</p>
       </article>
       <article class="activity-stat">
         <p class="activity-stat-label">Longest Streak</p>
         <p class="activity-stat-value">${streaks.longest}</p>
-        <p class="activity-stat-note">Best run in this history</p>
+        <p class="activity-stat-note">Best run of 3+ workout weeks</p>
       </article>
       <article class="activity-stat">
         <p class="activity-stat-label">Avg / Week</p>

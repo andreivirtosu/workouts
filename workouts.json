@@ -1,6 +1,138 @@
 {
   "workouts": [
     {
+      "date": "2026-04-24",
+      "workout_name": "Upper B",
+      "started_at": "2026-04-24T15:18",
+      "ended_at": "2026-04-24T16:09",
+      "duration_min": 51,
+      "bodyweight": 82.9,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 8
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Flat DB Bench Press",
+          "sets": [
+            {
+              "weight_kg": 18,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Cable Row",
+          "sets": [
+            {
+              "weight_kg": 70,
+              "reps": 12
+            },
+            {
+              "weight_kg": 80,
+              "reps": 12
+            },
+            {
+              "weight_kg": 85,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Rear Delt Fly Machine",
+          "sets": [
+            {
+              "weight_kg": 22.5,
+              "reps": 8
+            },
+            {
+              "weight_kg": 22.5,
+              "reps": 8
+            },
+            {
+              "weight_kg": 22.5,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Lateral Raise",
+          "sets": [
+            {
+              "weight_kg": 30,
+              "reps": 12,
+              "note": "Using Machine"
+            },
+            {
+              "weight_kg": 30,
+              "reps": 8
+            },
+            {
+              "weight_kg": 30,
+              "reps": 7
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 35
+            },
+            {
+              "duration_sec": 35
+            }
+          ]
+        },
+        {
+          "name": "Incline bench press",
+          "sets": [
+            {
+              "weight_kg": 18,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 10
+            },
+            {
+              "weight_kg": 20,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Lat Pulldown",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 10
+            },
+            {
+              "weight_kg": 50,
+              "reps": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-04-22",
       "workout_name": "Lower A",
       "started_at": "2026-04-22T14:57",
