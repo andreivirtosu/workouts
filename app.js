@@ -103,9 +103,52 @@
     return yaml;
   }
 
+  function hasLiveSessionProgress(session) {
+    if (!session || typeof session !== "object") return false;
+    return !!(
+      (Array.isArray(session.sets) && session.sets.length) ||
+      session.started_at ||
+      toNumber(session.bodyweight) !== null ||
+      toNumber(session.warmup_run_min) !== null ||
+      toNumber(session.cooldown_bike_min) !== null
+    );
+  }
+
   function getSharedDraftRetryDelayMs() {
     const span = SHARED_DRAFT_RETRY_MAX_DELAY_MS - SHARED_DRAFT_RETRY_MIN_DELAY_MS;
     return SHARED_DRAFT_RETRY_MIN_DELAY_MS + Math.round(Math.random() * span);
+  }
+
+  async function attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt }) {
+    if (runId !== state.sharedDraftSaveRunId) return;
+
+    try {
+      await saveSharedWorkoutDraft(yaml, title);
+      if (runId !== state.sharedDraftSaveRunId) return;
+      if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
+    } catch (err) {
+      if (runId !== state.sharedDraftSaveRunId) return;
+      if (attempt < SHARED_DRAFT_RETRY_MAX_ATTEMPTS) {
+        const nextAttempt = attempt + 1;
+        const retryDelayMs = getSharedDraftRetryDelayMs();
+        if (feedbackEl) {
+          feedbackEl.textContent = `Shared draft save failed. Retrying (${nextAttempt}/${SHARED_DRAFT_RETRY_MAX_ATTEMPTS}) in a few minutes...`;
+        }
+        scheduleSharedWorkoutDraftSaveAttempt({
+          yaml,
+          title,
+          feedbackEl,
+          runId,
+          attempt: nextAttempt,
+          delayMs: retryDelayMs
+        });
+        return;
+      }
+
+      if (feedbackEl) {
+        feedbackEl.textContent = `Warning: shared draft auto-save failed after ${SHARED_DRAFT_RETRY_MAX_ATTEMPTS} attempts.`;
+      }
+    }
   }
 
   function scheduleSharedWorkoutDraftSaveAttempt({ yaml, title, feedbackEl, runId, attempt, delayMs }) {
@@ -113,37 +156,10 @@
       window.clearTimeout(state.sharedDraftSaveTimerId);
     }
 
-    state.sharedDraftSaveTimerId = window.setTimeout(async () => {
+    state.sharedDraftSaveTimerId = window.setTimeout(() => {
       if (runId !== state.sharedDraftSaveRunId) return;
       state.sharedDraftSaveTimerId = null;
-
-      try {
-        await saveSharedWorkoutDraft(yaml, title);
-        if (runId !== state.sharedDraftSaveRunId) return;
-        if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
-      } catch (err) {
-        if (runId !== state.sharedDraftSaveRunId) return;
-        if (attempt < SHARED_DRAFT_RETRY_MAX_ATTEMPTS) {
-          const nextAttempt = attempt + 1;
-          const retryDelayMs = getSharedDraftRetryDelayMs();
-          if (feedbackEl) {
-            feedbackEl.textContent = `Shared draft save failed. Retrying (${nextAttempt}/${SHARED_DRAFT_RETRY_MAX_ATTEMPTS}) in a few minutes...`;
-          }
-          scheduleSharedWorkoutDraftSaveAttempt({
-            yaml,
-            title,
-            feedbackEl,
-            runId,
-            attempt: nextAttempt,
-            delayMs: retryDelayMs
-          });
-          return;
-        }
-
-        if (feedbackEl) {
-          feedbackEl.textContent = `Warning: shared draft auto-save failed after ${SHARED_DRAFT_RETRY_MAX_ATTEMPTS} attempts.`;
-        }
-      }
+      void attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt });
     }, delayMs);
   }
 
@@ -157,6 +173,22 @@
       runId: state.sharedDraftSaveRunId,
       attempt: 1,
       delayMs: 700
+    });
+  }
+
+  async function flushSharedWorkoutDraftSave(session, feedbackEl) {
+    const yaml = refreshLiveYamlOutput(session);
+    state.sharedDraftSaveRunId += 1;
+    if (state.sharedDraftSaveTimerId) {
+      window.clearTimeout(state.sharedDraftSaveTimerId);
+      state.sharedDraftSaveTimerId = null;
+    }
+    await attemptSharedWorkoutDraftSave({
+      yaml,
+      title: session.workout_name || getCurrentPlanName(),
+      feedbackEl,
+      runId: state.sharedDraftSaveRunId,
+      attempt: 1
     });
   }
 
@@ -1085,7 +1117,7 @@
       if (!parsed || typeof parsed !== "object") return { date: getTodayIso(), workout_name: getCurrentPlanName(), sets: [] };
       if (!Array.isArray(parsed.sets)) parsed.sets = [];
       if (!parsed.date) parsed.date = getTodayIso();
-      parsed.workout_name = getCurrentPlanName();
+      if (!parsed.workout_name) parsed.workout_name = getCurrentPlanName();
       parsed.bodyweight = toNumber(parsed.bodyweight);
       parsed.warmup_run_min = toNumber(parsed.warmup_run_min);
       parsed.cooldown_bike_min = toNumber(parsed.cooldown_bike_min);
@@ -1116,17 +1148,22 @@
     localStorage.setItem(getNextPlanStorageKey(date), JSON.stringify(doneMap || {}));
   }
 
-  function ensureTodaySession(session) {
-    const today = getTodayIso();
-    if (session.date === today) {
-      session.workout_name = getCurrentPlanName();
-      session.bodyweight = toNumber(session.bodyweight);
-      session.warmup_run_min = toNumber(session.warmup_run_min);
-      session.cooldown_bike_min = toNumber(session.cooldown_bike_min);
-      return session;
-    }
+  function normalizeLiveSession(session) {
+    const normalized = (session && typeof session === "object") ? session : {};
+    if (!Array.isArray(normalized.sets)) normalized.sets = [];
+    if (!normalized.date) normalized.date = getTodayIso();
+    if (!normalized.workout_name) normalized.workout_name = getCurrentPlanName();
+    normalized.bodyweight = toNumber(normalized.bodyweight);
+    normalized.warmup_run_min = toNumber(normalized.warmup_run_min);
+    normalized.cooldown_bike_min = toNumber(normalized.cooldown_bike_min);
+    if (typeof normalized.started_at !== "string") normalized.started_at = null;
+    if (typeof normalized.ended_at !== "string") normalized.ended_at = null;
+    return normalized;
+  }
+
+  function createNewLiveSession() {
     return {
-      date: today,
+      date: getTodayIso(),
       workout_name: getCurrentPlanName(),
       bodyweight: null,
       warmup_run_min: null,
@@ -1372,7 +1409,7 @@
     const restStopBtn = document.getElementById("rest-stop");
     if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !bodyweightInput || !warmupRunInput || !cooldownBikeInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
 
-    let session = ensureTodaySession(loadLiveSession());
+    let session = normalizeLiveSession(loadLiveSession());
     renderLiveExerciseOptions();
     updateLiveInputMode();
     renderLiveSession(session);
@@ -1409,7 +1446,7 @@
     });
 
     bodyweightInput.addEventListener("input", () => {
-      session = ensureTodaySession(session);
+      session = normalizeLiveSession(session);
       session.bodyweight = toNumber(bodyweightInput.value);
       saveLiveSession(session);
       refreshLiveYamlOutput(session);
@@ -1417,7 +1454,7 @@
     });
 
     warmupRunInput.addEventListener("input", () => {
-      session = ensureTodaySession(session);
+      session = normalizeLiveSession(session);
       session.warmup_run_min = toNumber(warmupRunInput.value);
       saveLiveSession(session);
       refreshLiveYamlOutput(session);
@@ -1425,20 +1462,20 @@
     });
 
     cooldownBikeInput.addEventListener("input", () => {
-      session = ensureTodaySession(session);
+      session = normalizeLiveSession(session);
       session.cooldown_bike_min = toNumber(cooldownBikeInput.value);
       saveLiveSession(session);
       refreshLiveYamlOutput(session);
       queueSharedWorkoutDraftSave(session, feedback);
     });
 
-    toggleWorkoutBtn.addEventListener("click", () => {
+    toggleWorkoutBtn.addEventListener("click", async () => {
       const running = !!session.started_at && !session.ended_at;
       if (running) {
         session.ended_at = toMinuteStamp();
         feedback.textContent = "Workout timer ended.";
       } else {
-        session = ensureTodaySession(session);
+        session = createNewLiveSession();
         session.started_at = toMinuteStamp();
         session.ended_at = null;
         feedback.textContent = "Workout timer started.";
@@ -1446,7 +1483,12 @@
       saveLiveSession(session);
       renderLiveSession(session);
       refreshLiveYamlOutput(session);
-      queueSharedWorkoutDraftSave(session, feedback);
+      if (running) {
+        feedback.textContent = "Workout timer ended. Saving shared draft...";
+        await flushSharedWorkoutDraftSave(session, feedback);
+      } else {
+        queueSharedWorkoutDraftSave(session, feedback);
+      }
       syncTimer();
     });
 
@@ -1466,7 +1508,7 @@
         return;
       }
 
-      session = ensureTodaySession(session);
+      session = normalizeLiveSession(session);
       session.sets.push({
         exercise,
         weight_kg: durationOnly ? null : weight,
@@ -1488,7 +1530,7 @@
     });
 
     removeLastBtn.addEventListener("click", () => {
-      session = ensureTodaySession(session);
+      session = normalizeLiveSession(session);
       if (!session.sets.length) {
         feedback.textContent = "No sets to remove.";
         return;
@@ -1503,16 +1545,7 @@
     });
 
     clearBtn.addEventListener("click", () => {
-      session = {
-        date: getTodayIso(),
-        workout_name: getCurrentPlanName(),
-        bodyweight: null,
-        warmup_run_min: null,
-        cooldown_bike_min: null,
-        sets: [],
-        started_at: null,
-        ended_at: null
-      };
+      session = createNewLiveSession();
       saveLiveSession(session);
       renderLiveSession(session);
       bodyweightInput.value = "";
@@ -1580,7 +1613,10 @@
   }
 
   function syncActiveWorkoutUi() {
-    const session = ensureTodaySession(loadLiveSession());
+    const session = normalizeLiveSession(loadLiveSession());
+    if (!hasLiveSessionProgress(session)) {
+      session.workout_name = getCurrentPlanName();
+    }
     saveLiveSession(session);
     renderNextPlan(state.workoutsAsc);
 
@@ -1622,7 +1658,7 @@
   }
 
   function buildLiveSessionYaml(session) {
-    const safeSession = ensureTodaySession(session || { date: getTodayIso(), workout_name: "", sets: [] });
+    const safeSession = normalizeLiveSession(session || { date: getTodayIso(), workout_name: "", sets: [] });
     const grouped = [];
     const byExercise = new Map();
 
