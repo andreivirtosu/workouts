@@ -1,6 +1,121 @@
 {
   "workouts": [
     {
+      "date": "2026-04-26",
+      "workout_name": "Lower B",
+      "started_at": "2026-04-26T11:37",
+      "ended_at": null,
+      "duration_min": 55,
+      "bodyweight": 83.2,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 8
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets": [
+            {
+              "weight_kg": 0,
+              "reps": 10,
+              "note": "Only the bar"
+            },
+            {
+              "weight_kg": 10,
+              "reps": 10
+            },
+            {
+              "weight_kg": 10,
+              "reps": 8
+            },
+            {
+              "weight_kg": 10,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Leg Curl",
+          "sets": [
+            {
+              "weight_kg": 35,
+              "reps": 12
+            },
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Back Extension",
+          "sets": [
+            {
+              "weight_kg": 0,
+              "reps": 15
+            },
+            {
+              "weight_kg": 0,
+              "reps": 15
+            }
+          ]
+        },
+        {
+          "name": "Leg Press, lighter than Lower A",
+          "sets": [
+            {
+              "weight_kg": 164,
+              "reps": 12
+            },
+            {
+              "weight_kg": 182,
+              "reps": 12
+            },
+            {
+              "weight_kg": 191,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 48
+            },
+            {
+              "duration_sec": 30
+            }
+          ]
+        },
+        {
+          "name": "Plank",
+          "sets": [
+            {
+              "duration_sec": 60
+            },
+            {
+              "duration_sec": 60
+            }
+          ]
+        }
+      ],
+      "cooldown": [
+        {
+          "activity": "Bike",
+          "duration_min": 10
+        }
+      ]
+    },
+    {
       "date": "2026-04-24",
       "workout_name": "Upper B",
       "started_at": "2026-04-24T15:18",
