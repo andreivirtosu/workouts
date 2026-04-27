@@ -805,6 +805,35 @@
     return Math.round((b.getTime() - a.getTime()) / 86400000);
   }
 
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  function addMonths(date, months) {
+    return new Date(date.getFullYear(), date.getMonth() + months, 1);
+  }
+
+  function buildCalendarMonthLabels({ firstDate, lastDate, rangeStart, startX, cellSize, gap }) {
+    const labels = [];
+    let cursor = startOfMonth(firstDate);
+
+    while (cursor <= lastDate) {
+      const anchor = cursor < firstDate ? firstDate : cursor;
+      const weekIndex = Math.floor(diffDays(rangeStart, anchor) / 7);
+      const x = startX + weekIndex * (cellSize + gap);
+      const label = cursor.toLocaleDateString(undefined, { month: "short" });
+      const previous = labels[labels.length - 1];
+
+      if (!previous || x - previous.x >= 26) {
+        labels.push({ label, x });
+      }
+
+      cursor = addMonths(cursor, 1);
+    }
+
+    return labels;
+  }
+
   function drawCalendarChart(canvas, days) {
     if (!canvas) return;
     const { ctx, width, height } = setupCanvas(canvas);
@@ -829,7 +858,7 @@
     const cellSize = Math.max(4, Math.min(18, Math.floor(Math.min((chartW - gap * (totalWeeks - 1)) / totalWeeks, (chartH - gap * 6) / 7))));
     const startX = pad.left;
     const startY = pad.top;
-    const monthLabels = [];
+    const monthLabels = buildCalendarMonthLabels({ firstDate, lastDate, rangeStart, startX, cellSize, gap });
     const cells = [];
 
     ctx.fillStyle = colors.text;
@@ -851,14 +880,6 @@
       const x = startX + weekIndex * (cellSize + gap);
       const y = startY + weekday * (cellSize + gap);
       const selected = state.selectedCalendarDate === day.date;
-
-      if (cursor.getDate() === 1 || (weekIndex === 0 && weekday === 0)) {
-        const label = cursor.toLocaleDateString(undefined, { month: "short" });
-        const existing = monthLabels[monthLabels.length - 1];
-        if (!existing || existing.label !== label) {
-          monthLabels.push({ label, x });
-        }
-      }
 
       ctx.fillStyle = getCalendarTypeColor(getCalendarDayType(day));
       ctx.fillRect(x, y, cellSize, cellSize);
