@@ -1034,14 +1034,16 @@
         day: "Monday",
         workout: "Upper A",
         selectable: true,
+        defaultNext: true,
         items: [
-          "Warmup: Bike or row 5 min + mobility 3-5 min",
+          "Warmup: Run 6-8 min",
           "Incline Dumbbell Bench Press: 3 x 8-10",
           "Chest Supported Row or Seated Cable Row: 3 x 8-12",
           "Assisted Pull-up: 3 x 5-8",
-          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
           "Machine Chest Press or Assisted Dips: 2-3 x 8-10",
-          "Rear Delt Fly or Lateral Raise: 2 x 12-15",
+          "Hang: 2 x 30-45s",
+          "Lateral Raise or Rear Delt Fly: 2 x 12-15",
+          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
           "Plank or Dead Bug: 2-3 sets"
         ]
       },
@@ -1050,16 +1052,15 @@
         day: "Tuesday",
         workout: "Lower A",
         selectable: true,
-        defaultNext: true,
         items: [
-          "Warmup: Easy bike 5 min + lower-body mobility",
-          "Smith Machine Squat or Goblet Squat: 3-4 x 8-10",
+          "Warmup: Run 6-8 min",
+          "Smith Machine Squat: 3 x 10-12",
           "Leg Press: 3 x 10-15",
-          "Seated or Lying Leg Curl: 3 x 12-15",
-          "Walking Lunges or Split Squat: 2 sets each side",
-          "Calf Raise: 2-3 x 12-15",
+          "Seated Leg Curl: 3 x 12-15",
+          "Rotary Calf: 3 x 12-20",
+          "Hang or Plank: 2 sets",
           "Farmer's Carry: 3-4 rounds",
-          "Optional bike: 8-10 min"
+          "Bike: 6-10 min"
         ]
       },
       {
@@ -1077,14 +1078,15 @@
         workout: "Upper B",
         selectable: true,
         items: [
-          "Warmup: Bike or row 5 min + shoulder mobility",
-          "Flat DB Bench Press or Machine Chest Press: 3 x 8-10",
-          "One-Arm DB Row or Cable Row: 3 x 10-12",
-          "Lat Pulldown: 3 x 8-12",
-          "Assisted Dips or Incline Machine Press: 2-3 x 8-10",
-          "Rear Delt Fly: 2-3 x 12-15",
-          "Lateral Raise or Face Pull: 2 x 12-15",
-          "Hangs or Pallof Press: 2-3 sets"
+          "Warmup: Run 6-8 min",
+          "Flat DB Bench Press: 3 x 8-12",
+          "Cable Row: 3 x 10-12",
+          "Assisted Pull-up or Lat Pulldown: 3 x 8-12",
+          "Rear Delt Fly Machine: 3 x 8-12",
+          "Lateral Raise: 3 x 8-12",
+          "Triceps Pushdown or Biceps Curl: 2-3 x 10-15",
+          "Hang or Pallof Press: 2-3 sets",
+          "Optional bike: 5-10 min"
         ]
       },
       {
@@ -1102,14 +1104,13 @@
         workout: "Lower B",
         selectable: true,
         items: [
-          "Warmup: Easy bike 5 min + hip mobility",
-          "Romanian Deadlift: 3 x 8-10",
-          "Bulgarian Split Squat or Reverse Lunge: 3 sets each side",
+          "Warmup: Run 6-8 min",
+          "Romanian Deadlift: 4 x 8-10",
           "Leg Curl: 3 x 12-15",
-          "Back Extension: 2-3 x 12-15",
-          "Leg Press, lighter than Lower A: 2 x 15",
-          "Plank or Dead Bug: 2-3 sets",
-          "Bike / rower / incline walk: 10 min steady"
+          "Leg Press: 3 x 12-15 (lighter than Lower A)",
+          "Back Extension or Hang: 2 sets",
+          "Plank: 2 x 60s",
+          "Bike: 10 min"
         ]
       },
       {
