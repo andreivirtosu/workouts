@@ -30,6 +30,7 @@
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
+  const SHARED_DRAFT_PENDING_STORAGE_KEY = "workout-shared-draft-pending-v1";
   const EXERCISE_DEMOS = {
     "Flat Bench Press": {
       pageUrl: "https://musclewiki.com/exercise/dumbbell-bench-press",
@@ -74,9 +75,10 @@
     return payload && payload.data && typeof payload.data.content === "string" ? payload.data.content : "";
   }
 
-  async function saveSharedWorkoutDraft(text, title) {
+  async function saveSharedWorkoutDraft(text, title, { keepalive = false } = {}) {
     const response = await fetch(SHARED_WORKOUT_OBJECT_URL, {
       method: "PATCH",
+      keepalive,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"
@@ -119,12 +121,49 @@
     return SHARED_DRAFT_RETRY_MIN_DELAY_MS + Math.round(Math.random() * span);
   }
 
-  async function attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt }) {
+  function loadPendingSharedDraftSave() {
+    try {
+      const raw = localStorage.getItem(SHARED_DRAFT_PENDING_STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return null;
+      if (typeof parsed.yaml !== "string" || typeof parsed.title !== "string") return null;
+      return parsed;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function savePendingSharedDraftSave(payload) {
+    try {
+      localStorage.setItem(SHARED_DRAFT_PENDING_STORAGE_KEY, JSON.stringify({
+        yaml: payload.yaml || "",
+        title: payload.title || "Last Workout",
+        saved_at: new Date().toISOString()
+      }));
+    } catch (err) {
+      // Ignore local persistence failures and still attempt remote save.
+    }
+  }
+
+  function clearPendingSharedDraftSave(payload) {
+    try {
+      const current = loadPendingSharedDraftSave();
+      if (!current) return;
+      if (payload && (current.yaml !== payload.yaml || current.title !== payload.title)) return;
+      localStorage.removeItem(SHARED_DRAFT_PENDING_STORAGE_KEY);
+    } catch (err) {
+      // Ignore local cleanup failures.
+    }
+  }
+
+  async function attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt, keepalive = false }) {
     if (runId !== state.sharedDraftSaveRunId) return;
 
     try {
-      await saveSharedWorkoutDraft(yaml, title);
+      await saveSharedWorkoutDraft(yaml, title, { keepalive });
       if (runId !== state.sharedDraftSaveRunId) return;
+      clearPendingSharedDraftSave({ yaml, title });
       if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
     } catch (err) {
       if (runId !== state.sharedDraftSaveRunId) return;
@@ -165,10 +204,15 @@
 
   function queueSharedWorkoutDraftSave(session, feedbackEl) {
     const yaml = refreshLiveYamlOutput(session);
+    const payload = {
+      yaml,
+      title: session.workout_name || getCurrentPlanName()
+    };
+    savePendingSharedDraftSave(payload);
     state.sharedDraftSaveRunId += 1;
     scheduleSharedWorkoutDraftSaveAttempt({
-      yaml,
-      title: session.workout_name || getCurrentPlanName(),
+      yaml: payload.yaml,
+      title: payload.title,
       feedbackEl,
       runId: state.sharedDraftSaveRunId,
       attempt: 1,
@@ -176,25 +220,56 @@
     });
   }
 
-  async function flushSharedWorkoutDraftSave(session, feedbackEl) {
+  async function flushSharedWorkoutDraftSave(session, feedbackEl, { keepalive = false } = {}) {
     const yaml = refreshLiveYamlOutput(session);
+    const payload = {
+      yaml,
+      title: session.workout_name || getCurrentPlanName()
+    };
+    savePendingSharedDraftSave(payload);
     state.sharedDraftSaveRunId += 1;
     if (state.sharedDraftSaveTimerId) {
       window.clearTimeout(state.sharedDraftSaveTimerId);
       state.sharedDraftSaveTimerId = null;
     }
     await attemptSharedWorkoutDraftSave({
-      yaml,
-      title: session.workout_name || getCurrentPlanName(),
+      yaml: payload.yaml,
+      title: payload.title,
       feedbackEl,
       runId: state.sharedDraftSaveRunId,
-      attempt: 1
+      attempt: 1,
+      keepalive
+    });
+  }
+
+  async function resumePendingSharedDraftSave(feedbackEl) {
+    const pending = loadPendingSharedDraftSave();
+    if (!pending || !pending.yaml.trim()) return;
+    state.sharedDraftSaveRunId += 1;
+    if (state.sharedDraftSaveTimerId) {
+      window.clearTimeout(state.sharedDraftSaveTimerId);
+      state.sharedDraftSaveTimerId = null;
+    }
+    if (feedbackEl) feedbackEl.textContent = "Resuming shared draft sync...";
+    await attemptSharedWorkoutDraftSave({
+      yaml: pending.yaml,
+      title: pending.title || "Last Workout",
+      feedbackEl,
+      runId: state.sharedDraftSaveRunId,
+      attempt: 1,
+      keepalive: true
     });
   }
 
   function toNumber(value) {
     if (value === null || value === undefined) return null;
-    if (typeof value === "string" && value.trim() === "") return null;
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (trimmed === "") return null;
+      const normalized = trimmed.replace(",", ".");
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
     const n = Number(value);
     return Number.isFinite(n) ? n : null;
   }
@@ -1183,11 +1258,20 @@
     return normalized;
   }
 
+  function getLatestLoggedBodyweight() {
+    const workoutsDesc = [...state.workoutsAsc].reverse();
+    for (const workout of workoutsDesc) {
+      const bodyweight = toNumber(workout && workout.bodyweight);
+      if (bodyweight !== null) return bodyweight;
+    }
+    return null;
+  }
+
   function createNewLiveSession() {
     return {
       date: getTodayIso(),
       workout_name: getCurrentPlanName(),
-      bodyweight: null,
+      bodyweight: getLatestLoggedBodyweight(),
       warmup_run_min: null,
       cooldown_bike_min: null,
       sets: [],
@@ -1507,7 +1591,7 @@
       refreshLiveYamlOutput(session);
       if (running) {
         feedback.textContent = "Workout timer ended. Saving shared draft...";
-        await flushSharedWorkoutDraftSave(session, feedback);
+        await flushSharedWorkoutDraftSave(session, feedback, { keepalive: true });
       } else {
         queueSharedWorkoutDraftSave(session, feedback);
       }
@@ -1630,6 +1714,19 @@
       stopRestTimer();
       feedback.textContent = "Rest timer stopped.";
     });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "hidden") return;
+      if (!loadPendingSharedDraftSave()) return;
+      void resumePendingSharedDraftSave();
+    });
+
+    window.addEventListener("pagehide", () => {
+      if (!loadPendingSharedDraftSave()) return;
+      void resumePendingSharedDraftSave();
+    });
+
+    void resumePendingSharedDraftSave(feedback);
 
     state.liveLoggerBound = true;
   }
