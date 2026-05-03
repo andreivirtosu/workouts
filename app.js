@@ -308,6 +308,7 @@
     if (raw.includes("biceps curl")) return "Biceps Curl";
     if (raw.includes("triceps")) return "Triceps Pushdown";
     if (raw.includes("leg curl")) return "Leg Curl";
+    if (raw.includes("rotary calf") || raw === "calf") return "Rotary Calf";
     if (raw.includes("back extension")) return "Back Extension";
     if (raw.includes("squat")) return "Squat";
     if (raw.includes("rear delt")) return "Rear Delt Fly";

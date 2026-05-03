@@ -695,7 +695,7 @@
           ]
         },
         {
-          "name": "Rotary calf",
+          "name": "Rotary Calf",
           "sets": [
             {
               "weight_kg": 25,
@@ -1100,7 +1100,7 @@
           ]
         },
         {
-          "name": "Bench Press Dumbbells",
+          "name": "Flat DB Bench Press",
           "sets": [
             {
               "weight_kg": 18,
@@ -1847,7 +1847,7 @@
           ]
         },
         {
-          "name": "Flat Dumbbell Bench Press",
+          "name": "Flat DB Bench Press",
           "sets": [
             {
               "weight_kg": 16,

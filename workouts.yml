@@ -359,7 +359,7 @@ workouts:
       reps: 12
     - weight_kg: 40
       reps: 12
-  - name: 'Rotary calf'
+  - name: 'Rotary Calf'
     sets:
     - weight_kg: 25
       reps: 20
@@ -559,7 +559,7 @@ workouts:
     sets:
     - reps: 15
     - reps: 15
-  - name: Bench Press Dumbbells
+  - name: Flat DB Bench Press
     sets:
     - weight_kg: 18
       reps: 12
@@ -922,7 +922,7 @@ workouts:
       reps: 10
     - weight_kg: 10
       reps: 10
-  - name: Flat Dumbbell Bench Press
+  - name: Flat DB Bench Press
     sets:
     - weight_kg: 16
       reps: 12
