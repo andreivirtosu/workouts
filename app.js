@@ -1333,6 +1333,69 @@
     return Math.round(diffMs / 60000);
   }
 
+  function getWorkoutFamily(name) {
+    const raw = String(name || "").trim().toLowerCase();
+    if (raw.startsWith("upper")) return "Upper";
+    if (raw.startsWith("lower")) return "Lower";
+    if (raw.startsWith("full")) return "Full Body";
+    return "";
+  }
+
+  function averageNumbers(values) {
+    if (!values.length) return null;
+    const total = values.reduce((sum, value) => sum + value, 0);
+    return total / values.length;
+  }
+
+  function getLiveWorkoutEstimate(session) {
+    const workoutName = String(session && session.workout_name ? session.workout_name : "").trim();
+    const exactDurations = [];
+    const familyDurations = [];
+    const family = getWorkoutFamily(workoutName);
+
+    state.workoutsAsc.forEach((workout) => {
+      const duration = getWorkoutDurationMinutes(workout);
+      if (duration === null) return;
+      const pastName = String(workout.workout_name || "").trim();
+      if (workoutName && pastName.toLowerCase() === workoutName.toLowerCase()) {
+        exactDurations.push(duration);
+        return;
+      }
+      if (family && getWorkoutFamily(pastName) === family) {
+        familyDurations.push(duration);
+      }
+    });
+
+    const exactAverage = averageNumbers(exactDurations);
+    if (exactAverage !== null) {
+      return {
+        estimateMin: Math.round(exactAverage),
+        sourceText: `${exactDurations.length} past ${workoutName || "matching"} session${exactDurations.length === 1 ? "" : "s"}`
+      };
+    }
+
+    const familyAverage = averageNumbers(familyDurations);
+    if (familyAverage !== null) {
+      return {
+        estimateMin: Math.round(familyAverage),
+        sourceText: `${familyDurations.length} past ${family ? family.toLowerCase() : "similar"} workout${familyDurations.length === 1 ? "" : "s"}`
+      };
+    }
+
+    const overallDurations = state.workoutsAsc
+      .map((workout) => getWorkoutDurationMinutes(workout))
+      .filter((duration) => duration !== null);
+    const overallAverage = averageNumbers(overallDurations);
+    if (overallAverage !== null) {
+      return {
+        estimateMin: Math.round(overallAverage),
+        sourceText: `${overallDurations.length} logged workout${overallDurations.length === 1 ? "" : "s"}`
+      };
+    }
+
+    return null;
+  }
+
   function renderLiveExerciseOptions() {
     const select = document.getElementById("live-exercise");
     const customWrap = document.getElementById("live-custom-wrap");
@@ -1459,6 +1522,7 @@
   function renderLiveSession(session) {
     const nextWorkoutTitle = document.getElementById("next-workout-title");
     const status = document.getElementById("live-status");
+    const estimate = document.getElementById("live-estimate");
     const list = document.getElementById("live-list");
     const bodyweightInput = document.getElementById("live-bodyweight");
     const warmupRunInput = document.getElementById("live-warmup-run");
@@ -1493,6 +1557,26 @@
     const startedText = started ? ` | start ${started}` : "";
     const endedText = ended ? ` | end ${ended}` : "";
     status.textContent = `${session.date} | ${session.sets.length} set${session.sets.length === 1 ? "" : "s"} logged | ${timeText}${startedText}${endedText}`;
+    if (estimate) {
+      const workoutEstimate = getLiveWorkoutEstimate(session);
+      if (!workoutEstimate) {
+        estimate.textContent = "";
+      } else {
+        const base = `Estimated total: about ${workoutEstimate.estimateMin} min, based on ${workoutEstimate.sourceText}.`;
+        if (durationMin === null) {
+          estimate.textContent = base;
+        } else {
+          const remaining = workoutEstimate.estimateMin - durationMin;
+          if (remaining > 0) {
+            estimate.textContent = `${base} About ${remaining} min left if today follows the usual pattern.`;
+          } else if (remaining < 0) {
+            estimate.textContent = `${base} You're about ${Math.abs(remaining)} min past the usual duration.`;
+          } else {
+            estimate.textContent = `${base} You're right around the usual finish time.`;
+          }
+        }
+      }
+    }
     updateLiveToggleButton(session);
 
     if (!session.sets.length) {

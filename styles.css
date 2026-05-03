@@ -794,6 +794,12 @@ canvas {
   color: var(--ink-soft);
 }
 
+.live-estimate {
+  margin-top: 4px;
+  font-size: 0.84rem;
+  color: var(--ink);
+}
+
 .live-feedback {
   margin-top: 4px;
   font-size: 0.82rem;
