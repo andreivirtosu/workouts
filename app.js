@@ -1432,13 +1432,22 @@
       nextWorkoutTitle.textContent = `Next Workout: ${session.workout_name || getCurrentPlanName()}`;
     }
     if (bodyweightInput) {
-      bodyweightInput.value = session.bodyweight === null ? "" : String(session.bodyweight);
+      const nextValue = session.bodyweight === null ? "" : String(session.bodyweight);
+      if (document.activeElement !== bodyweightInput || bodyweightInput.value !== nextValue) {
+        bodyweightInput.value = nextValue;
+      }
     }
     if (warmupRunInput) {
-      warmupRunInput.value = session.warmup_run_min === null ? "" : String(session.warmup_run_min);
+      const nextValue = session.warmup_run_min === null ? "" : String(session.warmup_run_min);
+      if (document.activeElement !== warmupRunInput || warmupRunInput.value !== nextValue) {
+        warmupRunInput.value = nextValue;
+      }
     }
     if (cooldownBikeInput) {
-      cooldownBikeInput.value = session.cooldown_bike_min === null ? "" : String(session.cooldown_bike_min);
+      const nextValue = session.cooldown_bike_min === null ? "" : String(session.cooldown_bike_min);
+      if (document.activeElement !== cooldownBikeInput || cooldownBikeInput.value !== nextValue) {
+        cooldownBikeInput.value = nextValue;
+      }
     }
     const durationMin = getSessionDurationMinutes(session);
     const started = formatClockTime(session.started_at);
