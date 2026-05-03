@@ -864,15 +864,51 @@
     return latestWithWorkout ? latestWithWorkout.date : (days[0] ? days[0].date : null);
   }
 
+  function getUserLocale() {
+    if (typeof navigator !== "undefined" && navigator.language) return navigator.language;
+    return undefined;
+  }
+
+  function getLocaleWeekStart() {
+    try {
+      if (typeof Intl !== "undefined" && typeof Intl.Locale === "function") {
+        const locale = new Intl.Locale(getUserLocale());
+        if (locale.weekInfo && Number.isInteger(locale.weekInfo.firstDay)) {
+          return locale.weekInfo.firstDay % 7;
+        }
+      }
+    } catch (err) {
+      // Fall back to Monday-first if weekInfo is unavailable.
+    }
+    return 1;
+  }
+
+  function getWeekdayIndex(date) {
+    const localeWeekStart = getLocaleWeekStart();
+    return (date.getDay() - localeWeekStart + 7) % 7;
+  }
+
+  function getWeekdayLabels() {
+    const formatter = new Intl.DateTimeFormat(getUserLocale(), { weekday: "narrow" });
+    const baseSunday = new Date(2026, 4, 3);
+    const localeWeekStart = getLocaleWeekStart();
+    const labels = [];
+    for (let i = 0; i < 7; i += 1) {
+      const day = addDays(baseSunday, (localeWeekStart + i) % 7);
+      labels.push(formatter.format(day));
+    }
+    return labels;
+  }
+
   function startOfWeek(date) {
     const start = new Date(date);
-    start.setDate(start.getDate() - start.getDay());
+    start.setDate(start.getDate() - getWeekdayIndex(start));
     return start;
   }
 
   function endOfWeek(date) {
     const end = new Date(date);
-    end.setDate(end.getDate() + (6 - end.getDay()));
+    end.setDate(end.getDate() + (6 - getWeekdayIndex(end)));
     return end;
   }
 
@@ -939,7 +975,7 @@
     ctx.fillStyle = colors.text;
     ctx.font = "12px 'Avenir Next', 'Trebuchet MS', sans-serif";
     ctx.textAlign = "left";
-    const weekdayLabels = ["S", "M", "T", "W", "T", "F", "S"];
+    const weekdayLabels = getWeekdayLabels();
     weekdayLabels.forEach((label, row) => {
       if (row % 2 === 1) {
         const y = startY + row * (cellSize + gap) + cellSize * 0.72;
@@ -951,7 +987,7 @@
       const iso = toIsoDate(cursor);
       const day = dateMap.get(iso) || { date: iso, label: formatDateShort(iso), count: 0, workouts: [] };
       const weekIndex = Math.floor(diffDays(rangeStart, cursor) / 7);
-      const weekday = cursor.getDay();
+      const weekday = getWeekdayIndex(cursor);
       const x = startX + weekIndex * (cellSize + gap);
       const y = startY + weekday * (cellSize + gap);
       const selected = state.selectedCalendarDate === day.date;
