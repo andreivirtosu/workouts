@@ -689,7 +689,7 @@ workouts:
       reps: 6
     - weight_kg: 12
       reps: 6
-  - name: Chest Press Machine
+  - name: Machine Chest Press
     sets:
     - weight_kg: 40
       reps: 6
