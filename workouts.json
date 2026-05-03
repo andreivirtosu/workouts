@@ -85,12 +85,11 @@
           ]
         },
         {
-          "name": "Chest Fly",
+          "name": "Machine Chest Fly",
           "sets": [
             {
               "weight_kg": 40,
-              "reps": 12,
-              "note": "Machine- the reverse of rear felt"
+              "reps": 12
             }
           ]
         },
@@ -1225,7 +1224,7 @@
           ]
         },
         {
-          "name": "Chest Fly Machine",
+          "name": "Machine Chest Fly",
           "sets": [
             {
               "weight_kg": 30,

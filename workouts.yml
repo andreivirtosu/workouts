@@ -44,11 +44,10 @@ workouts:
       reps: 8
     - weight_kg: 22.5
       reps: 8
-  - name: 'Chest Fly'
+  - name: 'Machine Chest Fly'
     sets:
     - weight_kg: 40
       reps: 12
-      note: 'Machine- the reverse of rear felt'
   - name: 'Lateral Raise'
     sets:
     - weight_kg: 30
@@ -620,7 +619,7 @@ workouts:
   - name: Back Extension
     sets:
     - reps: 15
-  - name: Chest Fly Machine
+  - name: Machine Chest Fly
     sets:
     - weight_kg: 30
       reps: 10
