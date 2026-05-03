@@ -1347,17 +1347,17 @@
     return total / values.length;
   }
 
-  function getLiveWorkoutEstimate(session) {
-    const workoutName = String(session && session.workout_name ? session.workout_name : "").trim();
+  function getWorkoutDurationEstimateByName(workoutName) {
+    const normalizedWorkoutName = String(workoutName || "").trim();
     const exactDurations = [];
     const familyDurations = [];
-    const family = getWorkoutFamily(workoutName);
+    const family = getWorkoutFamily(normalizedWorkoutName);
 
     state.workoutsAsc.forEach((workout) => {
       const duration = getWorkoutDurationMinutes(workout);
       if (duration === null) return;
       const pastName = String(workout.workout_name || "").trim();
-      if (workoutName && pastName.toLowerCase() === workoutName.toLowerCase()) {
+      if (normalizedWorkoutName && pastName.toLowerCase() === normalizedWorkoutName.toLowerCase()) {
         exactDurations.push(duration);
         return;
       }
@@ -1370,7 +1370,7 @@
     if (exactAverage !== null) {
       return {
         estimateMin: Math.round(exactAverage),
-        sourceText: `${exactDurations.length} past ${workoutName || "matching"} session${exactDurations.length === 1 ? "" : "s"}`
+        sourceText: `${exactDurations.length} past ${normalizedWorkoutName || "matching"} session${exactDurations.length === 1 ? "" : "s"}`
       };
     }
 
@@ -1394,6 +1394,10 @@
     }
 
     return null;
+  }
+
+  function getLiveWorkoutEstimate(session) {
+    return getWorkoutDurationEstimateByName(session && session.workout_name ? session.workout_name : "");
   }
 
   function renderLiveExerciseOptions() {
@@ -2089,6 +2093,7 @@
           : entry.next
             ? '<button class="next-plan-action is-active" type="button" disabled>Active</button>'
             : `<button class="next-plan-action" type="button" data-set-active-workout="${escapeHtml(entry.id)}">Set Active</button>`;
+        const estimate = entry.selectable ? getWorkoutDurationEstimateByName(entry.workout) : null;
         const items = entry.items
           .map((item) => `<div class="next-plan-target">${escapeHtml(item)}</div>`)
           .join("");
@@ -2097,7 +2102,10 @@
         <article class="${nextClass}">
           <div class="week-overview-head">
             <div class="next-plan-name">${escapeHtml(entry.day)}: ${escapeHtml(entry.workout)}</div>
-            ${action}
+            <div class="week-overview-side">
+              ${action}
+              ${estimate ? `<div class="week-overview-estimate">~${estimate.estimateMin} min</div>` : ""}
+            </div>
           </div>
           <div class="next-plan-copy">
             ${items}

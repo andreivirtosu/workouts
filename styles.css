@@ -356,6 +356,18 @@ canvas {
   gap: 10px;
 }
 
+.week-overview-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.week-overview-estimate {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
 .next-plan-head {
   font-size: 0.88rem;
   color: var(--ink-soft);
