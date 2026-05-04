@@ -1148,14 +1148,15 @@
         selectable: true,
         defaultNext: true,
         items: [
-          "Warmup: Run 6-8 min",
+          "Warmup: Run 7-8 min",
           "Incline Dumbbell Bench Press: 3 x 8-10",
-          "Chest Supported Row or Seated Cable Row: 3 x 8-12",
-          "Assisted Pull-up: 3 x 5-8",
-          "Machine Chest Press or Assisted Dips: 2-3 x 8-10",
-          "Hang: 2 x 30-45s",
-          "Lateral Raise or Rear Delt Fly: 2 x 12-15",
+          "Seated Cable Row or Chest Supported Row: 3 x 8-12",
+          "Assisted Pull-up: 3 x 6-10",
+          "Machine Chest Press: 2-3 x 8-12",
           "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
+          "Rear Delt Fly or Lateral Raise: 2-3 x 10-15",
+          "Triceps Pushdown: 2-3 x 10-15",
+          "Hang: 2 x 30-45s",
           "Plank or Dead Bug: 2-3 sets"
         ]
       },
@@ -1169,6 +1170,7 @@
           "Smith Machine Squat: 3 x 10-12",
           "Leg Press: 3 x 10-15",
           "Seated Leg Curl: 3 x 12-15",
+          "Bulgarian Split Squat or Walking Lunge: 2 x 8-10 each side",
           "Rotary Calf: 3 x 12-20",
           "Hang or Plank: 2 sets",
           "Farmer's Carry: 3-4 rounds",
@@ -1193,11 +1195,12 @@
           "Warmup: Run 6-8 min",
           "Flat DB Bench Press: 3 x 8-12",
           "Cable Row: 3 x 10-12",
-          "Assisted Pull-up or Lat Pulldown: 3 x 8-12",
+          "Lat Pulldown or Assisted Pull-up: 3 x 8-12",
           "Rear Delt Fly Machine: 3 x 8-12",
+          "Machine Chest Fly: 2-3 x 10-15",
           "Lateral Raise: 3 x 8-12",
-          "Triceps Pushdown or Biceps Curl: 2-3 x 10-15",
-          "Hang or Pallof Press: 2-3 sets",
+          "Triceps Pushdown or Biceps Curl: 2 x 10-15",
+          "Hang or Pallof Press: 2 sets",
           "Optional bike: 5-10 min"
         ]
       },
@@ -1217,12 +1220,12 @@
         selectable: true,
         items: [
           "Warmup: Run 6-8 min",
-          "Romanian Deadlift: 4 x 8-10",
-          "Leg Curl: 3 x 12-15",
+          "Romanian Deadlift: 3-4 x 8-10",
+          "Leg Extension: 3 x 10-15",
           "Leg Press: 3 x 12-15 (lighter than Lower A)",
-          "Back Extension or Hang: 2 sets",
-          "Plank: 2 x 60s",
-          "Bike: 10 min"
+          "Bulgarian Split Squat or Step-up: 2 x 8-10 each side",
+          "Hang or Plank: 2 sets",
+          "Bike: 8-10 min"
         ]
       },
       {
