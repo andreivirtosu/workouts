@@ -223,7 +223,7 @@ workouts:
     - weight_kg: 120
       reps: 12
       note: 'A2 machine'
-  - name: 'Seated Leg Curl'
+  - name: 'Leg Extension'
     sets:
     - weight_kg: 35
       reps: 12
@@ -353,7 +353,7 @@ workouts:
       reps: 8
     - weight_kg: 10
       reps: 10
-  - name: 'Leg Curl'
+  - name: 'Leg Extension'
     sets:
     - weight_kg: 35
       reps: 12
@@ -477,7 +477,7 @@ workouts:
       reps: 12
     - weight_kg: 191
       reps: 12
-  - name: 'Seated Leg Curl'
+  - name: 'Leg Extension'
     sets:
     - weight_kg: 30
       reps: 15
@@ -780,7 +780,7 @@ workouts:
       reps: 12
     - weight_kg: 173
       reps: 15
-  - name: Leg Curl
+  - name: Leg Extension
     sets:
     - weight_kg: 25
       reps: 15
@@ -919,7 +919,7 @@ workouts:
       reps: 12
     - weight_kg: 50
       reps: 8
-  - name: Leg Curl
+  - name: Leg Extension
     sets:
     - weight_kg: 25
       reps: 15
@@ -982,7 +982,7 @@ workouts:
       reps: 12
     - weight_kg: 160
       reps: 10
-  - name: Seated Leg Curl
+  - name: Leg Extension
     sets:
     - weight_kg: 30
       reps: 15
@@ -1082,7 +1082,7 @@ workouts:
       reps: 12
     - weight_kg: 40
       reps: 8
-  - name: Leg Curl (Seated or Lying)
+  - name: Leg Extension
     sets:
     - weight_kg: 25
       reps: 12
@@ -1144,7 +1144,7 @@ workouts:
       reps: 12
     - weight_kg: 140
       reps: 12
-  - name: Seated Leg Curl
+  - name: Leg Extension
     sets:
     - weight_kg: 25
       reps: 15
@@ -1189,7 +1189,7 @@ workouts:
     sets:
     - reps: 20
     - reps: 20
-  - name: Lying Leg Curl
+  - name: Leg Extension
     sets:
     - weight_kg: 23
       reps: 15
