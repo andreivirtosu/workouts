@@ -426,7 +426,7 @@
           ]
         },
         {
-          "name": "Seated Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 35,
@@ -678,7 +678,7 @@
           ]
         },
         {
-          "name": "Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 35,
@@ -920,7 +920,7 @@
           ]
         },
         {
-          "name": "Seated Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 30,
@@ -1538,7 +1538,7 @@
           ]
         },
         {
-          "name": "Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 25,
@@ -1824,7 +1824,7 @@
           ]
         },
         {
-          "name": "Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 25,
@@ -1956,7 +1956,7 @@
           ]
         },
         {
-          "name": "Seated Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 30,
@@ -2164,7 +2164,7 @@
           ]
         },
         {
-          "name": "Leg Curl (Seated or Lying)",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 25,
@@ -2291,7 +2291,7 @@
           ]
         },
         {
-          "name": "Seated Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 25,
@@ -2387,7 +2387,7 @@
           ]
         },
         {
-          "name": "Lying Leg Curl",
+          "name": "Leg Extension",
           "sets": [
             {
               "weight_kg": 23,
