@@ -1193,7 +1193,7 @@
         selectable: true,
         items: [
           "Warmup: Run 6-8 min",
-          "Flat DB Bench Press: 3 x 8-12",
+          "Flat Bench Press: 3 x 8-12",
           "Cable Row: 3 x 10-12",
           "Lat Pulldown or Assisted Pull-up: 3 x 8-12",
           "Rear Delt Fly Machine: 3 x 8-12",
