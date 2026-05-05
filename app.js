@@ -726,7 +726,13 @@
       }
     });
 
-    for (let i = weeks.length - 1; i >= 0; i -= 1) {
+    let currentIndex = weeks.length - 1;
+    const thisWeekStart = toIsoDate(startOfWeek(new Date()));
+    if (currentIndex >= 0 && weeks[currentIndex].weekStart === thisWeekStart && !weeks[currentIndex].hitTarget) {
+      currentIndex -= 1;
+    }
+
+    for (let i = currentIndex; i >= 0; i -= 1) {
       if (weeks[i].hitTarget) current += 1;
       else break;
     }
