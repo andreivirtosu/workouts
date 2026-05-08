@@ -6,9 +6,13 @@ on:
       - main
     paths:
       - index.html
+      - sessions.html
+      - logger.html
+      - exercises.html
       - styles.css
       - app.js
       - workouts.json
+      - favicon.svg
       - .nojekyll
       - .github/workflows/deploy-pages.yml
   workflow_dispatch:
