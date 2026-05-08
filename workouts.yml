@@ -28,7 +28,7 @@ workouts:
       reps: 10
     - weight_kg: 200
       reps: 10
-  - name: 'Leg Extension'
+  - name: 'Seated Leg Curl'
     sets:
     - weight_kg: 30
       reps: 12
