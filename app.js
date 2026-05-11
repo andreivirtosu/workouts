@@ -1158,7 +1158,7 @@
           "Incline Dumbbell Bench Press: 3 x 8-10",
           "Seated Cable Row or Chest Supported Row: 3 x 8-12",
           "Assisted Pull-up: 3 x 6-10",
-          "Machine Chest Press: 2-3 x 8-12",
+          "Flat Bench Press: 2-3 x 8-12",
           "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
           "Rear Delt Fly or Lateral Raise: 2-3 x 10-15",
           "Triceps Pushdown: 2-3 x 10-15",
