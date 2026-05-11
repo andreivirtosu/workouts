@@ -1185,7 +1185,6 @@
           "Smith Machine Squat: 3 x 10-12",
           "Leg Press: 3 x 10-15",
           "Seated Leg Curl: 3 x 12-15",
-          "Bulgarian Split Squat or Walking Lunge: 2 x 8-10 each side",
           "Rotary Calf: 3 x 12-20",
           "Hang or Plank: 2 sets",
           "Farmer's Carry: 3-4 rounds"
@@ -1236,7 +1235,6 @@
           "Romanian Deadlift: 3-4 x 8-10",
           "Leg Extension: 3 x 10-15",
           "Leg Press: 3 x 12-15 (lighter than Lower A)",
-          "Bulgarian Split Squat or Step-up: 2 x 8-10 each side",
           "Hang or Plank: 2 sets"
         ]
       }
