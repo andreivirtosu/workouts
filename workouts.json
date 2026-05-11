@@ -1,6 +1,99 @@
 {
   "workouts": [
     {
+      "date": "2026-05-10",
+      "workout_name": "Lower B",
+      "started_at": "2026-05-10T14:25",
+      "ended_at": "2026-05-10T15:01",
+      "duration_min": 36,
+      "bodyweight": 83.5,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 6
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets": [
+            {
+              "weight_kg": 10,
+              "reps": 12
+            },
+            {
+              "weight_kg": 15,
+              "reps": 10
+            },
+            {
+              "weight_kg": 15,
+              "reps": 10
+            },
+            {
+              "weight_kg": 15,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Leg Extension",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 12
+            },
+            {
+              "weight_kg": 50,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 191,
+              "reps": 12
+            },
+            {
+              "weight_kg": 191,
+              "reps": 12
+            },
+            {
+              "weight_kg": 191,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 45
+            },
+            {
+              "duration_sec": 30
+            }
+          ]
+        },
+        {
+          "name": "Back extension",
+          "sets": [
+            {
+              "weight_kg": 0,
+              "reps": 15
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-05-08",
       "workout_name": "Upper B",
       "started_at": "2026-05-08T15:31",
