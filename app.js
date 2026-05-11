@@ -1163,7 +1163,7 @@
           "Rear Delt Fly or Lateral Raise: 2-3 x 10-15",
           "Triceps Pushdown: 2-3 x 10-15",
           "Hang: 2 x 30-45s",
-          "Plank or Dead Bug: 2-3 sets"
+          "Plank: 2-3 sets"
         ]
       },
       {
@@ -1188,8 +1188,7 @@
           "Bulgarian Split Squat or Walking Lunge: 2 x 8-10 each side",
           "Rotary Calf: 3 x 12-20",
           "Hang or Plank: 2 sets",
-          "Farmer's Carry: 3-4 rounds",
-          "Bike: 6-10 min"
+          "Farmer's Carry: 3-4 rounds"
         ]
       },
       {
@@ -1215,8 +1214,7 @@
           "Machine Chest Fly: 2-3 x 10-15",
           "Lateral Raise: 3 x 8-12",
           "Triceps Pushdown or Biceps Curl: 2 x 10-15",
-          "Hang or Pallof Press: 2 sets",
-          "Optional bike: 5-10 min"
+          "Hang: 2 sets"
         ]
       },
       {
@@ -1239,8 +1237,7 @@
           "Leg Extension: 3 x 10-15",
           "Leg Press: 3 x 12-15 (lighter than Lower A)",
           "Bulgarian Split Squat or Step-up: 2 x 8-10 each side",
-          "Hang or Plank: 2 sets",
-          "Bike: 8-10 min"
+          "Hang or Plank: 2 sets"
         ]
       }
     ];
