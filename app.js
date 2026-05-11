@@ -1167,8 +1167,17 @@
         ]
       },
       {
-        id: "tuesday-lower-a",
+        id: "tuesday-recovery",
         day: "Tuesday",
+        workout: "Recovery",
+        selectable: false,
+        items: [
+          "Rest, walk, or easy cardio"
+        ]
+      },
+      {
+        id: "wednesday-lower-a",
+        day: "Wednesday",
         workout: "Lower A",
         selectable: true,
         items: [
@@ -1184,8 +1193,8 @@
         ]
       },
       {
-        id: "wednesday-recovery",
-        day: "Wednesday",
+        id: "thursday-recovery",
+        day: "Thursday",
         workout: "Recovery",
         selectable: false,
         items: [
@@ -1193,8 +1202,8 @@
         ]
       },
       {
-        id: "thursday-upper-b",
-        day: "Thursday",
+        id: "friday-upper-b",
+        day: "Friday",
         workout: "Upper B",
         selectable: true,
         items: [
@@ -1211,8 +1220,8 @@
         ]
       },
       {
-        id: "friday-recovery",
-        day: "Friday",
+        id: "saturday-recovery",
+        day: "Saturday",
         workout: "Recovery",
         selectable: false,
         items: [
@@ -1220,8 +1229,8 @@
         ]
       },
       {
-        id: "saturday-lower-b",
-        day: "Saturday",
+        id: "sunday-lower-b",
+        day: "Sunday",
         workout: "Lower B",
         selectable: true,
         items: [
@@ -1232,15 +1241,6 @@
           "Bulgarian Split Squat or Step-up: 2 x 8-10 each side",
           "Hang or Plank: 2 sets",
           "Bike: 8-10 min"
-        ]
-      },
-      {
-        id: "sunday-recovery",
-        day: "Sunday",
-        workout: "Recovery",
-        selectable: false,
-        items: [
-          "Rest or light mobility"
         ]
       }
     ];
