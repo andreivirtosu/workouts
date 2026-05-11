@@ -1235,7 +1235,9 @@
           "Romanian Deadlift: 3-4 x 8-10",
           "Leg Extension: 3 x 10-15",
           "Leg Press: 3 x 12-15 (lighter than Lower A)",
-          "Hang or Plank: 2 sets"
+          "Back Extension: 2 x 12-15",
+          "Hang: 2 sets",
+          "Plank: 2 sets"
         ]
       }
     ];
