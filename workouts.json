@@ -1,6 +1,147 @@
 {
   "workouts": [
     {
+      "date": "2026-05-11",
+      "workout_name": "Upper A",
+      "started_at": "2026-05-11T15:11",
+      "ended_at": "2026-05-11T15:57",
+      "duration_min": 46,
+      "bodyweight": 82.9,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 7
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Incline Dumbbell Bench Press",
+          "sets": [
+            {
+              "weight_kg": 22,
+              "reps": 12
+            },
+            {
+              "weight_kg": 24,
+              "reps": 8
+            },
+            {
+              "weight_kg": 24,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets": [
+            {
+              "weight_kg": 90,
+              "reps": 12
+            },
+            {
+              "weight_kg": 95,
+              "reps": 12
+            },
+            {
+              "weight_kg": 100,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Lateral Raise",
+          "sets": [
+            {
+              "weight_kg": 30,
+              "reps": 10
+            },
+            {
+              "weight_kg": 36,
+              "reps": 8
+            },
+            {
+              "weight_kg": 36,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Shoulder Press Machine",
+          "sets": [
+            {
+              "weight_kg": 25,
+              "reps": 12
+            },
+            {
+              "weight_kg": 25,
+              "reps": 10
+            },
+            {
+              "weight_kg": 25,
+              "reps": 7
+            }
+          ]
+        },
+        {
+          "name": "Assisted Pull-up",
+          "sets": [
+            {
+              "weight_kg": 36,
+              "reps": 12
+            },
+            {
+              "weight_kg": 36,
+              "reps": 8
+            },
+            {
+              "weight_kg": 36,
+              "reps": 6,
+              "note": "Hard"
+            }
+          ]
+        },
+        {
+          "name": "Flat Bench Press",
+          "sets": [
+            {
+              "weight_kg": 22,
+              "reps": 10
+            },
+            {
+              "weight_kg": 22,
+              "reps": 5
+            }
+          ]
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": [
+            {
+              "weight_kg": 15,
+              "reps": 12
+            },
+            {
+              "weight_kg": 15,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 45
+            },
+            {
+              "duration_sec": 35
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-05-10",
       "workout_name": "Lower B",
       "started_at": "2026-05-10T14:25",
