@@ -22,6 +22,7 @@
     liveTimerIntervalId: null,
     sharedDraftSaveTimerId: null,
     sharedDraftSaveRunId: 0,
+    sharedDraftSaveController: null,
     restTimerIntervalId: null,
     restTimerEndTs: null
   };
@@ -75,10 +76,11 @@
     return payload && payload.data && typeof payload.data.content === "string" ? payload.data.content : "";
   }
 
-  async function saveSharedWorkoutDraft(text, title, { keepalive = false } = {}) {
+  async function saveSharedWorkoutDraft(text, title, { keepalive = false, signal } = {}) {
     const response = await fetch(SHARED_WORKOUT_OBJECT_URL, {
       method: "PATCH",
       keepalive,
+      signal,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"
@@ -134,6 +136,17 @@
     }
   }
 
+  function stopSharedWorkoutDraftActivity() {
+    if (state.sharedDraftSaveTimerId) {
+      window.clearTimeout(state.sharedDraftSaveTimerId);
+      state.sharedDraftSaveTimerId = null;
+    }
+    if (state.sharedDraftSaveController) {
+      state.sharedDraftSaveController.abort();
+      state.sharedDraftSaveController = null;
+    }
+  }
+
   function savePendingSharedDraftSave(payload) {
     try {
       localStorage.setItem(SHARED_DRAFT_PENDING_STORAGE_KEY, JSON.stringify({
@@ -160,12 +173,22 @@
   async function attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt, keepalive = false }) {
     if (runId !== state.sharedDraftSaveRunId) return;
 
+    const controller = new AbortController();
+    state.sharedDraftSaveController = controller;
+
     try {
-      await saveSharedWorkoutDraft(yaml, title, { keepalive });
+      await saveSharedWorkoutDraft(yaml, title, { keepalive, signal: controller.signal });
       if (runId !== state.sharedDraftSaveRunId) return;
+      if (state.sharedDraftSaveController === controller) {
+        state.sharedDraftSaveController = null;
+      }
       clearPendingSharedDraftSave({ yaml, title });
       if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
     } catch (err) {
+      if (state.sharedDraftSaveController === controller) {
+        state.sharedDraftSaveController = null;
+      }
+      if (err && err.name === "AbortError") return;
       if (runId !== state.sharedDraftSaveRunId) return;
       if (attempt < SHARED_DRAFT_RETRY_MAX_ATTEMPTS) {
         const nextAttempt = attempt + 1;
@@ -227,11 +250,8 @@
       title: session.workout_name || getCurrentPlanName()
     };
     savePendingSharedDraftSave(payload);
+    stopSharedWorkoutDraftActivity();
     state.sharedDraftSaveRunId += 1;
-    if (state.sharedDraftSaveTimerId) {
-      window.clearTimeout(state.sharedDraftSaveTimerId);
-      state.sharedDraftSaveTimerId = null;
-    }
     await attemptSharedWorkoutDraftSave({
       yaml: payload.yaml,
       title: payload.title,
@@ -245,11 +265,8 @@
   async function resumePendingSharedDraftSave(feedbackEl) {
     const pending = loadPendingSharedDraftSave();
     if (!pending || !pending.yaml.trim()) return;
+    stopSharedWorkoutDraftActivity();
     state.sharedDraftSaveRunId += 1;
-    if (state.sharedDraftSaveTimerId) {
-      window.clearTimeout(state.sharedDraftSaveTimerId);
-      state.sharedDraftSaveTimerId = null;
-    }
     if (feedbackEl) feedbackEl.textContent = "Resuming shared draft sync...";
     await attemptSharedWorkoutDraftSave({
       yaml: pending.yaml,
@@ -1729,13 +1746,18 @@
       saveLiveSession(session);
       renderLiveSession(session);
       refreshLiveYamlOutput(session);
+      syncTimer();
       if (running) {
         feedback.textContent = "Workout timer ended. Saving shared draft...";
-        await flushSharedWorkoutDraftSave(session, feedback, { keepalive: true });
+        toggleWorkoutBtn.disabled = true;
+        try {
+          await flushSharedWorkoutDraftSave(session, feedback, { keepalive: true });
+        } finally {
+          toggleWorkoutBtn.disabled = false;
+        }
       } else {
         queueSharedWorkoutDraftSave(session, feedback);
       }
-      syncTimer();
     });
 
     addBtn.addEventListener("click", () => {
