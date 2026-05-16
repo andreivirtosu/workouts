@@ -1,5 +1,82 @@
 ---
 workouts:
+- date: '2026-05-16'
+  workout_name: 'Upper B'
+  started_at: '2026-05-16T09:52'
+  ended_at: '2026-05-16T10:43'
+  duration_min: 51
+  bodyweight: 83.5
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 7
+  exercises:
+  - name: 'Cable Row'
+    sets:
+    - weight_kg: 90
+      reps: 15
+    - weight_kg: 100
+      reps: 12
+    - weight_kg: 100
+      reps: 12
+  - name: 'Flat Bench Press'
+    sets:
+    - weight_kg: 22
+      reps: 12
+    - weight_kg: 24
+      reps: 10
+    - weight_kg: 24
+      reps: 8
+      note: 'Hard last 2'
+  - name: 'Lat Pulldown'
+    sets:
+    - weight_kg: 50
+      reps: 12
+    - weight_kg: 50
+      reps: 8
+    - weight_kg: 50
+      reps: 6
+  - name: 'Rear Delt Fly Machine'
+    sets:
+    - weight_kg: 22.5
+      reps: 12
+    - weight_kg: 22.5
+      reps: 10
+    - weight_kg: 22.5
+      reps: 8
+      note: 'Hard'
+  - name: 'Machine Chest Fly'
+    sets:
+    - weight_kg: 22.5
+      reps: 12
+    - weight_kg: 31.5
+      reps: 12
+    - weight_kg: 40.5
+      reps: 12
+    - weight_kg: 49.5
+      reps: 9
+  - name: 'Lateral Raise'
+    sets:
+    - weight_kg: 30
+      reps: 12
+    - weight_kg: 30
+      reps: 8
+      note: 'Hard'
+    - weight_kg: 30
+      reps: 6
+      note: 'Hard'
+  - name: 'Triceps Pushdown'
+    sets:
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 20
+      reps: 10
+  - name: 'Hang'
+    sets:
+    -
+      duration_sec: 45
+
 - date: '2026-05-13'
   workout_name: 'Lower A'
   started_at: '2026-05-13T14:31'
