@@ -170,6 +170,26 @@
     }
   }
 
+  function buildSharedDraftSavePayload(session) {
+    return {
+      yaml: refreshLiveYamlOutput(session),
+      title: session.workout_name || getCurrentPlanName()
+    };
+  }
+
+  function dispatchKeepaliveSharedDraftSave(payload, feedbackEl) {
+    if (!payload || !payload.yaml) return;
+    savePendingSharedDraftSave(payload);
+    void saveSharedWorkoutDraft(payload.yaml, payload.title, { keepalive: true })
+      .then(() => {
+        clearPendingSharedDraftSave(payload);
+        if (feedbackEl) feedbackEl.textContent = "Shared draft auto-saved.";
+      })
+      .catch(() => {
+        // Keep the pending payload so the next page load can retry it.
+      });
+  }
+
   async function attemptSharedWorkoutDraftSave({ yaml, title, feedbackEl, runId, attempt, keepalive = false }) {
     if (runId !== state.sharedDraftSaveRunId) return;
 
@@ -226,11 +246,7 @@
   }
 
   function queueSharedWorkoutDraftSave(session, feedbackEl) {
-    const yaml = refreshLiveYamlOutput(session);
-    const payload = {
-      yaml,
-      title: session.workout_name || getCurrentPlanName()
-    };
+    const payload = buildSharedDraftSavePayload(session);
     savePendingSharedDraftSave(payload);
     state.sharedDraftSaveRunId += 1;
     scheduleSharedWorkoutDraftSaveAttempt({
@@ -244,11 +260,7 @@
   }
 
   async function flushSharedWorkoutDraftSave(session, feedbackEl, { keepalive = false } = {}) {
-    const yaml = refreshLiveYamlOutput(session);
-    const payload = {
-      yaml,
-      title: session.workout_name || getCurrentPlanName()
-    };
+    const payload = buildSharedDraftSavePayload(session);
     savePendingSharedDraftSave(payload);
     stopSharedWorkoutDraftActivity();
     state.sharedDraftSaveRunId += 1;
@@ -1749,6 +1761,7 @@
       syncTimer();
       if (running) {
         feedback.textContent = "Workout timer ended. Saving shared draft...";
+        dispatchKeepaliveSharedDraftSave(buildSharedDraftSavePayload(session));
         toggleWorkoutBtn.disabled = true;
         try {
           await flushSharedWorkoutDraftSave(session, feedback, { keepalive: true });
@@ -1879,13 +1892,25 @@
 
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "hidden") return;
-      if (!loadPendingSharedDraftSave()) return;
-      void resumePendingSharedDraftSave();
+      const latestSession = normalizeLiveSession(loadLiveSession());
+      if (hasLiveSessionProgress(latestSession)) {
+        dispatchKeepaliveSharedDraftSave(buildSharedDraftSavePayload(latestSession));
+        return;
+      }
+      const pending = loadPendingSharedDraftSave();
+      if (!pending) return;
+      dispatchKeepaliveSharedDraftSave(pending);
     });
 
     window.addEventListener("pagehide", () => {
-      if (!loadPendingSharedDraftSave()) return;
-      void resumePendingSharedDraftSave();
+      const latestSession = normalizeLiveSession(loadLiveSession());
+      if (hasLiveSessionProgress(latestSession)) {
+        dispatchKeepaliveSharedDraftSave(buildSharedDraftSavePayload(latestSession));
+        return;
+      }
+      const pending = loadPendingSharedDraftSave();
+      if (!pending) return;
+      dispatchKeepaliveSharedDraftSave(pending);
     });
 
     void resumePendingSharedDraftSave(feedback);
