@@ -28,6 +28,7 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-05-17";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -305,6 +306,29 @@
 
   function parseDate(dateStr) {
     return new Date(`${dateStr}T00:00:00`);
+  }
+
+  function getIsoWeekInfo(input) {
+    const date = input instanceof Date ? new Date(input) : parseDate(String(input));
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+    const week1 = new Date(date.getFullYear(), 0, 4);
+    week1.setDate(week1.getDate() + 3 - ((week1.getDay() + 6) % 7));
+    const week = 1 + Math.round((date.getTime() - week1.getTime()) / 604800000);
+    return {
+      year: date.getFullYear(),
+      week
+    };
+  }
+
+  function getWeeklyPlanMetaText() {
+    const updatedAt = parseDate(WEEKLY_PLAN_UPDATED_AT);
+    const { year, week } = getIsoWeekInfo(updatedAt);
+    const formattedDate = updatedAt.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric"
+    });
+    return `Plan for ${year}-W${String(week).padStart(2, "0")} · updated ${formattedDate}`;
   }
 
   function formatDateShort(dateStr) {
@@ -2135,9 +2159,14 @@
 
   function renderNextPlan(workoutsAsc) {
     const weeklyPlan = getWeeklyPlan();
+    const planMetaText = getWeeklyPlanMetaText();
 
     const nextWorkout = weeklyPlan.find((entry) => entry.next) || weeklyPlan[0];
     const overview = document.getElementById("week-overview");
+    const overviewMeta = document.getElementById("week-plan-meta");
+    const nextPlanMeta = document.getElementById("next-plan-meta");
+    if (overviewMeta) overviewMeta.textContent = planMetaText;
+    if (nextPlanMeta) nextPlanMeta.textContent = planMetaText;
     if (overview) {
       overview.innerHTML = weeklyPlan.map((entry) => {
         const nextClass = entry.next ? " week-overview-item is-next-workout" : " week-overview-item";
