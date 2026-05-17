@@ -22,9 +22,7 @@
     liveTimerIntervalId: null,
     sharedDraftSaveTimerId: null,
     sharedDraftSaveRunId: 0,
-    sharedDraftSaveController: null,
-    restTimerIntervalId: null,
-    restTimerEndTs: null
+    sharedDraftSaveController: null
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
@@ -1702,11 +1700,7 @@
     const yamlOutput = document.getElementById("live-yaml-output");
     const status = document.getElementById("live-status");
     const feedback = document.getElementById("live-feedback");
-    const rest60Btn = document.getElementById("rest-60");
-    const rest90Btn = document.getElementById("rest-90");
-    const rest120Btn = document.getElementById("rest-120");
-    const restStopBtn = document.getElementById("rest-stop");
-    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !bodyweightInput || !warmupRunInput || !cooldownBikeInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback || !rest60Btn || !rest90Btn || !rest120Btn || !restStopBtn) return;
+    if (!toggleWorkoutBtn || !addBtn || !removeLastBtn || !clearBtn || !exportBtn || !copyBtn || !exerciseSelect || !customWrap || !customExerciseInput || !bodyweightInput || !warmupRunInput || !cooldownBikeInput || !weightInput || !repsInput || !durationInput || !noteInput || !yamlOutput || !status || !feedback) return;
 
     let session = normalizeLiveSession(loadLiveSession());
     renderLiveExerciseOptions();
@@ -1714,7 +1708,6 @@
     renderLiveSession(session);
     refreshLiveYamlOutput(session);
     renderLiveExerciseHistory(getActiveLiveExerciseName());
-    renderRestDisplay("--:--");
 
     const syncTimer = () => {
       const running = !!session.started_at && !session.ended_at;
@@ -1864,7 +1857,6 @@
       feedback.textContent = "Session cleared.";
       queueSharedWorkoutDraftSave(session, feedback);
       syncTimer();
-      stopRestTimer();
     });
 
     exportBtn.addEventListener("click", () => {
@@ -1892,26 +1884,6 @@
       } catch (err) {
         feedback.textContent = "Could not copy automatically. Select and copy manually.";
       }
-    });
-
-    rest60Btn.addEventListener("click", () => {
-      startRestTimer(60, feedback);
-      feedback.textContent = "Rest timer: 60s";
-    });
-
-    rest90Btn.addEventListener("click", () => {
-      startRestTimer(90, feedback);
-      feedback.textContent = "Rest timer: 90s";
-    });
-
-    rest120Btn.addEventListener("click", () => {
-      startRestTimer(120, feedback);
-      feedback.textContent = "Rest timer: 120s";
-    });
-
-    restStopBtn.addEventListener("click", () => {
-      stopRestTimer();
-      feedback.textContent = "Rest timer stopped.";
     });
 
     document.addEventListener("visibilitychange", () => {
@@ -2056,59 +2028,6 @@
     lines.push(`  - activity: ${yamlQuote("Bike")}`);
     lines.push(`    duration_min: ${safeSession.cooldown_bike_min}`);
     return lines.join("\n");
-  }
-
-  function formatRestTime(totalSeconds) {
-    const s = Math.max(0, Math.floor(totalSeconds));
-    const mm = String(Math.floor(s / 60)).padStart(2, "0");
-    const ss = String(s % 60).padStart(2, "0");
-    return `${mm}:${ss}`;
-  }
-
-  function renderRestDisplay(text) {
-    const display = document.getElementById("rest-display");
-    if (!display) return;
-    display.textContent = text;
-  }
-
-  function stopRestTimer() {
-    if (state.restTimerIntervalId) {
-      window.clearInterval(state.restTimerIntervalId);
-      state.restTimerIntervalId = null;
-    }
-    state.restTimerEndTs = null;
-    renderRestDisplay("--:--");
-  }
-
-  function startRestTimer(seconds, feedbackNode) {
-    state.restTimerEndTs = Date.now() + seconds * 1000;
-    if (state.restTimerIntervalId) {
-      window.clearInterval(state.restTimerIntervalId);
-      state.restTimerIntervalId = null;
-    }
-
-    const tick = () => {
-      if (!state.restTimerEndTs) {
-        renderRestDisplay("--:--");
-        return;
-      }
-      const remainingMs = state.restTimerEndTs - Date.now();
-      const remainingSec = Math.ceil(remainingMs / 1000);
-      if (remainingSec <= 0) {
-        renderRestDisplay("00:00");
-        if (feedbackNode) feedbackNode.textContent = "Rest finished.";
-        if (state.restTimerIntervalId) {
-          window.clearInterval(state.restTimerIntervalId);
-          state.restTimerIntervalId = null;
-        }
-        state.restTimerEndTs = null;
-        return;
-      }
-      renderRestDisplay(formatRestTime(remainingSec));
-    };
-
-    tick();
-    state.restTimerIntervalId = window.setInterval(tick, 250);
   }
 
   function isLowerBodyExercise(name) {
