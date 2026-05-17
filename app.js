@@ -1185,14 +1185,14 @@
         items: [
           "Warmup: Run 7-8 min",
           "Incline Dumbbell Bench Press: 3 x 8-10",
-          "Seated Cable Row or Chest Supported Row: 3 x 8-12",
+          "Seated Cable Row: 3 x 10-12",
           "Assisted Pull-up: 3 x 6-10",
-          "Flat Bench Press: 2-3 x 8-12",
-          "Shoulder Press Machine or DB Shoulder Press: 2-3 x 8-10",
-          "Rear Delt Fly or Lateral Raise: 2-3 x 10-15",
+          "Shoulder Press Machine: 3 x 8-12",
+          "Lateral Raise or Rear Delt Fly: 3 x 8-12",
+          "Flat Bench Press: 2 x 8-10",
           "Triceps Pushdown: 2-3 x 10-15",
           "Hang: 2 x 30-45s",
-          "Plank: 2-3 sets"
+          "Optional Plank: 2 sets"
         ]
       },
       {
@@ -1210,13 +1210,13 @@
         workout: "Lower A",
         selectable: true,
         items: [
-          "Warmup: Run 6-8 min",
-          "Smith Machine Squat: 3 x 10-12",
-          "Leg Press: 3 x 10-15",
-          "Seated Leg Curl: 3 x 12-15",
-          "Rotary Calf: 3 x 12-20",
-          "Hang or Plank: 2 sets",
-          "Farmer's Carry: 3-4 rounds"
+          "Warmup: Run 7-8 min",
+          "Smith Machine Squat: 4 x 10-15",
+          "Leg Press: 3 x 10-12",
+          "Seated Leg Curl: 3 x 10-12",
+          "Rotary Calf: 3 x 12-15",
+          "Plank: 2-3 sets",
+          "Farmer's Carry: 3 rounds"
         ]
       },
       {
@@ -1234,15 +1234,15 @@
         workout: "Upper B",
         selectable: true,
         items: [
-          "Warmup: Run 6-8 min",
+          "Warmup: Run 7-8 min",
+          "Cable Row: 3 x 10-15",
           "Flat Bench Press: 3 x 8-12",
-          "Cable Row: 3 x 10-12",
-          "Lat Pulldown or Assisted Pull-up: 3 x 8-12",
+          "Lat Pulldown: 3 x 8-12",
           "Rear Delt Fly Machine: 3 x 8-12",
-          "Machine Chest Fly: 2-3 x 10-15",
+          "Machine Chest Fly: 3-4 x 10-12",
           "Lateral Raise: 3 x 8-12",
-          "Triceps Pushdown or Biceps Curl: 2 x 10-15",
-          "Hang: 2 sets"
+          "Triceps Pushdown: 2 x 10-12",
+          "Hang: 1-2 sets"
         ]
       },
       {
@@ -1261,12 +1261,12 @@
         selectable: true,
         items: [
           "Warmup: Run 6-8 min",
-          "Romanian Deadlift: 3-4 x 8-10",
-          "Leg Extension: 3 x 10-15",
-          "Leg Press: 3 x 12-15 (lighter than Lower A)",
+          "Romanian Deadlift: 4 x 8-12",
+          "Leg Extension: 3 x 8-12",
+          "Leg Press: 3 x 12-15 (alternate machine is fine)",
           "Back Extension: 2 x 12-15",
-          "Hang: 2 sets",
-          "Plank: 2 sets"
+          "Hang: 2 x 30-45s",
+          "Plank: 2 x 45-60s"
         ]
       }
     ];
