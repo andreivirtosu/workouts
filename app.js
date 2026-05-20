@@ -1286,6 +1286,7 @@
           "Romanian Deadlift: 4 x 8-12",
           "Leg Extension: 3 x 8-12",
           "Leg Press: 3 x 12-15 (alternate machine is fine)",
+          "Rotary Calf: 3 x 12-15",
           "Back Extension: 2 x 12-15",
           "Hang: 2 x 30-45s",
           "Plank: 2 x 45-60s"
