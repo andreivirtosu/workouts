@@ -27,6 +27,7 @@
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
   const WEEKLY_PLAN_UPDATED_AT = "2026-05-17";
+  const WORKOUTS_DATA_VERSION = "20260521a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -2348,7 +2349,7 @@
     const shouldUpdateStatus = !!(status && status.dataset && status.dataset.dynamic === "true");
 
     try {
-      const response = await fetch("./workouts.json", { cache: "no-store" });
+      const response = await fetch(`./workouts.json?v=${WORKOUTS_DATA_VERSION}`, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
 
