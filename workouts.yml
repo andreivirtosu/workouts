@@ -1,5 +1,60 @@
 ---
 workouts:
+- date: '2026-05-21'
+  workout_name: 'Lower A'
+  started_at: '2026-05-21T11:18'
+  ended_at: '2026-05-21T12:02'
+  duration_min: 44
+  bodyweight: 84.75
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 6
+  exercises:
+  - name: 'Leg Press'
+    sets:
+    - weight_kg: 191
+      reps: 12
+    - weight_kg: 200
+      reps: 12
+    - weight_kg: 200
+      reps: 12
+    - weight_kg: 209
+      reps: 12
+  - name: 'Smith Machine Squat'
+    sets:
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 20
+      reps: 10
+  - name: 'Leg extension'
+    sets:
+    - weight_kg: 40
+      reps: 12
+  - name: 'Seated Leg Curl'
+    sets:
+    - weight_kg: 40
+      reps: 12
+    - weight_kg: 45
+      reps: 10
+  - name: 'Rotary Calf'
+    sets:
+    - weight_kg: 40
+      reps: 15
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 12
+  - name: 'Plank'
+    sets:
+    -
+      duration_sec: 60
+    -
+      duration_sec: 40
+
 - date: '2026-05-19'
   workout_name: 'Upper A'
   started_at: '2026-05-19T14:50'
