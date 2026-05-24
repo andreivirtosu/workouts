@@ -1,6 +1,134 @@
 {
   "workouts": [
     {
+      "date": "2026-05-24",
+      "workout_name": "Upper B",
+      "started_at": "2026-05-24T09:24",
+      "ended_at": "2026-05-24T10:11",
+      "duration_min": 47,
+      "bodyweight": 83.5,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 6
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Flat Bench Press",
+          "sets": [
+            {
+              "weight_kg": 22,
+              "reps": 12
+            },
+            {
+              "weight_kg": 24,
+              "reps": 10
+            },
+            {
+              "weight_kg": 24,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Cable Row",
+          "sets": [
+            {
+              "weight_kg": 95,
+              "reps": 15
+            },
+            {
+              "weight_kg": 100,
+              "reps": 12
+            },
+            {
+              "weight_kg": 100,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Lateral Raise",
+          "sets": [
+            {
+              "weight_kg": 30,
+              "reps": 12
+            },
+            {
+              "weight_kg": 36,
+              "reps": 10
+            },
+            {
+              "weight_kg": 36,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 50
+            },
+            {
+              "duration_sec": 40
+            }
+          ]
+        },
+        {
+          "name": "Lat Pulldown",
+          "sets": [
+            {
+              "weight_kg": 50,
+              "reps": 12
+            },
+            {
+              "weight_kg": 50,
+              "reps": 10,
+              "note": "Hard"
+            },
+            {
+              "weight_kg": 50,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Dumbbell chest fly",
+          "sets": [
+            {
+              "weight_kg": 12,
+              "reps": 12
+            },
+            {
+              "weight_kg": 14,
+              "reps": 12
+            },
+            {
+              "weight_kg": 14,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": [
+            {
+              "weight_kg": 20,
+              "reps": 10
+            },
+            {
+              "weight_kg": 20,
+              "reps": null
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-05-21",
       "workout_name": "Lower A",
       "started_at": "2026-05-21T11:18",
