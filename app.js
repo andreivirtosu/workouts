@@ -26,8 +26,8 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
-  const WEEKLY_PLAN_UPDATED_AT = "2026-05-17";
-  const WORKOUTS_DATA_VERSION = "20260521a";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-05-26";
+  const WORKOUTS_DATA_VERSION = "20260526a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -1200,77 +1200,48 @@
     const selectedId = loadActivePlanId();
     const weeklyPlan = [
       {
-        id: "monday-upper-a",
-        day: "Monday",
-        workout: "Upper A",
+        id: "tuesday-lower-a",
+        day: "Tuesday",
+        workout: "Lower A",
         selectable: true,
         defaultNext: true,
         items: [
-          "Warmup: Run 7-8 min",
-          "Incline Dumbbell Bench Press: 3 x 8-10",
-          "Seated Cable Row: 3 x 10-12",
-          "Assisted Pull-up: 3 x 6-10",
-          "Shoulder Press Machine: 3 x 8-12",
-          "Lateral Raise or Rear Delt Fly: 3 x 8-12",
-          "Flat Bench Press: 2 x 8-10",
-          "Triceps Pushdown: 2-3 x 10-15",
-          "Hang: 2 x 30-45s",
-          "Optional Plank: 2 sets"
+          "Warmup: Run 6 min",
+          "Leg Press: 200 x 12, 209 x 12, 209 x 12, 218 x 10-12 if feeling good",
+          "Smith Machine Squat: 20 x 12, 20 x 12, 20 x 12 target",
+          "Leg Extension: 40 x 12, 45 x 10-12",
+          "Seated Leg Curl: 40 x 12, 45 x 10-12",
+          "Rotary Calf: 45 x 12, 45 x 12, 45 x 12-15",
+          "Plank: 60s, 45-60s"
         ]
       },
       {
-        id: "tuesday-recovery",
-        day: "Tuesday",
-        workout: "Recovery",
-        selectable: false,
-        items: [
-          "Rest, walk, or easy cardio"
-        ]
-      },
-      {
-        id: "wednesday-lower-a",
+        id: "wednesday-recovery",
         day: "Wednesday",
-        workout: "Lower A",
-        selectable: true,
+        workout: "Recovery",
+        selectable: false,
         items: [
-          "Warmup: Run 7-8 min",
-          "Smith Machine Squat: 4 x 10-15",
-          "Leg Press: 3 x 10-12",
-          "Seated Leg Curl: 3 x 10-12",
-          "Rotary Calf: 3 x 12-15",
-          "Plank: 2-3 sets",
-          "Farmer's Carry: 3 rounds"
+          "Rest, walk, or easy cardio"
         ]
       },
       {
-        id: "thursday-recovery",
+        id: "thursday-upper-a",
         day: "Thursday",
-        workout: "Recovery",
-        selectable: false,
-        items: [
-          "Rest, walk, or easy cardio"
-        ]
-      },
-      {
-        id: "friday-upper-b",
-        day: "Friday",
-        workout: "Upper B",
+        workout: "Upper A",
         selectable: true,
         items: [
-          "Warmup: Run 7-8 min",
-          "Cable Row: 3 x 10-15",
-          "Flat Bench Press: 3 x 8-12",
-          "Lat Pulldown: 3 x 8-12",
-          "Rear Delt Fly Machine: 3 x 8-12",
-          "Machine Chest Fly: 3-4 x 10-12",
-          "Lateral Raise: 3 x 8-12",
-          "Triceps Pushdown: 2 x 10-12",
-          "Hang: 1-2 sets"
+          "Warmup: Run 6 min",
+          "Incline Dumbbell Bench Press: 22 x 12, 24 x 10, 24 x 8 target",
+          "Assisted Pull-up: 27.7 assist x 8, 27.7 assist x 8, 27.7 assist x 7-8",
+          "Seated Cable Row: 95 x 12, 95 x 12, 95 x 12",
+          "Shoulder Press Machine: 25 x 10, 25 x 8, 25 x 6-8",
+          "Flat Bench Press: 22 x 8-10, 22 x 6-8",
+          "Triceps Pushdown: 17.5-20 x 10, 17.5-20 x 10"
         ]
       },
       {
-        id: "saturday-recovery",
-        day: "Saturday",
+        id: "friday-recovery",
+        day: "Friday",
         workout: "Recovery",
         selectable: false,
         items: [
@@ -1278,19 +1249,34 @@
         ]
       },
       {
-        id: "sunday-lower-b",
-        day: "Sunday",
+        id: "saturday-lower-b",
+        day: "Saturday",
         workout: "Lower B",
         selectable: true,
         items: [
-          "Warmup: Run 6-8 min",
-          "Romanian Deadlift: 4 x 8-12",
-          "Leg Extension: 3 x 8-12",
-          "Leg Press: 3 x 12-15 (alternate machine is fine)",
-          "Rotary Calf: 3 x 12-15",
-          "Back Extension: 2 x 12-15",
-          "Hang: 2 x 30-45s",
-          "Plank: 2 x 45-60s"
+          "Warmup: Run or bike 5-6 min",
+          "Romanian Deadlift: 35 x 12-15 warmup, 45 x 12, 45 x 12, 45 x 10-12",
+          "Leg Extension: 45 x 12, 50 x 10, 50 x 8-10",
+          "Leg Press: 80 x 12, 80 x 12, 90 x 10-12",
+          "Back Extension: bodyweight x 15, bodyweight x 15",
+          "Hang: 50s, 40s",
+          "Plank: 60s, 60s"
+        ]
+      },
+      {
+        id: "sunday-upper-b",
+        day: "Sunday",
+        workout: "Upper B",
+        selectable: true,
+        items: [
+          "Warmup: Run 6 min",
+          "Flat Bench Press: 22 x 12, 24 x 10, 24 x 9-10 target",
+          "Cable Row: 100 x 12, 100 x 12, 105 x 10-12 if available",
+          "Lateral Raise: 30 x 12, 36 x 10, 36 x 8-10",
+          "Hang: 50s, 40-45s",
+          "Lat Pulldown: 50 x 12, 50 x 10, 50 x 8-10",
+          "Dumbbell Chest Fly: 14 x 12, 14 x 12, 14 x 10-12",
+          "Triceps Pushdown: 20 x 10, 20 x 10-12"
         ]
       }
     ];
