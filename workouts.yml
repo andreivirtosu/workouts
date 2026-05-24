@@ -64,7 +64,7 @@ workouts:
     - weight_kg: 20
       reps: 10
     - weight_kg: 20
-      reps: null
+      reps: 10
 
 - date: '2026-05-21'
   workout_name: 'Lower A'
