@@ -1,6 +1,112 @@
 {
   "workouts": [
     {
+      "date": "2026-05-26",
+      "workout_name": "Lower A",
+      "started_at": "2026-05-26T14:53",
+      "ended_at": "2026-05-26T15:31",
+      "duration_min": 38,
+      "bodyweight": 82.8,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 5
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 200,
+              "reps": 12
+            },
+            {
+              "weight_kg": 209,
+              "reps": 12
+            },
+            {
+              "weight_kg": 209,
+              "reps": 12
+            },
+            {
+              "weight_kg": 218,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Smith Machine Squat",
+          "sets": [
+            {
+              "weight_kg": 10,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Leg Extension",
+          "sets": [
+            {
+              "weight_kg": 45,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Rotary Calf",
+          "sets": [
+            {
+              "weight_kg": 45,
+              "reps": 15
+            },
+            {
+              "weight_kg": 45,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Plank",
+          "sets": [
+            {
+              "duration_sec": 60
+            },
+            {
+              "duration_sec": 60
+            }
+          ]
+        },
+        {
+          "name": "Prone leg curl",
+          "sets": [
+            {
+              "weight_kg": 27,
+              "reps": 12
+            },
+            {
+              "weight_kg": 32,
+              "reps": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-05-24",
       "workout_name": "Upper B",
       "started_at": "2026-05-24T09:24",
