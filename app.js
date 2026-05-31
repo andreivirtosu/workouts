@@ -26,8 +26,8 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
-  const WEEKLY_PLAN_UPDATED_AT = "2026-05-26";
-  const WORKOUTS_DATA_VERSION = "20260526a";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-06-01";
+  const WORKOUTS_DATA_VERSION = "20260601a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -1200,19 +1200,31 @@
     const selectedId = loadActivePlanId();
     const weeklyPlan = [
       {
-        id: "tuesday-lower-a",
+        id: "monday-recovery",
+        day: "Monday",
+        workout: "Recovery",
+        selectable: false,
+        items: [
+          "Back flare deload: walk 20-30 min total, easy pace",
+          "Heat/sauna optional: 10-15 min, no aggressive stretching",
+          "Gentle mobility only: cat-cow, pelvic tilts, easy breathing"
+        ]
+      },
+      {
+        id: "tuesday-upper-a",
         day: "Tuesday",
-        workout: "Lower A",
+        workout: "Upper A",
         selectable: true,
         defaultNext: true,
         items: [
-          "Warmup: Run 6 min",
-          "Leg Press: 200 x 12, 209 x 12, 209 x 12, 218 x 10-12 if feeling good",
-          "Smith Machine Squat: 20 x 12, 20 x 12, 20 x 12 target",
-          "Leg Extension: 40 x 12, 45 x 10-12",
-          "Seated Leg Curl: 40 x 12, 45 x 10-12",
-          "Rotary Calf: 45 x 12, 45 x 12, 45 x 12-15",
-          "Plank: 60s, 45-60s"
+          "Warmup: Bike or easy walk 5-6 min; skip running if back feels tight",
+          "Incline Dumbbell Bench Press: 20 x 12, 22 x 10, 22 x 8-10 easy RPE",
+          "Assisted Pull-up: comfortable assist x 8, x 8, x 6-8; no swinging",
+          "Chest-Supported Row or Seated Cable Row: light/moderate x 12, x 12, x 10-12",
+          "Shoulder Press Machine: 20-25 x 10, x 8, x 6-8 only if pain-free",
+          "Flat Bench Press: 20-22 x 8-10, x 6-8",
+          "Triceps Pushdown: 17.5 x 10, 17.5 x 10",
+          "No loaded carries, heavy bracing, or back-extension work"
         ]
       },
       {
@@ -1221,22 +1233,25 @@
         workout: "Recovery",
         selectable: false,
         items: [
-          "Rest, walk, or easy cardio"
+          "Walk 20-30 min total, split into short walks if needed",
+          "Gentle mobility: cat-cow, pelvic tilts, optional easy bird dog",
+          "If pain is worse than Tuesday, keep Thursday as recovery too"
         ]
       },
       {
-        id: "thursday-upper-a",
+        id: "thursday-lower-rehab",
         day: "Thursday",
-        workout: "Upper A",
+        workout: "Lower Rehab",
         selectable: true,
         items: [
-          "Warmup: Run 6 min",
-          "Incline Dumbbell Bench Press: 22 x 12, 24 x 10, 24 x 8 target",
-          "Assisted Pull-up: 27.7 assist x 8, 27.7 assist x 8, 27.7 assist x 7-8",
-          "Seated Cable Row: 95 x 12, 95 x 12, 95 x 12",
-          "Shoulder Press Machine: 25 x 10, 25 x 8, 25 x 6-8",
-          "Flat Bench Press: 22 x 8-10, 22 x 6-8",
-          "Triceps Pushdown: 17.5-20 x 10, 17.5-20 x 10"
+          "Only if daily movement is improving and pain stays low",
+          "Warmup: Bike or walk 6-8 min",
+          "Leg Press: very light 80-120 x 12, x 12, x 12; slow, no grinding",
+          "Leg Extension: 35-40 x 12, 40 x 10-12",
+          "Seated Leg Curl: 30-35 x 12, 35 x 10-12",
+          "Rotary Calf: 35-45 x 12, x 12",
+          "Core: McGill curl-up, side plank, bird dog 1-2 easy rounds if pain-free",
+          "Skip deadlifts, RDLs, Smith squats, back extensions, hangs, and planks if they provoke the back"
         ]
       },
       {
@@ -1245,38 +1260,40 @@
         workout: "Recovery",
         selectable: false,
         items: [
-          "Rest, walk, or easy cardio"
+          "Rest, walk, easy cardio, heat if it helps",
+          "No testing heavy hinges yet"
         ]
       },
       {
-        id: "saturday-lower-b",
+        id: "saturday-upper-b",
         day: "Saturday",
-        workout: "Lower B",
-        selectable: true,
-        items: [
-          "Warmup: Run or bike 5-6 min",
-          "Romanian Deadlift: 35 x 12-15 warmup, 45 x 12, 45 x 12, 45 x 10-12",
-          "Leg Extension: 45 x 12, 50 x 10, 50 x 8-10",
-          "Leg Press: 80 x 12, 80 x 12, 90 x 10-12",
-          "Back Extension: bodyweight x 15, bodyweight x 15",
-          "Hang: 50s, 40s",
-          "Plank: 60s, 60s"
-        ]
-      },
-      {
-        id: "sunday-upper-b",
-        day: "Sunday",
         workout: "Upper B",
         selectable: true,
         items: [
-          "Warmup: Run 6 min",
-          "Flat Bench Press: 22 x 12, 24 x 10, 24 x 9-10 target",
-          "Cable Row: 100 x 12, 100 x 12, 105 x 10-12 if available",
-          "Lateral Raise: 30 x 12, 36 x 10, 36 x 8-10",
-          "Hang: 50s, 40-45s",
-          "Lat Pulldown: 50 x 12, 50 x 10, 50 x 8-10",
-          "Dumbbell Chest Fly: 14 x 12, 14 x 12, 14 x 10-12",
-          "Triceps Pushdown: 20 x 10, 20 x 10-12"
+          "Warmup: Bike or easy walk 5-6 min",
+          "Flat Bench Press: 22 x 10-12, 22 x 8-10, 22 x 8 easy RPE",
+          "Chest-Supported Row or Cable Row: 80-95 x 12, x 12, x 10-12; strict torso",
+          "Lateral Raise: 30 x 12, 30-36 x 10, 30-36 x 8-10",
+          "Lat Pulldown: 45-50 x 12, 45-50 x 10, 45-50 x 8-10",
+          "Dumbbell Chest Fly: 12-14 x 12, 12-14 x 10-12",
+          "Triceps Pushdown: 17.5-20 x 10, x 10",
+          "Skip hangs/carries if they create lumbar tension"
+        ]
+      },
+      {
+        id: "sunday-optional-lower-rehab",
+        day: "Sunday",
+        workout: "Optional Lower Rehab",
+        selectable: true,
+        items: [
+          "Do this only if back is clearly improving and next-morning response has been fine",
+          "Warmup: Bike or walk 6-8 min",
+          "Leg Press: 80-120 x 12, x 12, x 12 easy",
+          "Leg Extension: 35-45 x 12, x 10-12",
+          "Seated Leg Curl: 30-40 x 12, x 10-12",
+          "Rotary Calf: 35-45 x 12, x 12",
+          "Core: McGill big 3 easy technique work",
+          "Otherwise make Sunday recovery; no deadlifts/back extensions this week"
         ]
       }
     ];
