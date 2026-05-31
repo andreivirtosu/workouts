@@ -1,5 +1,42 @@
 ---
 workouts:
+- date: '2026-05-30'
+  workout_name: 'Lower B'
+  started_at: '2026-05-30T09:52'
+  ended_at: '2026-05-30T10:14'
+  duration_min: 22
+  bodyweight: 82.5
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 5
+  exercises:
+  - name: 'Romanian deadlift dumbbells'
+    sets:
+    - weight_kg: 24
+      reps: 10
+    - weight_kg: 24
+      reps: 8
+  - name: 'Leg Extension'
+    sets:
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 11
+  - name: 'Leg Press'
+    sets:
+    - weight_kg: 200
+      reps: 12
+    - weight_kg: 200
+      reps: 10
+  - name: 'Hang'
+    sets:
+    - duration_sec: 47
+    - duration_sec: 25
+
 - date: '2026-05-28'
   workout_name: 'Upper A'
   started_at: '2026-05-28T10:54'
