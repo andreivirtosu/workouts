@@ -1,6 +1,122 @@
 {
   "workouts": [
     {
+      "date": "2026-06-04",
+      "workout_name": "Upper A",
+      "started_at": "2026-06-04T15:24",
+      "ended_at": "2026-06-04T16:02",
+      "duration_min": 38,
+      "bodyweight": 81.4,
+      "energy": null,
+      "notes": null,
+      "warmup": [],
+      "exercises": [
+        {
+          "name": "Incline Dumbbell Bench Press",
+          "sets": [
+            {
+              "weight_kg": 20,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 10
+            },
+            {
+              "weight_kg": 20,
+              "reps": 10
+            }
+          ]
+        },
+        {
+          "name": "Chest fly",
+          "sets": [
+            {
+              "weight_kg": 31.5,
+              "reps": 12
+            },
+            {
+              "weight_kg": 31.5,
+              "reps": 12
+            },
+            {
+              "weight_kg": 31.5,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Assisted Pull-up",
+          "sets": [
+            {
+              "weight_kg": 27.7,
+              "reps": 8
+            },
+            {
+              "weight_kg": 27.7,
+              "reps": 8
+            },
+            {
+              "weight_kg": 27.7,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Shoulder Press Machine",
+          "sets": [
+            {
+              "weight_kg": 25,
+              "reps": 12
+            },
+            {
+              "weight_kg": 25,
+              "reps": 8
+            },
+            {
+              "weight_kg": 25,
+              "reps": 6
+            }
+          ]
+        },
+        {
+          "name": "Flat Bench Press",
+          "sets": [
+            {
+              "weight_kg": 20,
+              "reps": 8
+            }
+          ]
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets": [
+            {
+              "weight_kg": 65,
+              "reps": 15
+            },
+            {
+              "weight_kg": 80,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Triceps Pushdown",
+          "sets": [
+            {
+              "weight_kg": 15,
+              "reps": 12
+            },
+            {
+              "weight_kg": 20,
+              "reps": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-05-30",
       "workout_name": "Lower B",
       "started_at": "2026-05-30T09:52",
