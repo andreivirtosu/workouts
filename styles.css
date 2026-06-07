@@ -102,6 +102,7 @@ body {
 
 .kpi-card,
 .panel {
+  position: relative;
   background: color-mix(in oklab, var(--card) 90%, white 10%);
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -172,6 +173,25 @@ canvas {
   border-radius: 12px;
   background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%);
   border: 1px solid #ece8dc;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: rgba(35, 42, 48, 0.94);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 20px rgba(25, 33, 38, 0.18);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.chart-tooltip[hidden] {
+  display: none;
 }
 
 .session-list {

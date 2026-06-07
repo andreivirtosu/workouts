@@ -27,7 +27,7 @@
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
   const WEEKLY_PLAN_UPDATED_AT = "2026-06-01";
-  const WORKOUTS_DATA_VERSION = "20260605a";
+  const WORKOUTS_DATA_VERSION = "20260607a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -566,12 +566,12 @@
   }
 
   function drawLineChart(canvas, labels, values, lineColor) {
-    if (!canvas) return;
+    if (!canvas) return { points: [], width: 0, height: 0 };
     const { ctx, width, height } = setupCanvas(canvas);
     const pad = { top: 18, right: 12, bottom: 34, left: 44 };
     ctx.clearRect(0, 0, width, height);
 
-    if (!values.length) return;
+    if (!values.length) return { points: [], width, height, pad };
 
     drawAxes(ctx, width, height, { pad });
 
@@ -589,25 +589,28 @@
       return pad.top + (1 - (v - minV) / range) * (height - pad.top - pad.bottom);
     }
 
+    const points = values.map((v, i) => ({
+      x: xAt(i),
+      y: yAt(v),
+      label: labels[i],
+      value: v
+    }));
+
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
 
-    values.forEach((v, i) => {
-      const x = xAt(i);
-      const y = yAt(v);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    points.forEach((point, i) => {
+      if (i === 0) ctx.moveTo(point.x, point.y);
+      else ctx.lineTo(point.x, point.y);
     });
 
     ctx.stroke();
 
     ctx.fillStyle = colors.point;
-    values.forEach((v, i) => {
-      const x = xAt(i);
-      const y = yAt(v);
+    points.forEach((point) => {
       ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
       ctx.fill();
     });
 
@@ -623,6 +626,62 @@
     tickIndexes.forEach((i) => {
       ctx.fillText(labels[i], xAt(i), height - 10);
     });
+
+    return { points, width, height, pad };
+  }
+
+  function bindLineChartPointHover(canvas, labels, values, lineColor, formatTooltip) {
+    if (!canvas) return;
+
+    const hitRadius = 10;
+    const chart = drawLineChart(canvas, labels, values, lineColor);
+    const container = canvas.parentElement;
+    let tooltip = container ? container.querySelector(".chart-tooltip") : null;
+    if (container && !tooltip) {
+      tooltip = document.createElement("div");
+      tooltip.className = "chart-tooltip";
+      tooltip.setAttribute("role", "status");
+      container.appendChild(tooltip);
+    }
+
+    const hideTooltip = () => {
+      if (tooltip) tooltip.hidden = true;
+      canvas.removeAttribute("title");
+    };
+
+    canvas.onmousemove = (event) => {
+      const hit = chart.points
+        .map((point, index) => ({
+          index,
+          distance: Math.hypot(event.offsetX - point.x, event.offsetY - point.y)
+        }))
+        .filter((point) => point.distance <= hitRadius)
+        .sort((a, b) => a.distance - b.distance)[0];
+
+      if (!hit) {
+        canvas.style.cursor = "default";
+        hideTooltip();
+        return;
+      }
+
+      const point = chart.points[hit.index];
+      const text = formatTooltip(point, hit.index);
+      canvas.style.cursor = "pointer";
+      canvas.title = text;
+
+      if (tooltip) {
+        tooltip.textContent = text;
+        tooltip.hidden = false;
+        const containerRect = container.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        tooltip.style.left = `${canvasRect.left - containerRect.left + point.x}px`;
+        tooltip.style.top = `${canvasRect.top - containerRect.top + point.y}px`;
+      }
+    };
+    canvas.onmouseleave = () => {
+      canvas.style.cursor = "default";
+      hideTooltip();
+    };
   }
 
   function drawBarChart(canvas, labels, values) {
@@ -2326,7 +2385,13 @@
     if (bodyweightPoints.length) {
       const bwLabels = bodyweightPoints.map((p) => formatDateShort(p.date));
       const bwValues = bodyweightPoints.map((p) => p.bodyweight);
-      drawLineChart(bodyweightCanvas, bwLabels, bwValues, colors.bar);
+      bindLineChartPointHover(
+        bodyweightCanvas,
+        bwLabels,
+        bwValues,
+        colors.bar,
+        (point) => `${point.label}: ${point.value} kg`
+      );
     } else {
       drawCanvasMessage(bodyweightCanvas, "Log bodyweight to see trend.");
     }
