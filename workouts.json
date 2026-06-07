@@ -128,6 +128,92 @@
       ]
     },
     {
+      "date": "2026-06-05",
+      "workout_name": "Lower Rehab",
+      "started_at": "2026-06-05T11:32",
+      "ended_at": "2026-06-05T12:01",
+      "duration_min": 29,
+      "bodyweight": 80.9,
+      "energy": null,
+      "notes": null,
+      "warmup": [
+        {
+          "activity": "Run",
+          "duration_min": 8
+        }
+      ],
+      "exercises": [
+        {
+          "name": "Leg Press",
+          "sets": [
+            {
+              "weight_kg": 120,
+              "reps": 20
+            },
+            {
+              "weight_kg": 164,
+              "reps": 12
+            },
+            {
+              "weight_kg": 190,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Leg Extension",
+          "sets": [
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 40,
+              "reps": 12
+            },
+            {
+              "weight_kg": 40,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Seated Leg Curl",
+          "sets": [
+            {
+              "weight_kg": 35,
+              "reps": 12
+            },
+            {
+              "weight_kg": 35,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Rotary Calf",
+          "sets": [
+            {
+              "weight_kg": 45,
+              "reps": 12
+            },
+            {
+              "weight_kg": 45,
+              "reps": 12
+            }
+          ]
+        },
+        {
+          "name": "Hang",
+          "sets": [
+            {
+              "duration_sec": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
       "date": "2026-06-04",
       "workout_name": "Upper A",
       "started_at": "2026-06-04T15:24",
