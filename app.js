@@ -32,6 +32,7 @@
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
   const SHARED_DRAFT_PENDING_STORAGE_KEY = "workout-shared-draft-pending-v1";
+  const THEME_STORAGE_KEY = "workout-theme-v1";
   const EXERCISE_DEMOS = {
     "Flat Bench Press": {
       pageUrl: "https://musclewiki.com/exercise/dumbbell-bench-press",
@@ -58,6 +59,63 @@
       imageUrl: "https://media.musclewiki.com/media/uploads/og-male-Machine-narrow-pulldown-front.jpg"
     }
   };
+
+  function getStoredTheme() {
+    try {
+      return localStorage.getItem(THEME_STORAGE_KEY) === "night" ? "night" : "day";
+    } catch (err) {
+      return "day";
+    }
+  }
+
+  function getCssColor(name, fallback) {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return value || fallback;
+  }
+
+  function syncChartColors() {
+    colors.grid = getCssColor("--chart-grid", "#e9e5da");
+    colors.axis = getCssColor("--chart-axis", "#b9b4a6");
+    colors.text = getCssColor("--ink-soft", "#4a5963");
+    colors.line = getCssColor("--accent", "#cc5a2b");
+    colors.point = getCssColor("--accent-2", "#1f6f78");
+    colors.bar = getCssColor("--accent-2", "#1f6f78");
+  }
+
+  function applyTheme(theme) {
+    const normalizedTheme = theme === "night" ? "night" : "day";
+    document.body.dataset.theme = normalizedTheme;
+    syncChartColors();
+    const toggle = document.getElementById("theme-toggle");
+    if (toggle) {
+      const night = normalizedTheme === "night";
+      toggle.textContent = night ? "☀ Day" : "☾ Night";
+      toggle.setAttribute("aria-pressed", String(night));
+      toggle.setAttribute("aria-label", night ? "Switch to day mode" : "Switch to night mode");
+    }
+    if (state.workoutsAsc.length) renderCharts();
+  }
+
+  function bindThemeToggle() {
+    applyTheme(getStoredTheme());
+    const nav = document.querySelector(".top-nav");
+    if (!nav || document.getElementById("theme-toggle")) return;
+    const toggle = document.createElement("button");
+    toggle.id = "theme-toggle";
+    toggle.className = "top-nav-link theme-toggle";
+    toggle.type = "button";
+    toggle.addEventListener("click", () => {
+      const nextTheme = document.body.dataset.theme === "night" ? "day" : "night";
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      } catch (err) {
+        // Ignore local persistence failures; the current page can still switch.
+      }
+      applyTheme(nextTheme);
+    });
+    nav.appendChild(toggle);
+    applyTheme(getStoredTheme());
+  }
 
   function getCurrentPlanName() {
     const activeWorkout = getWeeklyPlan().find((entry) => entry.next);
@@ -2453,5 +2511,6 @@
     if (state.workoutsAsc.length) renderCharts();
   });
 
+  bindThemeToggle();
   load();
 })();
