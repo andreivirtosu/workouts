@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workout Dashboard</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css?v=20260505a" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <main class="container">
+      <nav class="top-nav">
+        <a class="top-nav-link is-active" href="./dashboard.html">Dashboard</a>
+        <a class="top-nav-link" href="./sessions.html">Sessions</a>
+        <a class="top-nav-link" href="./exercises.html">Exercises</a>
+        <a class="top-nav-link" href="./index.html">Log Sets</a>
+      </nav>
+      <header class="hero">
+        <p class="eyebrow">Training Log</p>
+        <h1>Workout Dashboard</h1>
+      </header>
+
+      <section class="kpi-grid" aria-label="Key metrics">
+        <article class="kpi-card">
+          <p class="kpi-label">Workouts</p>
+          <p id="kpi-workouts" class="kpi-value">-</p>
+        </article>
+        <article class="kpi-card">
+          <p class="kpi-label">Total Sets</p>
+          <p id="kpi-sets" class="kpi-value">-</p>
+        </article>
+        <article class="kpi-card">
+          <p class="kpi-label">Total Reps</p>
+          <p id="kpi-reps" class="kpi-value">-</p>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Workouts by Calendar Day</h2>
+        <p class="panel-note">Calendar heatmap by workout type. Tap/click a day to see that day's workout.</p>
+        <div id="activity-summary" class="activity-summary" aria-label="Training summary"></div>
+        <canvas id="calendar-chart" height="220"></canvas>
+        <div id="calendar-legend" class="calendar-legend" aria-label="Workout type legend"></div>
+        <div id="calendar-day-detail" class="calendar-day-detail"></div>
+      </section>
+
+      <section class="panel-grid">
+        <article class="panel">
+          <h2>Sets Per Workout</h2>
+          <p class="panel-note">Volume distribution by session date.</p>
+          <canvas id="sets-chart" height="220"></canvas>
+        </article>
+
+        <article class="panel">
+          <h2>Bodyweight Trend</h2>
+          <p class="panel-note">Logged bodyweight over workout dates (kg).</p>
+          <canvas id="bodyweight-chart" height="220"></canvas>
+        </article>
+
+        <article class="panel">
+          <h2>Workout Duration</h2>
+          <p class="panel-note">Logged session duration over workout dates (min).</p>
+          <canvas id="duration-chart" height="220"></canvas>
+        </article>
+
+        <article class="panel panel-wide">
+          <h2>Exercise Progression</h2>
+          <p class="panel-note">One chart per exercise (top set weight by date).</p>
+          <div id="exercise-charts" class="exercise-charts"></div>
+        </article>
+      </section>
+
+    </main>
+
+    <script src="app.js?v=20260521a"></script>
+  </body>
+</html>

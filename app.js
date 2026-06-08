@@ -26,8 +26,8 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
-  const WEEKLY_PLAN_UPDATED_AT = "2026-06-01";
-  const WORKOUTS_DATA_VERSION = "20260607a";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-06-08";
+  const WORKOUTS_DATA_VERSION = "20260608a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -1264,26 +1264,26 @@
         workout: "Recovery",
         selectable: false,
         items: [
-          "Back flare deload: walk 20-30 min total, easy pace",
-          "Heat/sauna optional: 10-15 min, no aggressive stretching",
-          "Gentle mobility only: cat-cow, pelvic tilts, easy breathing"
+          "Rest after Sunday Upper B",
+          "Walk 20-30 min total or easy bike 10-15 min",
+          "Light mobility only; no need to test the back today"
         ]
       },
       {
-        id: "tuesday-upper-a",
+        id: "tuesday-lower-a",
         day: "Tuesday",
-        workout: "Upper A",
+        workout: "Lower A",
         selectable: true,
         defaultNext: true,
         items: [
-          "Warmup: Bike or easy walk 5-6 min; skip running if back feels tight",
-          "Incline Dumbbell Bench Press: 20 x 12, 22 x 10, 22 x 8-10 easy RPE",
-          "Assisted Pull-up: comfortable assist x 8, x 8, x 6-8; no swinging",
-          "Chest-Supported Row or Seated Cable Row: light/moderate x 12, x 12, x 10-12",
-          "Shoulder Press Machine: 20-25 x 10, x 8, x 6-8 only if pain-free",
-          "Flat Bench Press: 20-22 x 8-10, x 6-8",
-          "Triceps Pushdown: 17.5 x 10, 17.5 x 10",
-          "No loaded carries, heavy bracing, or back-extension work"
+          "Warmup: Run or bike 6-8 min, then 1-2 light ramp sets",
+          "Leg Press: 164 x 12, 200 x 12, 209 x 10-12, 209 x 10-12; controlled, no grinding",
+          "Smith Machine Squat: 10 x 12, 20 x 10-12, 20 x 10-12; stop if back position feels off",
+          "Leg Extension: 45 x 12, 45 x 12, 45 x 10-12",
+          "Seated/Prone Leg Curl: 35 x 12, 40 x 10-12, 40 x 8-10",
+          "Rotary Calf: 45 x 15, 45 x 12, 45 x 12",
+          "Plank: 45-60s x 2 if completely pain-free; otherwise skip",
+          "Leave 1-2 reps in reserve on all lower-body sets this first normal week back"
         ]
       },
       {
@@ -1292,25 +1292,24 @@
         workout: "Recovery",
         selectable: false,
         items: [
-          "Walk 20-30 min total, split into short walks if needed",
-          "Gentle mobility: cat-cow, pelvic tilts, optional easy bird dog",
-          "If pain is worse than Tuesday, keep Thursday as recovery too"
+          "Walk or easy cardio 20-30 min",
+          "If Tuesday causes next-morning back tightness, make Thursday lighter",
+          "Otherwise no special restrictions"
         ]
       },
       {
-        id: "thursday-lower-rehab",
+        id: "thursday-upper-a",
         day: "Thursday",
-        workout: "Lower Rehab",
+        workout: "Upper A",
         selectable: true,
         items: [
-          "Only if daily movement is improving and pain stays low",
-          "Warmup: Bike or walk 6-8 min",
-          "Leg Press: very light 80-120 x 12, x 12, x 12; slow, no grinding",
-          "Leg Extension: 35-40 x 12, 40 x 10-12",
-          "Seated Leg Curl: 30-35 x 12, 35 x 10-12",
-          "Rotary Calf: 35-45 x 12, x 12",
-          "Core: McGill curl-up, side plank, bird dog 1-2 easy rounds if pain-free",
-          "Skip deadlifts, RDLs, Smith squats, back extensions, hangs, and planks if they provoke the back"
+          "Warmup: Run/bike 5-6 min",
+          "Incline Dumbbell Bench Press: 22 x 12, 24 x 8-10, 24 x 6-8",
+          "Assisted Pull-up: 27.7 assist x 8-10, x 8, x 6-8; strict reps",
+          "Seated Cable Row: 90 x 12, 95 x 10-12, 95 x 10-12",
+          "Shoulder Press Machine: 25 x 10-12, 25 x 8, 25 x 6-8",
+          "Flat Bench Press: 22 x 6-8, 20-22 x 6-8",
+          "Triceps Pushdown: 17.5-20 x 10-12, x 10"
         ]
       },
       {
@@ -1319,40 +1318,41 @@
         workout: "Recovery",
         selectable: false,
         items: [
-          "Rest, walk, easy cardio, heat if it helps",
-          "No testing heavy hinges yet"
+          "Rest or easy walk",
+          "Optional sauna/heat if recovery feels good",
+          "Keep hinges for Saturday; no extra lower-body volume"
         ]
       },
       {
-        id: "saturday-upper-b",
+        id: "saturday-lower-b",
         day: "Saturday",
-        workout: "Upper B",
+        workout: "Lower B",
         selectable: true,
         items: [
-          "Warmup: Bike or easy walk 5-6 min",
-          "Flat Bench Press: 22 x 10-12, 22 x 8-10, 22 x 8 easy RPE",
-          "Chest-Supported Row or Cable Row: 80-95 x 12, x 12, x 10-12; strict torso",
-          "Lateral Raise: 30 x 12, 30-36 x 10, 30-36 x 8-10",
-          "Lat Pulldown: 45-50 x 12, 45-50 x 10, 45-50 x 8-10",
-          "Dumbbell Chest Fly: 12-14 x 12, 12-14 x 10-12",
-          "Triceps Pushdown: 17.5-20 x 10, x 10",
-          "Skip hangs/carries if they create lumbar tension"
+          "Warmup: Run or bike 6-8 min, then hip-hinge patterning with light DBs",
+          "Romanian Deadlift: 24 x 10, 24 x 10, optional 28 x 8 only if perfect and pain-free",
+          "Leg Extension: 45 x 12, 45 x 12, 45 x 10-12",
+          "Leg Press: 190 x 12, 200 x 10-12, 200 x 10-12",
+          "Seated/Prone Leg Curl: 35-40 x 12, 35-40 x 10-12",
+          "Back Extension: bodyweight x 12, x 12 only if it feels like glutes/hamstrings, not low back",
+          "Hang: 45-60s x 1-2 if it feels decompressing; skip if it creates lumbar tension",
+          "Do not chase load on RDLs this week; this is the back re-entry test"
         ]
       },
       {
-        id: "sunday-optional-lower-rehab",
+        id: "sunday-optional-upper-b",
         day: "Sunday",
-        workout: "Optional Lower Rehab",
+        workout: "Optional Upper B",
         selectable: true,
         items: [
-          "Do this only if back is clearly improving and next-morning response has been fine",
-          "Warmup: Bike or walk 6-8 min",
-          "Leg Press: 80-120 x 12, x 12, x 12 easy",
-          "Leg Extension: 35-45 x 12, x 10-12",
-          "Seated Leg Curl: 30-40 x 12, x 10-12",
-          "Rotary Calf: 35-45 x 12, x 12",
-          "Core: McGill big 3 easy technique work",
-          "Otherwise make Sunday recovery; no deadlifts/back extensions this week"
+          "Do this only if Lower B recovery is clean; otherwise make Sunday recovery",
+          "Warmup: Run/bike 5-6 min",
+          "Flat Bench Press: 22 x 12, 24 x 8-10, 22-24 x 8",
+          "Cable Row: 95 x 12, 100 x 10-12, 100 x 10-12; strict torso",
+          "Lat Pulldown: 50 x 10-12, 50 x 8-10, 45-50 x 8-10",
+          "Lateral Raise: 30 x 12, 36 x 8-10, 30-36 x 8",
+          "Chest Fly: 40.5 x 12, 40.5 x 10-12, optional 40.5 x 8-10",
+          "Triceps Pushdown: 20 x 10-12, 20 x 8-10"
         ]
       }
     ];

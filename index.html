@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workout Dashboard</title>
+    <title>Workout Logger</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css?v=20260505a" />
   </head>
@@ -13,66 +13,100 @@
 
     <main class="container">
       <nav class="top-nav">
-        <a class="top-nav-link is-active" href="./index.html">Dashboard</a>
+        <a class="top-nav-link" href="./dashboard.html">Dashboard</a>
         <a class="top-nav-link" href="./sessions.html">Sessions</a>
         <a class="top-nav-link" href="./exercises.html">Exercises</a>
-        <a class="top-nav-link" href="./logger.html">Log Sets</a>
+        <a class="top-nav-link is-active" href="./index.html">Log Sets</a>
       </nav>
+
       <header class="hero">
         <p class="eyebrow">Training Log</p>
-        <h1>Workout Dashboard</h1>
+        <h1>Live Set Logger</h1>
       </header>
 
-      <section class="kpi-grid" aria-label="Key metrics">
-        <article class="kpi-card">
-          <p class="kpi-label">Workouts</p>
-          <p id="kpi-workouts" class="kpi-value">-</p>
-        </article>
-        <article class="kpi-card">
-          <p class="kpi-label">Total Sets</p>
-          <p id="kpi-sets" class="kpi-value">-</p>
-        </article>
-        <article class="kpi-card">
-          <p class="kpi-label">Total Reps</p>
-          <p id="kpi-reps" class="kpi-value">-</p>
-        </article>
+      <section class="panel">
+        <h2>Week Overview</h2>
+        <p id="week-plan-meta" class="panel-note">Plan version</p>
+        <div id="week-overview" class="week-overview"></div>
       </section>
 
       <section class="panel">
-        <h2>Workouts by Calendar Day</h2>
-        <p class="panel-note">Calendar heatmap by workout type. Tap/click a day to see that day's workout.</p>
-        <div id="activity-summary" class="activity-summary" aria-label="Training summary"></div>
-        <canvas id="calendar-chart" height="220"></canvas>
-        <div id="calendar-legend" class="calendar-legend" aria-label="Workout type legend"></div>
-        <div id="calendar-day-detail" class="calendar-day-detail"></div>
+        <h2 id="next-workout-title">Next Workout: Upper A</h2>
+        <p id="next-plan-meta" class="panel-note">Plan version</p>
+        <div id="next-plan" class="next-plan"></div>
       </section>
 
-      <section class="panel-grid">
-        <article class="panel">
-          <h2>Sets Per Workout</h2>
-          <p class="panel-note">Volume distribution by session date.</p>
-          <canvas id="sets-chart" height="220"></canvas>
-        </article>
+      <section class="panel">
+        <p class="panel-note">Quickly log sets during training. Data is saved on this device.</p>
+        <p class="panel-note">Shared draft auto-saves here: <a id="live-shared-link" href="https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55" target="_blank" rel="noreferrer">open remote draft</a></p>
+        <div id="live-status" class="live-status"></div>
+        <div id="live-estimate" class="live-estimate"></div>
+        <div id="live-feedback" class="live-feedback"></div>
+        <div class="live-actions live-actions-top">
+          <button id="live-toggle-workout" class="live-btn live-btn-start" type="button">Start Workout</button>
+        </div>
+        <div class="live-session-grid">
+          <label class="live-field" for="live-bodyweight">
+            <span>Bodyweight (kg)</span>
+            <input id="live-bodyweight" type="number" min="0" step="any" inputmode="decimal" placeholder="82.5" />
+          </label>
+          <label class="live-field" for="live-warmup-run">
+            <span>Warmup Run (min)</span>
+            <input id="live-warmup-run" type="number" min="0" step="1" inputmode="numeric" placeholder="6" />
+          </label>
+          <label class="live-field" for="live-cooldown-bike">
+            <span>Cooldown Bike (min)</span>
+            <input id="live-cooldown-bike" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
+          </label>
+        </div>
+        <p class="panel-note">Exercises</p>
+        <div class="live-grid">
+          <label class="live-field" for="live-exercise">
+            <span>Exercise</span>
+            <select id="live-exercise"></select>
+          </label>
+          <label id="live-custom-wrap" class="live-field" for="live-custom-exercise" hidden>
+            <span>Custom Exercise Name</span>
+            <input id="live-custom-exercise" type="text" placeholder="e.g. Dumbbell Row" />
+          </label>
+          <label id="live-weight-wrap" class="live-field" for="live-weight">
+            <span>Weight (kg)</span>
+            <input id="live-weight" type="number" min="0" step="1" inputmode="decimal" placeholder="20" />
+          </label>
+          <label id="live-reps-wrap" class="live-field" for="live-reps">
+            <span>Reps</span>
+            <input id="live-reps" type="number" min="0" step="1" inputmode="numeric" placeholder="10" />
+          </label>
+          <label id="live-duration-wrap" class="live-field" for="live-duration-sec" hidden>
+            <span>Seconds</span>
+            <input id="live-duration-sec" type="number" min="1" step="1" inputmode="numeric" placeholder="30" />
+          </label>
+          <label class="live-field" for="live-set-note">
+            <span>Set Note (optional)</span>
+            <input id="live-set-note" type="text" placeholder="e.g. hard, pause reps, bad form" />
+          </label>
+          <div class="live-actions">
+            <button id="live-add" class="live-btn live-btn-plus" type="button" aria-label="Add Set" title="Add Set">+</button>
+            <button id="live-remove-last" class="live-btn live-btn-minus" type="button" aria-label="Remove Last Set" title="Remove Last Set">-</button>
+          </div>
+        </div>
 
-        <article class="panel">
-          <h2>Bodyweight Trend</h2>
-          <p class="panel-note">Logged bodyweight over workout dates (kg).</p>
-          <canvas id="bodyweight-chart" height="220"></canvas>
-        </article>
+        <details class="live-advanced">
+          <summary>More actions</summary>
+          <div class="live-advanced-actions">
+            <button id="live-export-yaml" class="live-btn live-btn-accent" type="button">Export YAML for Today</button>
+            <button id="live-copy-yaml" class="live-btn live-btn-dark" type="button">Copy YAML</button>
+            <button id="live-clear" class="live-btn live-btn-muted" type="button">Clear Session</button>
+          </div>
+          <label class="live-field" for="live-yaml-output">
+            <span>YAML Output</span>
+            <textarea id="live-yaml-output" class="live-yaml-output" readonly placeholder="Your generated YAML will appear here..."></textarea>
+          </label>
+        </details>
 
-        <article class="panel">
-          <h2>Workout Duration</h2>
-          <p class="panel-note">Logged session duration over workout dates (min).</p>
-          <canvas id="duration-chart" height="220"></canvas>
-        </article>
-
-        <article class="panel panel-wide">
-          <h2>Exercise Progression</h2>
-          <p class="panel-note">One chart per exercise (top set weight by date).</p>
-          <div id="exercise-charts" class="exercise-charts"></div>
-        </article>
+        <div id="live-list" class="live-list"></div>
+        <div id="live-ex-history" class="live-ex-history"></div>
       </section>
-
     </main>
 
     <script src="app.js?v=20260521a"></script>
