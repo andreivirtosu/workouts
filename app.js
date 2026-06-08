@@ -688,24 +688,44 @@
     return { points, width, height, pad };
   }
 
-  function bindLineChartPointHover(canvas, labels, values, lineColor, formatTooltip) {
-    if (!canvas) return;
-
-    const hitRadius = 10;
-    const chart = drawLineChart(canvas, labels, values, lineColor);
-    const container = canvas.parentElement;
-    let tooltip = container ? container.querySelector(".chart-tooltip") : null;
-    if (container && !tooltip) {
+  function getChartTooltip(canvas) {
+    const container = canvas ? canvas.parentElement : null;
+    if (!container) return null;
+    let tooltip = container.querySelector(".chart-tooltip");
+    if (!tooltip) {
       tooltip = document.createElement("div");
       tooltip.className = "chart-tooltip";
       tooltip.setAttribute("role", "status");
       container.appendChild(tooltip);
     }
+    return tooltip;
+  }
 
-    const hideTooltip = () => {
-      if (tooltip) tooltip.hidden = true;
-      canvas.removeAttribute("title");
-    };
+  function hideChartTooltip(canvas) {
+    const tooltip = getChartTooltip(canvas);
+    if (tooltip) tooltip.hidden = true;
+    if (canvas) canvas.removeAttribute("title");
+  }
+
+  function showChartTooltip(canvas, point, text) {
+    const container = canvas ? canvas.parentElement : null;
+    const tooltip = getChartTooltip(canvas);
+    if (!container || !tooltip) return;
+    canvas.title = text;
+    tooltip.textContent = text;
+    tooltip.hidden = false;
+    const containerRect = container.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+    tooltip.style.left = `${canvasRect.left - containerRect.left + point.x}px`;
+    tooltip.style.top = `${canvasRect.top - containerRect.top + point.y}px`;
+  }
+
+  function bindLineChartPointHover(canvas, labels, values, lineColor, formatTooltip) {
+    if (!canvas) return;
+
+    const hitRadius = 10;
+    const chart = drawLineChart(canvas, labels, values, lineColor);
+    getChartTooltip(canvas);
 
     canvas.onmousemove = (event) => {
       const hit = chart.points
@@ -718,37 +738,28 @@
 
       if (!hit) {
         canvas.style.cursor = "default";
-        hideTooltip();
+        hideChartTooltip(canvas);
         return;
       }
 
       const point = chart.points[hit.index];
       const text = formatTooltip(point, hit.index);
       canvas.style.cursor = "pointer";
-      canvas.title = text;
-
-      if (tooltip) {
-        tooltip.textContent = text;
-        tooltip.hidden = false;
-        const containerRect = container.getBoundingClientRect();
-        const canvasRect = canvas.getBoundingClientRect();
-        tooltip.style.left = `${canvasRect.left - containerRect.left + point.x}px`;
-        tooltip.style.top = `${canvasRect.top - containerRect.top + point.y}px`;
-      }
+      showChartTooltip(canvas, point, text);
     };
     canvas.onmouseleave = () => {
       canvas.style.cursor = "default";
-      hideTooltip();
+      hideChartTooltip(canvas);
     };
   }
 
   function drawBarChart(canvas, labels, values) {
-    if (!canvas) return;
+    if (!canvas) return { bars: [], width: 0, height: 0 };
     const { ctx, width, height } = setupCanvas(canvas);
     const pad = { top: 16, right: 12, bottom: 34, left: 38 };
     ctx.clearRect(0, 0, width, height);
 
-    if (!values.length) return;
+    if (!values.length) return { bars: [], width, height, pad };
 
     drawAxes(ctx, width, height, { pad });
 
@@ -757,13 +768,13 @@
     const chartH = height - pad.top - pad.bottom;
     const slotW = chartW / values.length;
     const barW = Math.max(10, slotW * 0.55);
-
-    values.forEach((v, i) => {
+    const bars = values.map((v, i) => {
       const h = maxV > 0 ? (v / maxV) * chartH : 0;
       const x = pad.left + i * slotW + (slotW - barW) / 2;
       const y = height - pad.bottom - h;
       ctx.fillStyle = colors.bar;
       ctx.fillRect(x, y, barW, h);
+      return { x, y, w: barW, h, label: labels[i], value: v, tooltipX: x + barW / 2, tooltipY: y };
     });
 
     ctx.fillStyle = colors.text;
@@ -778,6 +789,29 @@
       const x = pad.left + i * slotW + slotW / 2;
       ctx.fillText(label, x, height - 10);
     });
+
+    return { bars, width, height, pad };
+  }
+
+  function bindBarChartHover(canvas, labels, values, formatTooltip) {
+    if (!canvas) return;
+    const chart = drawBarChart(canvas, labels, values);
+    getChartTooltip(canvas);
+
+    canvas.onmousemove = (event) => {
+      const hit = chart.bars.find((bar) => event.offsetX >= bar.x && event.offsetX <= bar.x + bar.w && event.offsetY >= bar.y && event.offsetY <= bar.y + bar.h);
+      if (!hit) {
+        canvas.style.cursor = "default";
+        hideChartTooltip(canvas);
+        return;
+      }
+      canvas.style.cursor = "pointer";
+      showChartTooltip(canvas, { x: hit.tooltipX, y: hit.tooltipY }, formatTooltip(hit));
+    };
+    canvas.onmouseleave = () => {
+      canvas.style.cursor = "default";
+      hideChartTooltip(canvas);
+    };
   }
 
   function drawCanvasMessage(canvas, message) {
@@ -1192,16 +1226,33 @@
     state.calendarBars = cells;
   }
 
+  function formatCalendarTooltip(day) {
+    if (!day || !day.count) return `${day ? day.date : "Day"}: Rest day`;
+    const names = (day.workouts || []).map((workout) => workout.workout_name || "Workout").join(" + ");
+    return `${day.date}: ${names}`;
+  }
+
   function bindCalendarInteractions() {
     if (state.calendarBound) return;
     const canvas = document.getElementById("calendar-chart");
     if (!canvas) return;
+    getChartTooltip(canvas);
 
     canvas.addEventListener("mousemove", (event) => {
       const x = event.offsetX;
       const y = event.offsetY;
       const hit = state.calendarBars.find((bar) => x >= bar.x && x <= bar.x + bar.w && y >= bar.y && y <= bar.y + bar.h);
-      canvas.style.cursor = hit ? "pointer" : "default";
+      canvas.style.cursor = hit && hit.day.count ? "pointer" : "default";
+      if (hit) {
+        showChartTooltip(canvas, { x: hit.x + hit.w / 2, y: hit.y }, formatCalendarTooltip(hit.day));
+      } else {
+        hideChartTooltip(canvas);
+      }
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      canvas.style.cursor = "default";
+      hideChartTooltip(canvas);
     });
 
     canvas.addEventListener("click", (event) => {
@@ -2333,7 +2384,13 @@
 
       const labels = series.map((p) => formatDateShort(p.date));
       const values = series.map((p) => p.value);
-      drawLineChart(document.getElementById(canvasId), labels, values, colors.point);
+      bindLineChartPointHover(
+        document.getElementById(canvasId),
+        labels,
+        values,
+        colors.point,
+        (point) => `${point.label}: ${point.value} kg`
+      );
     });
   }
 
@@ -2429,7 +2486,12 @@
     renderCalendarDayDetail(selectedDay);
 
     const setsSeries = workoutsAsc.map((w) => buildWorkoutMetrics(w).sets);
-    drawBarChart(document.getElementById("sets-chart"), labels, setsSeries);
+    bindBarChartHover(
+      document.getElementById("sets-chart"),
+      labels,
+      setsSeries,
+      (bar) => `${bar.label}: ${bar.value} sets`
+    );
 
     let lastKnownBodyweight = null;
     const bodyweightPoints = workoutsAsc

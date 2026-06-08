@@ -731,6 +731,7 @@ canvas {
 }
 
 .exercise-card {
+  position: relative;
   border: 1px solid #ece8dc;
   border-radius: 12px;
   background: #fff;
