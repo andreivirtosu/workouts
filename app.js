@@ -2461,7 +2461,13 @@
     if (durationPoints.length) {
       const durationLabels = durationPoints.map((p) => formatDateShort(p.date));
       const durationValues = durationPoints.map((p) => p.duration);
-      drawLineChart(durationCanvas, durationLabels, durationValues, colors.line);
+      bindLineChartPointHover(
+        durationCanvas,
+        durationLabels,
+        durationValues,
+        colors.line,
+        (point) => `${point.label}: ${point.value} min`
+      );
     } else {
       drawCanvasMessage(durationCanvas, "Log workout duration to see trend.");
     }
