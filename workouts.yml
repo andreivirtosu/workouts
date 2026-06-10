@@ -1,5 +1,66 @@
 ---
 workouts:
+- date: '2026-06-10'
+  workout_name: 'Upper A'
+  started_at: '2026-06-10T15:17'
+  ended_at: '2026-06-10T15:55'
+  duration_min: 38
+  bodyweight: 81.2
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 6
+  exercises:
+  - name: 'Incline Dumbbell Bench Press'
+    sets:
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 22
+      reps: 12
+    - weight_kg: 24
+      reps: 6
+  - name: 'Assisted Pull-up'
+    sets:
+    - weight_kg: 27.7
+      reps: 10
+    - weight_kg: 27.7
+      reps: 8
+    - weight_kg: 27.7
+      reps: 6
+  - name: 'Seated Cable Row'
+    sets:
+    - weight_kg: 90
+      reps: 12
+    - weight_kg: 90
+      reps: 12
+    - weight_kg: 90
+      reps: 12
+  - name: 'Shoulder Press Machine'
+    sets:
+    - weight_kg: 30
+      reps: 12
+    - weight_kg: 30
+      reps: 10
+    - weight_kg: 30
+      reps: 8
+  - name: 'Flat Bench Press'
+    sets:
+    - weight_kg: 20
+      reps: 6
+    - weight_kg: 20
+      reps: 6
+    - weight_kg: 20
+      reps: 6
+  - name: 'Triceps Pushdown'
+    sets:
+    - weight_kg: 15
+      reps: 10
+    - weight_kg: 15
+      reps: 8
+    - weight_kg: 15
+      reps: 8
+
 - date: '2026-06-08'
   workout_name: 'Lower A'
   started_at: '2026-06-08T14:43'
