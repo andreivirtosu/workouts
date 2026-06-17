@@ -1,5 +1,56 @@
 ---
 workouts:
+- date: '2026-06-17'
+  workout_name: 'Upper B'
+  started_at: '2026-06-17T13:50'
+  ended_at: '2026-06-17T14:24'
+  duration_min: 34
+  bodyweight: 81.2
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 6
+  exercises:
+  - name: 'Leg Press'
+    sets:
+    - weight_kg: 164
+      reps: 15
+    - weight_kg: 191
+      reps: 12
+    - weight_kg: 200
+      reps: 12
+    - weight_kg: 209
+      reps: 12
+  - name: 'Smith Machine Squat'
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 25
+      reps: 8
+  - name: 'Leg Extension'
+    sets:
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 10
+    - weight_kg: 45
+      reps: 8
+  - name: 'Rotary Calf'
+    sets:
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 12
+  - name: 'Plank'
+    sets:
+    -
+      duration_sec: 60
+    -
+      duration_sec: 60
+
 - date: '2026-06-16'
   workout_name: 'Upper B'
   started_at: '2026-06-16T15:44'
