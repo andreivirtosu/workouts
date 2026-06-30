@@ -26,8 +26,8 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
-  const WEEKLY_PLAN_UPDATED_AT = "2026-06-15";
-  const WORKOUTS_DATA_VERSION = "20260615a";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-06-30";
+  const WORKOUTS_DATA_VERSION = "20260630a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -1368,100 +1368,90 @@
     const selectedId = loadActivePlanId();
     const weeklyPlan = [
       {
-        id: "monday-upper-b",
-        day: "Monday",
-        workout: "Upper B",
+        id: "tuesday-lower-b",
+        day: "Tuesday",
+        workout: "Lower B",
         selectable: true,
         defaultNext: true,
         items: [
-          "Warmup: Run/bike 5-6 min + shoulder/scap ramp-up",
-          "Flat Bench Press: 22 x 12, 24 x 8-10, 24 x 6-8; stop 1 rep before grind",
-          "Cable Row: 95 x 12, 100 x 10-12, 100 x 8-10; strict torso",
-          "Lat Pulldown: 50 x 10-12, 50 x 8-10, 45-50 x 8-10",
-          "Lateral Raise: 30 x 12, 36 x 8-10, 30-36 x 8",
-          "Chest Fly: 40.5 x 12, 40.5 x 10-12, optional 40.5 x 8-10",
-          "Triceps Pushdown: 20 x 10-12, 20 x 8-10",
-          "Hang: 45-60s x 1-2 only if it feels decompressing"
+          "Back from a short break: keep every working set at 1-2 reps in reserve; no grinders",
+          "Warmup: bike/run 6-8 min, then light squat/hinge patterning",
+          "Smith Machine Squat: 15 x 12, 20 x 10, 25 x 8-10, optional 25 x 8 only if clean",
+          "Leg Extension: 45 x 12, 50 x 10, 45-50 x 8-10",
+          "Leg Press: 191 x 8-10, 191 x 8-10; skip heavier top set unless it feels very easy",
+          "Prone Leg Curl: 40 x 12, 40 x 10-12, 40 x 10",
+          "Back Extension: bodyweight x 12-15, x 12 only if glutes/hamstrings dominate",
+          "Hang: 45-60s x 1 if it feels decompressing; skip if lumbar tension appears"
         ]
       },
       {
-        id: "tuesday-recovery",
-        day: "Tuesday",
+        id: "wednesday-recovery",
+        day: "Wednesday",
         workout: "Recovery",
         selectable: false,
         items: [
-          "Walk 20-30 min total or easy bike 10-15 min",
-          "Light mobility; keep elbows/shoulders easy after Upper B",
-          "No extra pressing volume"
+          "Walk 20-30 min or easy bike 10-15 min",
+          "Light hips/hamstrings mobility only if it feels good",
+          "If Lower B causes back tightness, keep Thursday upper lighter and skip hanging"
         ]
       },
       {
-        id: "wednesday-lower-a",
-        day: "Wednesday",
-        workout: "Lower A",
+        id: "thursday-upper-b",
+        day: "Thursday",
+        workout: "Upper B",
         selectable: true,
         items: [
-          "Warmup: Run or bike 6-8 min, then 1-2 light ramp sets",
-          "Leg Press: 164 x 12, 200 x 12, 209 x 10-12, 209 x 10-12; controlled",
-          "Smith Machine Squat: 15 x 12, 20 x 10-12, 25 x 8-10 if back position is clean",
-          "Leg Extension: 45 x 12, 50 x 10-12, 50 x 8-10",
-          "Seated/Prone Leg Curl: 40 x 12, 40 x 10-12, 40 x 8-10",
-          "Rotary Calf: 45 x 15, 45 x 12, 45 x 12",
-          "Plank: 45-60s x 2 if completely pain-free",
-          "Keep 1-2 reps in reserve; no load chasing on lower body"
+          "Warmup: Run/bike 5-6 min + shoulder/scap ramp-up",
+          "Flat Bench Press: 22 x 12, 24 x 8-10, 24 x 6-8; stop 1 rep before grind",
+          "Cable Row: 90 x 12, 95 x 10-12, 95 x 8-10; strict torso",
+          "Lat Pulldown: 50 x 10-12, 50 x 8, 45-50 x 8",
+          "Lateral Raise: 30 x 12, 30-36 x 8-10, 30 x 8",
+          "Chest Fly: 40.5 x 12, 40.5 x 8-10, optional 40.5 x 8",
+          "Triceps Pushdown: 17.5-20 x 10-12, 17.5-20 x 8-10",
+          "Hang: 45-60s x 1 only if it feels decompressing"
         ]
       },
       {
-        id: "thursday-recovery",
-        day: "Thursday",
+        id: "friday-recovery",
+        day: "Friday",
         workout: "Recovery",
         selectable: false,
         items: [
           "Rest or easy walk 20-30 min",
-          "If Wednesday causes next-morning back tightness, make Friday upper lighter",
-          "Otherwise no special restrictions"
+          "No extra pressing or leg volume",
+          "Use this as the buffer day so the restart week does not turn into catch-up volume"
         ]
       },
       {
-        id: "friday-upper-a",
-        day: "Friday",
-        workout: "Upper A",
-        selectable: true,
-        items: [
-          "Warmup: Run/bike 5-6 min",
-          "Incline Dumbbell Bench Press: 22 x 12, 24 x 8-10, 24 x 6-8",
-          "Assisted Pull-up: 27.7 assist x 8-10, x 8, x 6-8; strict reps",
-          "Seated Cable Row: 90 x 12, 95 x 10-12, 95 x 10-12",
-          "Shoulder Press Machine: 30 x 10-12, 30 x 8-10, 25-30 x 8",
-          "Flat Bench Press: 20-22 x 6-8, 20-22 x 6-8",
-          "Triceps Pushdown: 17.5-20 x 10-12, x 10"
-        ]
-      },
-      {
-        id: "saturday-recovery",
+        id: "saturday-lower-a",
         day: "Saturday",
-        workout: "Recovery",
-        selectable: false,
+        workout: "Lower A",
+        selectable: true,
         items: [
-          "Rest or easy walk",
-          "Optional sauna/heat if recovery feels good",
-          "Keep hinges for Sunday; no extra lower-body volume"
+          "Warmup: Run or bike 6-8 min, then 1-2 light ramp sets",
+          "Leg Press: 164 x 12, 191 x 12, 200 x 10-12, optional 209 x 8-10 if smooth",
+          "Smith Machine Squat: 15 x 12, 20 x 10-12, 25 x 8 if back position is clean",
+          "Leg Extension: 45 x 12, 50 x 10, 45-50 x 8-10",
+          "Seated/Prone Leg Curl: 40 x 12, 40 x 10-12, 40 x 8-10",
+          "Rotary Calf: 45 x 15, 45 x 12, 45 x 12",
+          "Plank: 45-60s x 2 if completely pain-free",
+          "Keep 1-2 reps in reserve; this is still a re-entry week"
         ]
       },
       {
-        id: "sunday-lower-b",
+        id: "sunday-upper-a-optional",
         day: "Sunday",
-        workout: "Lower B",
+        workout: "Optional Upper A",
         selectable: true,
         items: [
-          "Warmup: Run or bike 6-8 min, then light squat/hinge patterning",
-          "Smith Machine Squat: 15 x 12, 20 x 10, 25 x 8-10, 25 x 8-10 if clean",
-          "Leg Extension: 45 x 12, 50 x 10-12, 50 x 8-10",
-          "Leg Press: 191 x 8-10, 191 x 8-10, optional 200 x 8 only if strong",
-          "Prone Leg Curl: 40 x 12, 40 x 12, 40 x 10",
-          "Back Extension: bodyweight x 12-15, x 12-15 only if glutes/hamstrings dominate",
-          "Hang: 45-60s x 1-2 if it feels decompressing; skip if lumbar tension appears",
-          "Keep RDL/deadlift out this week; back is progressing, not proven under hinge load yet"
+          "Optional only if recovery is good; otherwise take the rest day and start next week with Upper A",
+          "Warmup: Run/bike 5-6 min",
+          "Incline Dumbbell Bench Press: 22 x 12, 24 x 8, 22-24 x 6-8",
+          "Assisted Pull-up: 27.7 assist x 8-10, x 8, x 6; strict reps",
+          "Seated Cable Row: 85-90 x 12, 90 x 10-12, 90 x 10",
+          "Shoulder Press Machine: 30 x 10, 30 x 8, optional 25-30 x 8",
+          "Flat Bench Press: 20-22 x 6-8, 20 x 6-8",
+          "Triceps Pushdown: 17.5-20 x 10, x 8-10"
         ]
       }
     ];
