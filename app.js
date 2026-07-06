@@ -26,8 +26,8 @@
   };
 
   const SHARED_WORKOUT_OBJECT_URL = "https://api.restful-api.dev/objects/ff8081819d82fab6019da7edcb1f2a55";
-  const WEEKLY_PLAN_UPDATED_AT = "2026-06-30";
-  const WORKOUTS_DATA_VERSION = "20260630a";
+  const WEEKLY_PLAN_UPDATED_AT = "2026-07-06";
+  const WORKOUTS_DATA_VERSION = "20260706a";
   const SHARED_DRAFT_RETRY_MAX_ATTEMPTS = 4;
   const SHARED_DRAFT_RETRY_MIN_DELAY_MS = 3 * 60 * 1000;
   const SHARED_DRAFT_RETRY_MAX_DELAY_MS = 5 * 60 * 1000;
@@ -1368,36 +1368,36 @@
     const selectedId = loadActivePlanId();
     const weeklyPlan = [
       {
-        id: "tuesday-lower-b",
-        day: "Tuesday",
+        id: "monday-lower-b",
+        day: "Monday",
         workout: "Lower B",
         selectable: true,
         defaultNext: true,
         items: [
-          "Back from a short break: keep every working set at 1-2 reps in reserve; no grinders",
+          "Restart after the gap: keep all working sets at 1-2 reps in reserve; no grinders",
           "Warmup: bike/run 6-8 min, then light squat/hinge patterning",
-          "Smith Machine Squat: 15 x 12, 20 x 10, 25 x 8-10, optional 25 x 8 only if clean",
+          "Smith Machine Squat: 15 x 12, 20 x 10, 25 x 8-10; optional 25 x 8 only if smooth",
           "Leg Extension: 45 x 12, 50 x 10, 45-50 x 8-10",
-          "Leg Press: 191 x 8-10, 191 x 8-10; skip heavier top set unless it feels very easy",
+          "Leg Press: 191 x 8-10, 191 x 8-10; skip heavy top set unless it feels very easy",
           "Prone Leg Curl: 40 x 12, 40 x 10-12, 40 x 10",
           "Back Extension: bodyweight x 12-15, x 12 only if glutes/hamstrings dominate",
           "Hang: 45-60s x 1 if it feels decompressing; skip if lumbar tension appears"
         ]
       },
       {
-        id: "wednesday-recovery",
-        day: "Wednesday",
+        id: "tuesday-recovery",
+        day: "Tuesday",
         workout: "Recovery",
         selectable: false,
         items: [
           "Walk 20-30 min or easy bike 10-15 min",
           "Light hips/hamstrings mobility only if it feels good",
-          "If Lower B causes back tightness, keep Thursday upper lighter and skip hanging"
+          "If Lower B causes back tightness, keep Wednesday upper lighter and skip hanging"
         ]
       },
       {
-        id: "thursday-upper-b",
-        day: "Thursday",
+        id: "wednesday-upper-b",
+        day: "Wednesday",
         workout: "Upper B",
         selectable: true,
         items: [
@@ -1412,8 +1412,8 @@
         ]
       },
       {
-        id: "friday-recovery",
-        day: "Friday",
+        id: "thursday-recovery",
+        day: "Thursday",
         workout: "Recovery",
         selectable: false,
         items: [
@@ -1423,8 +1423,8 @@
         ]
       },
       {
-        id: "saturday-lower-a",
-        day: "Saturday",
+        id: "friday-lower-a",
+        day: "Friday",
         workout: "Lower A",
         selectable: true,
         items: [
