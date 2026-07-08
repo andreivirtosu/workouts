@@ -1,5 +1,60 @@
 ---
 workouts:
+- date: '2026-07-08'
+  workout_name: 'Lower B'
+  started_at: '2026-07-08T09:45'
+  ended_at: '2026-07-08T10:58'
+  duration_min: 73
+  bodyweight: 81.8
+  energy:
+  notes: null
+  warmup:
+  - activity: 'Run'
+    duration_min: 5
+  exercises:
+  - name: 'Smith Machine Squat'
+    sets:
+    - weight_kg: 15
+      reps: 12
+    - weight_kg: 20
+      reps: 12
+    - weight_kg: 25
+      reps: 8
+  - name: 'Leg Extension'
+    sets:
+    - weight_kg: 45
+      reps: 12
+    - weight_kg: 45
+      reps: 9
+    - weight_kg: 45
+      reps: 8
+  - name: 'Leg Press'
+    sets:
+    - weight_kg: 181
+      reps: 10
+    - weight_kg: 181
+      reps: 10
+    - weight_kg: 181
+      reps: 10
+  - name: 'Prone Leg Curl'
+    sets:
+    - weight_kg: 40
+      reps: 12
+    - weight_kg: 40
+      reps: 10
+  - name: 'Back Extension'
+    sets:
+    - weight_kg: 0
+      reps: 12
+    - weight_kg: 0
+      reps: 12
+  - name: 'Hang'
+    sets:
+    -
+      duration_sec: 45
+    -
+      duration_sec: 15
+
 - date: '2026-07-01'
   workout_name: 'Upper B'
   started_at: '2026-07-01T09:54'
